@@ -1,0 +1,154 @@
+import { contrast, fixContrast, oklchToHex, type Hex } from "./color";
+
+export type Mode = "dark" | "light";
+export type FontStyle = "italic" | "bold";
+
+export const ROLE_IDS = [
+  "bg", "fg", "accent", "muted",
+  "keyword", "string", "function", "type", "variable", "constant", "operator",
+  "error", "warning", "info", "success",
+] as const;
+export type RoleId = (typeof ROLE_IDS)[number];
+
+export interface RoleDef {
+  id: RoleId;
+  label: string;
+  group: "Base" | "Syntax" | "Status";
+  /** Minimum WCAG contrast against bg. bg itself has none. */
+  min: number;
+  hint: string;
+  styleable?: boolean;
+}
+
+export const ROLES: RoleDef[] = [
+  { id: "bg", label: "Background", group: "Base", min: 0, hint: "Editor background. Sidebar, tabs and panels are derived from it." },
+  { id: "fg", label: "Text", group: "Base", min: 7, hint: "Default text in the editor and UI." },
+  { id: "accent", label: "Accent", group: "Base", min: 3, hint: "Focus borders, active tab, status bar, buttons, badges." },
+  { id: "muted", label: "Comments", group: "Base", min: 3, hint: "Comments, line numbers, inactive tabs and secondary text.", styleable: true },
+  { id: "keyword", label: "Keyword", group: "Syntax", min: 4.5, hint: "import, const, if, return, function…", styleable: true },
+  { id: "string", label: "String", group: "Syntax", min: 4.5, hint: "Strings and regular expressions.", styleable: true },
+  { id: "function", label: "Function", group: "Syntax", min: 4.5, hint: "Function and method names.", styleable: true },
+  { id: "type", label: "Type", group: "Syntax", min: 4.5, hint: "Types, classes and interfaces.", styleable: true },
+  { id: "variable", label: "Variable", group: "Syntax", min: 4.5, hint: "Variables, parameters and properties.", styleable: true },
+  { id: "constant", label: "Number", group: "Syntax", min: 4.5, hint: "Numbers, booleans and constants.", styleable: true },
+  { id: "operator", label: "Operator", group: "Syntax", min: 4.5, hint: "Operators and punctuation.", styleable: true },
+  { id: "error", label: "Error", group: "Status", min: 4.5, hint: "Error squiggles, deleted files, failing tests." },
+  { id: "warning", label: "Warning", group: "Status", min: 4.5, hint: "Warnings and modified files." },
+  { id: "info", label: "Info", group: "Status", min: 4.5, hint: "Info diagnostics and hints." },
+  { id: "success", label: "Success", group: "Status", min: 4.5, hint: "Added files and passing states." },
+];
+
+export const ROLE_BY_ID = Object.fromEntries(ROLES.map((r) => [r.id, r])) as Record<RoleId, RoleDef>;
+
+export interface RoleState {
+  color: Hex;
+  locked: boolean;
+  fontStyle: FontStyle[];
+}
+
+export interface ThemeState {
+  version: 1;
+  name: string;
+  mode: Mode;
+  roles: Record<RoleId, RoleState>;
+}
+
+// ---------- random ----------
+export function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const HARMONIES: Record<string, number[]> = {
+  analogous: [0, 30, 60, -30, 90, -60],
+  complementary: [0, 180, 30, 210, -30, 150],
+  triadic: [0, 120, 240, 30, 150, 270],
+  split: [0, 150, 210, 40, 180, -40],
+};
+
+const ADJ = ["Quiet", "Ember", "Velvet", "Paper", "Neon", "Moss", "Harbor", "Dusk", "Frost", "Copper", "Lunar", "Saffron", "Cobalt", "Juniper", "Static", "Amber"];
+const NOUN = ["Harbor", "Night", "Garden", "Signal", "Orchard", "Tide", "Grove", "Circuit", "Lantern", "Atlas", "Bloom", "Meadow", "Reef", "Quarry", "Comet", "Hollow"];
+
+const DEFAULT_STYLE: Partial<Record<RoleId, FontStyle[]>> = { keyword: ["italic"], muted: ["italic"] };
+
+/**
+ * Generate a full theme. Locked roles in `prev` are kept as-is.
+ * All generated colors meet their role's minimum contrast against bg.
+ */
+export function generate(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
+  const r = mulberry32(seed);
+  const rnd = (a: number, b: number) => a + r() * (b - a);
+  const dark = mode === "dark";
+  const keep = (id: RoleId) => (prev && prev.mode === mode && prev.roles[id].locked ? prev.roles[id] : null);
+
+  const base = rnd(0, 360);
+  const harm = Object.values(HARMONIES)[Math.floor(r() * 4)];
+  const sat = rnd(0.08, 0.17);
+  const hues = harm.map((o) => (base + o + rnd(-12, 12) + 360) % 360);
+
+  const colors = {} as Record<RoleId, Hex>;
+  const bgKept = keep("bg");
+  colors.bg = bgKept
+    ? bgKept.color
+    : oklchToHex({ l: dark ? rnd(0.17, 0.25) : rnd(0.96, 0.99), c: rnd(0.008, dark ? 0.04 : 0.02), h: base });
+  const bg = colors.bg;
+  const syntaxL = dark ? rnd(0.74, 0.84) : rnd(0.45, 0.55);
+
+  const want: Record<Exclude<RoleId, "bg">, () => Hex> = {
+    fg: () => oklchToHex({ l: dark ? 0.9 : 0.28, c: 0.015, h: base }),
+    muted: () => oklchToHex({ l: dark ? 0.58 : 0.6, c: 0.03, h: base }),
+    accent: () => oklchToHex({ l: dark ? 0.72 : 0.52, c: sat * 1.1, h: (hues[0] + 200) % 360 }),
+    keyword: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[1] }),
+    string: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[2] }),
+    function: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[3] }),
+    type: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[4] }),
+    constant: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[5] }),
+    variable: () => oklchToHex({ l: dark ? 0.86 : 0.35, c: sat * 0.35, h: hues[0] }),
+    operator: () => oklchToHex({ l: dark ? 0.78 : 0.42, c: 0.05, h: hues[1] }),
+    error: () => oklchToHex({ l: dark ? 0.7 : 0.52, c: 0.17, h: 25 }),
+    warning: () => oklchToHex({ l: dark ? 0.8 : 0.55, c: 0.14, h: 75 }),
+    info: () => oklchToHex({ l: dark ? 0.75 : 0.5, c: 0.12, h: 240 }),
+    success: () => oklchToHex({ l: dark ? 0.76 : 0.5, c: 0.14, h: 145 }),
+  };
+
+  const roles = {} as Record<RoleId, RoleState>;
+  for (const def of ROLES) {
+    const kept = keep(def.id);
+    if (kept) {
+      roles[def.id] = { ...kept };
+      continue;
+    }
+    const raw = def.id === "bg" ? colors.bg : want[def.id as Exclude<RoleId, "bg">]();
+    const color = def.min ? fixContrast(raw, bg, def.min) : raw;
+    roles[def.id] = {
+      color,
+      locked: false,
+      fontStyle: prev?.roles[def.id]?.fontStyle ?? DEFAULT_STYLE[def.id] ?? [],
+    };
+  }
+
+  const name = prev && prev.mode === mode && ROLE_IDS.every((id) => prev.roles[id].locked)
+    ? prev.name
+    : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
+
+  return { version: 1, name, mode, roles };
+}
+
+export interface ContrastIssue {
+  role: RoleId;
+  ratio: number;
+  min: number;
+}
+
+export function contrastIssues(t: ThemeState): ContrastIssue[] {
+  const bg = t.roles.bg.color;
+  return ROLES.filter((d) => d.min > 0)
+    .map((d) => ({ role: d.id, ratio: contrast(t.roles[d.id].color, bg), min: d.min }))
+    .filter((i) => i.ratio < i.min);
+}
