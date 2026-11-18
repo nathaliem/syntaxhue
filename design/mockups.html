@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hueprint MVP Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ---------- page (documentation) ---------- */
+:root{--pg:#E9EBF0;--pg-ink:#1C2233;--pg-ink2:#545B72;--pg-line:#CDD1DB;--display:"Bricolage Grotesque",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0F121A;--pg-ink:#E7E9F0;--pg-ink2:#A3A9BC;--pg-line:#2A3142}}
+:root[data-theme="dark"]{--pg:#0F121A;--pg-ink:#E7E9F0;--pg-ink2:#A3A9BC;--pg-line:#2A3142}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pg);color:var(--pg-ink);font:16px/1.55 var(--body)}
+.doc{max-width:1320px;margin:0 auto;padding:40px 16px 80px}
+@media(min-width:720px){.doc{padding:56px 32px 96px}}
+.doc>header h1{font:800 clamp(34px,5vw,56px)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 12px}
+.doc>header p{color:var(--pg-ink2);max-width:66ch;margin:0}
+.shot{margin-top:64px}
+.shot h2{font:700 26px/1.2 var(--display);margin:0 0 6px;letter-spacing:-.01em}
+.shot>p{color:var(--pg-ink2);margin:0 0 18px;max-width:72ch}
+.notes{display:grid;gap:8px 28px;margin:16px 0 0;padding:0;list-style:none;color:var(--pg-ink2);font-size:15px}
+@media(min-width:900px){.notes{grid-template-columns:1fr 1fr}}
+.notes li{padding-left:28px;position:relative}
+.notes li b{color:var(--pg-ink)}
+.notes .n{position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:#FF8A3D;color:#1C2233;font:700 12px/20px var(--body);text-align:center}
+.frame{position:relative;width:100%;overflow:hidden;border-radius:14px;box-shadow:0 30px 70px -40px rgba(10,14,30,.6);background:#000}
+.canvas{position:absolute;left:0;top:0;transform-origin:0 0}
+.phones{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.phone{width:min(390px,100%);aspect-ratio:390/844;border-radius:44px;padding:10px;background:#0b0d12;box-shadow:0 30px 70px -40px rgba(10,14,30,.7)}
+.phone .frame{height:100%;border-radius:34px;box-shadow:none}
+
+/* ---------- app chrome (DESIGN.md tokens) ---------- */
+.app{--paper:#F4F5F8;--surface:#FFFFFF;--surface-2:#EEF0F4;--ink:#1C2233;--ink-2:#545B72;--line:#D8DBE3;--brand:#2F4BFF;--brand-ink:#FFFFFF;--warn:#9A5B00;--warn-bg:#FFF4DC;--hl:#FF8A3D;
+  width:100%;height:100%;background:var(--paper);color:var(--ink);font:15px/1.45 var(--body);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.app[data-chrome="dark"]{--paper:#13161F;--surface:#1B1F2B;--surface-2:#232838;--ink:#E7E9F0;--ink-2:#A3A9BC;--line:#2F3647;--brand:#7E8FFF;--brand-ink:#0E1220;--warn:#F0C063;--warn-bg:#3A2E14}
+.bar{height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:9px;font:750 18px var(--display)}
+.tname{font:650 18px var(--display);margin-left:8px}
+.saved{font-size:13px;color:var(--ink-2)}
+.sp{flex:1}
+.b{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 14px var(--body);white-space:nowrap}
+.b.p{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.b.gh{border-color:transparent;background:transparent}
+.b.i{width:36px;padding:0;justify-content:center}
+.b.sm{height:30px;padding:0 10px;font-size:13px}
+.b.sm.i{width:30px}
+.b.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.b svg{width:18px;height:18px}
+.k{font:600 11px var(--mono);border:1px solid currentColor;border-radius:4px;padding:0 5px;opacity:.7}
+.seg{display:inline-flex;height:36px;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg span{padding:0 12px;display:flex;align-items:center;font:600 14px var(--body);color:var(--ink-2);background:var(--surface)}
+.seg span.on{background:var(--ink);color:var(--surface)}
+.body{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0}
+.rail{background:var(--surface);border-right:1px solid var(--line);padding:6px 8px;overflow:hidden}
+.gh2{display:flex;justify-content:space-between;align-items:baseline;padding:8px 8px 4px;font:650 14px var(--display);color:var(--ink-2)}
+.gh2 a{font:600 13px var(--body);color:var(--brand)}
+.row{display:flex;align-items:center;gap:10px;height:38px;padding:0 8px;border-radius:9px}
+.row .sw{width:26px;height:26px;border-radius:7px;flex:none;box-shadow:inset 0 0 0 1px rgba(127,127,127,.35)}
+.row .nm{flex:1;font-weight:600}
+.row .hx{font:12px var(--mono);color:var(--ink-2)}
+.badge{font:600 11px var(--mono);padding:1px 6px;border-radius:99px;border:1px solid var(--line);color:var(--ink-2);min-width:38px;text-align:center}
+.badge.w{color:var(--warn);border-color:var(--warn);background:var(--warn-bg)}
+.lk{width:20px;height:20px;color:var(--ink-2);opacity:.45}
+.lk.on{opacity:1;color:var(--ink)}
+.open{background:var(--surface-2);border-radius:10px;padding-bottom:12px;margin:2px 0}
+.open .row{background:transparent}
+.ed{padding:0 12px;display:grid;gap:8px}
+.hint{font-size:13px;color:var(--ink-2);margin:0}
+.sl{display:grid;grid-template-columns:68px 1fr 40px;gap:8px;align-items:center;font-size:13px;color:var(--ink-2)}
+.sl i{display:block;height:12px;border-radius:6px;position:relative;box-shadow:inset 0 0 0 1px rgba(127,127,127,.3)}
+.sl i::after{content:"";position:absolute;top:50%;left:var(--x);width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #1C2233;transform:translate(-50%,-50%);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.sl b{font:400 12px var(--mono);color:var(--ink);text-align:right}
+.edrow{display:flex;gap:6px;align-items:center}
+.hexf{height:30px;width:92px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font:13px/28px var(--mono);padding:0 8px}
+.warnbox{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--warn-bg);color:var(--warn);font:600 13px var(--body)}
+.foot{font-size:13px;color:var(--ink-2);padding:10px 8px}
+.foot a{color:var(--brand);font-weight:600}
+.stage{padding:16px 24px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.ptool{display:flex;align-items:center;gap:4px;font:600 13px var(--body);color:var(--ink-2)}
+.ptool span{padding:5px 10px;border-radius:7px}
+.ptool span.on{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.ptool .sp{flex:1}
+.banner{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:14px}
+.pop{position:absolute;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px -8px rgba(10,14,30,.35);padding:14px 16px;z-index:5}
+.pop h4{margin:0 0 10px;font:650 16px var(--display);display:flex;justify-content:space-between;align-items:baseline}
+.pop h4 a{font:600 13px var(--body);color:var(--brand)}
+.vs{display:grid;gap:4px;margin-bottom:12px}
+.vs .lab{display:flex;justify-content:space-between;font-size:13px}
+.vs .lab span:last-child{color:var(--ink-2)}
+.vs .ends{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2)}
+.vtrack{height:6px;border-radius:3px;background:var(--surface-2);position:relative;box-shadow:inset 0 0 0 1px var(--line)}
+.vtrack::before{content:"";position:absolute;left:50%;top:-3px;width:1px;height:12px;background:var(--ink-2)}
+.vtrack::after{content:"";position:absolute;top:50%;left:var(--x);width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--ink);transform:translate(-50%,-50%)}
+.coach{position:absolute;z-index:6;width:260px;background:var(--ink);color:var(--surface);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 8px 24px -8px rgba(10,14,30,.5)}
+.coach::before{content:"";position:absolute;top:-6px;left:var(--ax,24px);width:12px;height:12px;background:inherit;transform:rotate(45deg)}
+.coach .cf{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;opacity:.85}
+.coach .cf b{background:var(--surface);color:var(--ink);padding:3px 10px;border-radius:7px}
+.scrim{position:absolute;inset:0;background:rgba(12,15,25,.55);z-index:7}
+.dlg{position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;background:var(--surface);border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);padding:22px}
+.dlg h3{margin:0;font:700 24px var(--display)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:14px 0}
+.tabs span{padding:8px 12px;font:600 14px var(--body);color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs span.on{color:var(--ink);border-color:var(--brand)}
+.guide{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.guide div{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink-2)}
+.guide b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.guide code{font:12px var(--mono);color:var(--ink)}
+pre.snip{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:12px/1.55 var(--mono);height:210px;overflow:hidden;color:var(--ink-2)}
+pre.snip .key{color:var(--ink)}
+.chk{display:flex;gap:8px;font-size:14px;margin-bottom:10px;align-items:center}
+.chk i{width:16px;height:16px;border-radius:4px;background:var(--brand);display:inline-block;position:relative}
+.chk i::after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;border:solid var(--brand-ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.dact{display:flex;gap:10px;align-items:center;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.drawer{position:absolute;z-index:8;left:0;top:0;bottom:0;width:360px;background:var(--surface);box-shadow:0 30px 80px -20px rgba(0,0,0,.5);padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+.drawer h3{margin:0;font:650 20px var(--display);display:flex;justify-content:space-between;align-items:center}
+.lib{display:flex;flex-direction:column;gap:4px}
+.li{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px}
+.li.cur{background:var(--surface-2)}
+.li .strip{display:flex;border-radius:5px;overflow:hidden;flex:none;box-shadow:inset 0 0 0 1px rgba(127,127,127,.3)}
+.li .strip span{width:12px;height:28px}
+.li .meta{flex:1;line-height:1.25}
+.li .meta b{display:block;font-size:15px}
+.li .meta small{color:var(--ink-2);font-size:12.5px}
+.li .more{color:var(--ink-2);font-weight:700}
+.toast{position:absolute;z-index:9;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--surface);border-radius:10px;padding:10px 12px 10px 16px;display:flex;gap:14px;align-items:center;font-size:14px;box-shadow:0 8px 24px -8px rgba(10,14,30,.5)}
+.toast b{color:var(--surface);border:1px solid currentColor;border-radius:7px;padding:3px 10px;font-size:13px}
+
+/* ---------- preview (VS Code mock) ---------- */
+.wb{flex:1;min-height:0;border-radius:12px;overflow:hidden;border:1px solid var(--w-border);background:var(--w-editor);color:var(--r-fg);font:13px/1.6 var(--body);display:flex;flex-direction:column;box-shadow:0 24px 50px -28px rgba(10,14,30,.55)}
+.wb-title{height:32px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--w-activity);color:var(--r-muted);font-size:12px;border-bottom:1px solid var(--w-border);position:relative}
+.wb-title i{position:absolute;left:12px;width:46px;height:11px;background:radial-gradient(circle,var(--w-border) 5px,transparent 6px) 0 0/16px 11px repeat-x}
+.wb-b{flex:1;display:grid;grid-template-columns:48px 196px 1fr;min-height:0}
+.wb-act{background:var(--w-activity);border-right:1px solid var(--w-border);display:flex;flex-direction:column;align-items:center;gap:20px;padding-top:12px}
+.wb-act span{width:20px;height:20px;border:2px solid var(--r-muted);border-radius:5px}
+.wb-act span.on{border-color:var(--r-fg);box-shadow:-14px 0 0 -12px var(--r-accent)}
+.wb-side{background:var(--w-sidebar);border-right:1px solid var(--w-border);padding:8px 0;font-size:13px}
+.wb-side .h{padding:0 14px 6px;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--r-muted)}
+.wb-side div.f{height:23px;display:flex;align-items:center;padding:0 12px 0 var(--d,24px);white-space:nowrap}
+.wb-side .f.a{background:color-mix(in srgb,var(--r-accent) 22%,transparent);box-shadow:inset 0 0 0 1px var(--r-accent)}
+.wb-side .f em{font-style:normal;margin-left:auto;font-weight:700;font-size:11px}
+.wb-m{display:flex;flex-direction:column;min-width:0}
+.wb-tabs{display:flex;background:var(--w-tab);border-bottom:1px solid var(--w-border);flex:none}
+.wb-tabs span{padding:7px 16px;color:var(--r-muted);border-right:1px solid var(--w-border)}
+.wb-tabs span.a{background:var(--w-editor);color:var(--r-fg);box-shadow:inset 0 2px 0 var(--r-accent)}
+.wb-cr{padding:3px 16px;font-size:12px;color:var(--r-muted);flex:none}
+.wb-ed{flex:1;font:13px/1.62 var(--mono);padding:2px 0;position:relative;overflow:hidden;white-space:pre}
+.wb-ed .l{display:flex}
+.wb-ed .l.cur{background:var(--w-line)}
+.wb-ed code{font:inherit;white-space:pre}
+.wb-ed .n{width:46px;flex:none;text-align:right;padding-right:16px;color:var(--r-muted);opacity:.85}
+.wb-ed .mini{position:absolute;right:10px;top:6px;width:52px;display:flex;flex-direction:column;gap:3px;opacity:.55}
+.wb-ed .mini i{height:2px;border-radius:1px;display:block}
+.hlo{outline:2px dashed var(--hl);outline-offset:1px;border-radius:3px}
+.t-k{color:var(--r-keyword);font-style:italic}.t-s{color:var(--r-string)}.t-f{color:var(--r-function)}.t-t{color:var(--r-type)}.t-v{color:var(--r-variable)}.t-c{color:var(--r-constant)}.t-o{color:var(--r-operator)}.t-m{color:var(--r-muted);font-style:italic}
+.sq{text-decoration:underline wavy var(--r-error);text-underline-offset:3px}
+.wb-p{height:110px;flex:none;border-top:1px solid var(--w-border);background:var(--w-panel);font:12px/1.7 var(--mono);padding:6px 16px}
+.wb-p .pt{font:600 11px var(--body);color:var(--r-muted);display:flex;gap:18px;margin-bottom:4px}
+.wb-p .pt span.a{color:var(--r-fg);box-shadow:inset 0 -1px 0 var(--r-accent);padding-bottom:4px}
+.wb-st{height:24px;flex:none;display:flex;gap:16px;align-items:center;padding:0 12px;background:var(--r-accent);color:var(--w-on);font-size:12px}
+.wb-st span:nth-child(3){margin-left:auto}
+
+/* mobile */
+.m-bar{height:48px;flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.m-bar .tname{font-size:17px;margin:0;flex:1}
+.m-stage{flex:1;padding:12px;display:flex;flex-direction:column;min-height:0}
+.m-stage .wb-b{grid-template-columns:34px 1fr}
+.m-stage .wb-side{display:none}
+.m-stage .wb-ed{font-size:11px}
+.m-stage .wb-ed .n{width:30px;padding-right:10px}
+.m-strip{flex:none;display:flex;gap:6px;padding:10px 14px 4px;background:var(--surface);border-top:1px solid var(--line);overflow:hidden}
+.m-strip span{width:34px;height:34px;border-radius:8px;flex:none;position:relative;box-shadow:inset 0 0 0 1px rgba(127,127,127,.35)}
+.m-strip span.lkd::after{content:"";position:absolute;left:50%;bottom:-7px;width:5px;height:5px;border-radius:50%;background:var(--ink);transform:translateX(-50%)}
+.m-strip span.sel{outline:2px solid var(--ink);outline-offset:2px}
+.m-thumb{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px 22px;background:var(--surface)}
+.m-thumb .b{height:46px;justify-content:center;font-size:15px}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:56%;z-index:7;background:var(--surface);border-radius:16px 16px 0 0;box-shadow:0 -20px 50px -20px rgba(0,0,0,.5);padding:8px 16px 20px;display:flex;flex-direction:column;gap:10px}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:2px auto 4px}
+.sheet .row{height:auto;padding:0}
+.sheet .sl{grid-template-columns:76px 1fr 40px}
+.sheet .sl i{height:18px}
+.sheet .sl i::after{width:24px;height:24px}
+</style>
+</head>
+<body>
+<div class="doc">
+  <header>
+    <h1>Hueprint MVP mockups</h1>
+    <p>High-fidelity screens for the MVP in BACKLOG.md, drawn to the tokens and components in DESIGN.md. Numbered dots match the notes under each screen. Desktop frames are 1280×800 scaled to fit.</p>
+  </header>
+
+  <section class="shot">
+    <h2>S1 · First visit, exploring</h2>
+    <p>A fresh shuffle in the visitor's system mode. Shuffle is the primary action and the first coach mark explains Space and locks.</p>
+    <div class="frame" data-w="1280" data-h="800"><div class="canvas" id="s1"></div></div>
+    <ul class="notes">
+      <li><span class="n">1</span><b>Shuffle is primary</b> until the user locks or edits a color.</li>
+      <li><span class="n">2</span><b>Coach mark 1 of 3</b> never blocks interaction; Skip ends the tour.</li>
+      <li><span class="n">3</span><b>Language switcher</b> above the preview (HP-505); the preview scales to fit (HP-509).</li>
+      <li><span class="n">4</span><b>Rail footer</b> summarizes readability for the whole theme.</li>
+    </ul>
+  </section>
+
+  <section class="shot">
+    <h2>S2 · Editing a role, with vibe</h2>
+    <p>The user clicked a keyword in the preview: the rail opens Keyword, its uses are outlined, and Export has become the primary action. The Vibe popover is open on top.</p>
+    <div class="frame" data-w="1280" data-h="800"><div class="canvas" id="s2"></div></div>
+    <ul class="notes">
+      <li><span class="n">1</span><b>Export turns primary</b> after the first lock or edit; Shuffle steps down.</li>
+      <li><span class="n">2</span><b>Dashed orange outline</b> shows every use of the open role.</li>
+      <li><span class="n">3</span><b>Inline contrast fix</b> nudges lightness only and is one undo step.</li>
+      <li><span class="n">4</span><b>Vibe sliders</b> are centered at 0 with named ends and per-slider reset.</li>
+      <li><span class="n">5</span><b>Locked roles</b> show a filled lock; the footer links to the failing role.</li>
+      <li><span class="n">6</span><b>Saved state</b> next to the name: "Edited, not saved".</li>
+    </ul>
+  </section>
+
+  <section class="shot">
+    <h2>S4 · Export, right after copying</h2>
+    <p>The instructions become a three-step visual guide once the snippet is on the clipboard.</p>
+    <div class="frame" data-w="1280" data-h="800"><div class="canvas" id="s4"></div></div>
+    <ul class="notes">
+      <li><span class="n">1</span><b>Same verb through the flow</b>: "Copy snippet" becomes "Copied snippet".</li>
+      <li><span class="n">2</span><b>Scoped by default</b> so other themes stay untouched.</li>
+      <li><span class="n">3</span><b>Troubleshooting line</b> covers the most likely failure: an existing customizations block.</li>
+    </ul>
+  </section>
+
+  <section class="shot">
+    <h2>S5 · Library, light chrome</h2>
+    <p>The library drawer over a light theme. The chrome follows the theme's mode. Deleting shows an undo toast instead of a confirmation.</p>
+    <div class="frame" data-w="1280" data-h="800"><div class="canvas" id="s5"></div></div>
+    <ul class="notes">
+      <li><span class="n">1</span><b>Update vs save as new</b>: the button names the theme it will overwrite.</li>
+      <li><span class="n">2</span><b>Each theme shows a strip</b> of six key colors, its mode and when it was last edited.</li>
+      <li><span class="n">3</span><b>Undo toast</b> after delete, 5 s, pauses on hover.</li>
+    </ul>
+  </section>
+
+  <section class="shot">
+    <h2>S8 · Mobile</h2>
+    <p>Preview on top, a scrolling swatch strip and a thumb bar at the bottom. Tapping a swatch or the preview opens a bottom sheet that keeps the preview visible.</p>
+    <div class="phones">
+      <div class="phone"><div class="frame" data-w="390" data-h="844"><div class="canvas" id="m1"></div></div></div>
+      <div class="phone"><div class="frame" data-w="390" data-h="844"><div class="canvas" id="m2"></div></div></div>
+    </div>
+    <ul class="notes">
+      <li><span class="n">1</span><b>Long-press a swatch</b> to lock it; locked swatches get a dot.</li>
+      <li><span class="n">2</span><b>Bottom sheet</b> at 55 % height with larger slider thumbs (44 px targets).</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+/* ---------- sample themes ---------- */
+const DARK = {name:"Dusk Grove",mode:"dark",bg:"#1d2130",fg:"#dfe3ee",accent:"#8fa8ff",muted:"#7a8199",keyword:"#d59bf6",string:"#b4dc8c",function:"#7fc8f8",type:"#f5c97a",variable:"#e0d8f0",constant:"#f7a072",operator:"#a9b4d6",error:"#ff7b7b",warning:"#e8c06b",info:"#7fb4ff",success:"#8fd694"};
+const LIGHT = {name:"Paper Orchard",mode:"light",bg:"#fbfaf7",fg:"#2b2d38",accent:"#3a5bd9",muted:"#7c7f8c",keyword:"#9a3fb5",string:"#3f7d2c",function:"#1f6fb0",type:"#a3570c",variable:"#3d3550",constant:"#b8442c",operator:"#5a6075",error:"#c62f2f",warning:"#8f6400",info:"#2867c7",success:"#2e7d32"};
+const ROLES=[["Base",[["bg","Background",0],["fg","Text",7],["accent","Accent",3],["muted","Comments",3]]],["Syntax",[["keyword","Keyword",4.5],["string","String",4.5],["function","Function",4.5],["type","Type",4.5],["variable","Variable",4.5],["constant","Number",4.5],["operator","Operator",4.5]]],["Status",[["error","Error",4.5],["warning","Warning",4.5],["info","Info",4.5],["success","Success",4.5]]]];
+
+function lum(h){return [1,3,5].map(i=>{let c=parseInt(h.substr(i,2),16)/255;return c<=.04045?c/12.92:((c+.055)/1.055)**2.4}).reduce((a,c,i)=>a+c*[.2126,.7152,.0722][i],0)}
+function ratio(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+function mix(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));const A=p(a),B=p(b);return "#"+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0")).join("")}
+
+function vars(t){
+  const d=t.mode==="dark";
+  const v={"--w-editor":t.bg,"--w-sidebar":mix(t.bg,d?"#000":"#6b6f80",d?.18:.06),"--w-activity":mix(t.bg,d?"#000":"#6b6f80",d?.3:.1),"--w-panel":mix(t.bg,d?"#000":"#6b6f80",d?.18:.06),"--w-tab":mix(t.bg,d?"#000":"#6b6f80",d?.18:.06),"--w-border":mix(t.bg,t.fg,d?.12:.14),"--w-line":t.fg+(d?"0d":"0b"),"--w-on":ratio(t.accent,"#fff")>=ratio(t.accent,"#111418")?"#fff":"#111418"};
+  for(const [,g] of ROLES) for(const [id] of g) v["--r-"+id]=t[id];
+  return Object.entries(v).map(([k,x])=>`${k}:${x}`).join(";");
+}
+
+/* ---------- icons ---------- */
+const I={
+ shuffle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h3c4 0 6 10 10 10h4M17 14l3 3-3 3M3 17h3c1.5 0 2.7-1.4 3.7-3M13.3 10C14.3 8.4 15.5 7 17 7h3M17 4l3 3-3 3"/></svg>',
+ lock:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="9" width="12" height="8" rx="2" fill="currentColor"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>',
+ unlock:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="9" width="12" height="8" rx="2"/><path d="M7 9V6a3 3 0 0 1 5.8-1"/></svg>',
+ undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></svg>',
+ redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5M20 9H10a6 6 0 0 0 0 12h3"/></svg>',
+ export:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>',
+ library:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="4" width="6" height="16" rx="1.5"/><rect x="12" y="4" width="4" height="16" rx="1.5"/><path d="m18 5 3 .8-3.6 14.4-2.4-.6"/></svg>',
+ vibe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
+ more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+ eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14 7 3 3M5 19l1-4 9-9a2.1 2.1 0 0 1 3 3l-9 9z"/></svg>',
+ close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>'
+};
+const logo='<svg width="28" height="28" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="#1C2233"/><rect x="22" y="15" width="6" height="34" rx="3" fill="#7aa2ff"/><rect x="29" y="15" width="6" height="34" rx="3" fill="#c792ea"/><rect x="36" y="15" width="6" height="34" rx="3" fill="#a5d98f"/><path d="M17 13c-4 0-5 2-5 6v7c0 3-1 5-4 6 3 1 4 3 4 6v7c0 4 1 6 5 6M47 13c4 0 5 2 5 6v7c0 3 1 5 4 6-3 1-4 3-4 6v7c0 4-1 6-5 6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>';
+
+/* ---------- builders ---------- */
+const CODE=[
+ '<span class="t-m">// Pick colors that stay readable on any background</span>',
+ '<span class="t-k">import</span> <span class="t-o">{</span> <span class="t-v">contrast</span><span class="t-o">,</span> <span class="t-v">oklch</span> <span class="t-o">}</span> <span class="t-k">from</span> <span class="t-s">"./color"</span><span class="t-o">;</span>',
+ '',
+ '<span class="t-k">export</span> <span class="t-k">type</span> <span class="t-t">Role</span> <span class="t-o">=</span> <span class="t-s">"keyword"</span> <span class="t-o">|</span> <span class="t-s">"string"</span><span class="t-o">;</span>',
+ '',
+ '<span class="t-k">interface</span> <span class="t-t">Palette</span> <span class="t-o">{</span>',
+ '  <span class="t-v">name</span><span class="t-o">:</span> <span class="t-t">string</span><span class="t-o">;</span>',
+ '  <span class="t-v">locked</span><span class="t-o">:</span> <span class="t-t">boolean</span><span class="t-o">;</span>',
+ '<span class="t-o">}</span>',
+ '',
+ '<span class="t-k">const</span> <span class="t-c">MIN_CONTRAST</span> <span class="t-o">=</span> <span class="t-c">4.5</span><span class="t-o">;</span>',
+ '',
+ '<span class="t-k">export</span> <span class="t-k">function</span> <span class="t-f">shuffle</span><span class="t-o">(</span><span class="t-v">seed</span><span class="t-o">:</span> <span class="t-t">number</span><span class="t-o">):</span> <span class="t-t">Palette</span> <span class="t-o">{</span>',
+ '  <span class="t-k">const</span> <span class="t-v">hue</span> <span class="t-o">=</span> <span class="t-o">(</span><span class="t-v">seed</span> <span class="t-o">*</span> <span class="t-c">137.5</span><span class="t-o">)</span> <span class="t-o">%</span> <span class="t-c">360</span><span class="t-o">;</span>',
+ '  <span class="t-k">const</span> <span class="t-v">bg</span> <span class="t-o">=</span> <span class="t-f">oklch</span><span class="t-o">(</span><span class="t-c">0.21</span><span class="t-o">,</span> <span class="t-c">0.02</span><span class="t-o">,</span> <span class="t-v">hue</span><span class="t-o">);</span>',
+ '  <span class="t-k">if</span> <span class="t-o">(</span><span class="t-f">contrast</span><span class="t-o">(</span><span class="t-v">fg</span><span class="t-o">,</span> <span class="t-v">bg</span><span class="t-o">)</span> <span class="t-o">&lt;</span> <span class="t-c">MIN_CONTRAST</span><span class="t-o">)</span> <span class="t-f sq">lighten</span><span class="t-o">(</span><span class="t-v">fg</span><span class="t-o">);</span>',
+ '  <span class="t-k">return</span> <span class="t-o">{</span> <span class="t-v">name</span><span class="t-o">:</span> <span class="t-s">"Dusk Grove"</span><span class="t-o">,</span> <span class="t-v">locked</span><span class="t-o">:</span> <span class="t-c">false</span> <span class="t-o">};</span>',
+ '<span class="t-o">}</span>'
+];
+function workbench(t,{hl}={}){
+  let code=CODE.map((l,i)=>`<div class="l${i===14?" cur":""}"><span class="n">${i+1}</span><code>${hl==="keyword"?l.replace(/class="t-k"/g,'class="t-k hlo"'):l}</code></div>`).join("");
+  const mini=Array.from({length:18},(_,i)=>`<i style="width:${20+((i*37)%32)}px;background:var(--r-${["keyword","string","function","type","variable","muted"][i%6]})"></i>`).join("");
+  return `<div class="wb" style="${vars(t)}">
+   <div class="wb-title"><i></i>shuffle.ts — hueprint</div>
+   <div class="wb-b">
+    <div class="wb-act"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+    <div class="wb-side"><div class="h">EXPLORER</div>
+     <div class="f" style="--d:12px">› src</div><div class="f">color.ts</div>
+     <div class="f a">shuffle.ts<em style="color:var(--r-warning)">M</em></div>
+     <div class="f" style="color:var(--r-success)">export.ts<em>U</em></div>
+     <div class="f" style="color:var(--r-error)">contrast.ts<em>1</em></div>
+     <div class="f" style="--d:12px">package.json</div><div class="f" style="--d:12px">README.md</div></div>
+    <div class="wb-m">
+     <div class="wb-tabs"><span class="a">shuffle.ts</span><span>color.ts</span><span>export.ts</span></div>
+     <div class="wb-cr">src › shuffle.ts › shuffle</div>
+     <div class="wb-ed">${code}<div class="mini">${mini}</div></div>
+     <div class="wb-p"><div class="pt"><span>Problems</span><span class="a">Terminal</span><span>Output</span></div>
+      <div><span style="color:var(--r-success)">➜</span> <span style="color:var(--r-info)">hueprint</span> npm test</div>
+      <div><span style="color:var(--r-success)">✓</span> contrast.test.ts (12)</div>
+      <div><span style="color:var(--r-error)">✗</span> shuffle.test.ts <span style="color:var(--r-warning)">1 warning</span></div></div>
+    </div></div>
+   <div class="wb-st"><span>⎇ main</span><span>✕ 1 ⚠ 0</span><span>Ln 15, Col 9</span><span>UTF-8</span><span>TypeScript</span></div>
+  </div>`;
+}
+function rail(t,{open,locked=[],fail}={}){
+  let h="";
+  for(const [g,rows] of ROLES){
+    h+=`<div class="gh2">${g}${g==="Base"?"<a>Lock all</a>":""}</div>`;
+    for(const [id,label,min] of rows){
+      const c=t[id], r=min?ratio(c,t.bg):null, bad=fail===id;
+      const shown=bad?"#5e5470":c, rr=bad?2.8:r;
+      const lk=locked.includes(id);
+      const row=`<div class="row"><span class="sw" style="background:${shown}"></span><span class="nm">${label}</span><span class="hx">${shown}</span>${r?`<span class="badge${bad?" w":""}">${bad?"⚠ ":""}${rr.toFixed(1)}</span>`:""}<span class="lk${lk?" on":""}">${lk?I.lock:I.unlock}</span></div>`;
+      if(open===id){
+        h+=`<div class="open">${row}<div class="ed"><p class="hint">import, const, if, return, function…</p>
+         <div class="sl">Lightness<i style="--x:74%;background:linear-gradient(90deg,#000,#5b3a6e,#b07ad0,#f1d9ff,#fff)"></i><b>74%</b></div>
+         <div class="sl">Chroma<i style="--x:38%;background:linear-gradient(90deg,#b9b4bc,#c59ad8,#d084ff)"></i><b>0.14</b></div>
+         <div class="sl">Hue<i style="--x:85%;background:linear-gradient(90deg,#f28b8b,#e7c06b,#9fd38a,#6fd0c8,#7fa8ff,#c08af2,#f28bc4)"></i><b>305°</b></div>
+         <div class="edrow"><span class="hexf">${c}</span><span class="b sm">${I.eye} Pick</span><span class="sp"></span><span class="b sm i on"><i>I</i></span><span class="b sm i"><b>B</b></span><span class="b sm i"><u>U</u></span></div></div></div>`;
+      } else if(bad){
+        h+=`<div class="open">${row}<div class="ed"><div class="warnbox"><span>Hard to read: 2.8:1, needs 4.5:1.</span><span class="b sm">Fix contrast</span></div></div></div>`;
+      } else h+=row;
+    }
+  }
+  return `<div class="rail">${h}<div class="foot">${fail?`1 color is hard to read. <a>Show Variable</a>`:"All colors readable."}</div></div>`;
+}
+function topbar(t,{editing,saved="Saved"}={}){
+  return `<div class="bar"><span class="brand">${logo}Hueprint</span><span class="b gh">${I.library} Library</span>
+   <span class="tname">${t.name}</span><span class="saved">${saved}</span><span class="sp"></span>
+   <span class="b${editing?"":" p"}">${I.shuffle} Shuffle <span class="k">Space</span></span>
+   <span class="seg"><span class="${t.mode==="dark"?"on":""}">Dark</span><span class="${t.mode==="light"?"on":""}">Light</span></span>
+   <span class="b">${I.vibe} Vibe</span>
+   <span class="b i gh">${I.undo}</span><span class="b i gh">${I.redo}</span>
+   <span class="b${editing?" p":""}">${I.export} Export</span></div>`;
+}
+function ptool(){return `<div class="ptool"><span class="on">TypeScript</span><span>Python</span><span>Rust</span><span>Go</span><span>HTML</span><span>CSS</span><span>JSON</span><span>Markdown</span><span class="sp"></span><span>Fit to window ▾</span></div>`}
+function app(t,o={}){return `<div class="app" data-chrome="${t.mode}" style="width:1280px;height:800px">${topbar(t,o)}<div class="body">${rail(t,o)}<div class="stage">${o.banner||""}${ptool()}${workbench(t,o)}</div></div>${o.extra||""}</div>`}
+const dot=(n,x,y)=>`<span style="position:absolute;left:${x}px;top:${y}px;z-index:20;width:22px;height:22px;border-radius:50%;background:#FF8A3D;color:#1C2233;font:700 12px/22px var(--body);text-align:center;box-shadow:0 0 0 3px rgba(255,255,255,.85)">${n}</span>`;
+
+/* ---------- S1 ---------- */
+document.getElementById("s1").innerHTML=app(DARK,{saved:"",extra:
+ `<div class="coach" style="left:776px;top:66px;--ax:52px"><b>Try another theme</b><br>Press Space to shuffle. Lock colors you like and they stay put.<div class="cf"><span>1 of 3 · Skip</span><b>Next</b></div></div>`
+ +dot(1,786,4)+dot(2,1044,70)+dot(3,322,70)+dot(4,6,766)});
+
+/* ---------- S2 ---------- */
+document.getElementById("s2").innerHTML=app(DARK,{editing:true,open:"keyword",locked:["bg","keyword","string"],fail:"variable",saved:"Edited, not saved",hl:"keyword",extra:
+ `<div class="pop" style="left:928px;top:62px;width:300px"><h4>Vibe <a>Reset all</a></h4>
+   <div class="vs"><div class="lab"><span>Contrast</span><span>+0.3</span></div><div class="vtrack" style="--x:65%"></div><div class="ends"><span>Soft</span><span>Crisp</span></div></div>
+   <div class="vs"><div class="lab"><span>Saturation</span><span>0</span></div><div class="vtrack" style="--x:50%"></div><div class="ends"><span>Muted</span><span>Vivid</span></div></div>
+   <div class="vs"><div class="lab"><span>Warmth</span><span>−0.2</span></div><div class="vtrack" style="--x:40%"></div><div class="ends"><span>Cool</span><span>Warm</span></div></div>
+   <div class="vs" style="margin:0"><div class="lab"><span>Depth</span><span>+0.5</span></div><div class="vtrack" style="--x:75%"></div><div class="ends"><span>Flat</span><span>Layered</span></div></div></div>`
+ +dot(1,1256,34)+dot(2,640,300)+dot(3,300,640)+dot(4,906,64)+dot(5,296,150)+dot(6,530,17)});
+
+/* ---------- S4 ---------- */
+document.getElementById("s4").innerHTML=app(DARK,{editing:true,locked:["bg","keyword"],extra:
+ `<div class="scrim"></div><div class="dlg"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Export “Dusk Grove”</h3><span class="b sm i gh">${I.close}</span></div>
+  <div class="tabs"><span class="on">Paste into settings</span><span>Theme file</span><span>Share link</span></div>
+  <div class="guide"><div><b>1. Open the Command Palette</b><code>⇧⌘P</code> or <code>Ctrl+Shift+P</code></div><div><b>2. Open settings JSON</b>Run <code>Preferences: Open User Settings (JSON)</code></div><div><b>3. Paste and save</b>Inside the outer <code>{ }</code>. The theme switches right away.</div></div>
+  <div class="chk"><i></i>Only apply on top of “Default Dark Modern” (keeps your other themes untouched)</div>
+  <pre class="snip">// Dusk Grove — generated by Hueprint
+<span class="key">"workbench.colorTheme"</span>: "Default Dark Modern",
+<span class="key">"workbench.colorCustomizations"</span>: {
+  "[Default Dark Modern]": {
+    "editor.background": "${DARK.bg}",
+    "editor.foreground": "${DARK.fg}",
+    "focusBorder": "${DARK.accent}",
+    "statusBar.background": "${DARK.accent}",
+    …</pre>
+  <div class="dact"><span class="b p">${I.check} Copied snippet</span><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#FF8A3D;color:#1C2233;font:700 12px/22px var(--body);text-align:center;flex:none">1</span><span>Already have colorCustomizations? Replace that block, or the old colors win.</span><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:#FF8A3D;color:#1C2233;font:700 12px/22px var(--body);text-align:center;flex:none">3</span></div></div>`
+ +dot(2,262,404)});
+
+/* ---------- S5 ---------- */
+const lib=(t,name,meta,cur)=>`<div class="li${cur?" cur":""}"><span class="strip">${["bg","fg","accent","keyword","string","function"].map(k=>`<span style="background:${t[k]}"></span>`).join("")}</span><span class="meta"><b>${name}</b><small>${meta}</small></span><span class="more">${I.more.replace('<svg','<svg width="18" height="18"')}</span></div>`;
+const T2={...DARK,bg:"#141b1a",fg:"#d9e6e1",accent:"#5fd3b0",keyword:"#f08aa8",string:"#e6d27a",function:"#79c2ff"};
+const T3={...LIGHT,bg:"#f3f6fb",accent:"#0f7b8a",keyword:"#b0306a",string:"#2d6a4f",function:"#5b4bc4"};
+document.getElementById("s5").innerHTML=app(LIGHT,{editing:true,locked:["bg"],extra:
+ `<div class="scrim"></div><div class="drawer"><h3>Your themes <span class="b sm i gh">${I.close}</span></h3>
+  <span class="b p" style="justify-content:center">Update “Paper Orchard”</span><span class="b" style="justify-content:center;margin-top:-4px">Save as new theme</span>
+  <div class="lib">${lib(LIGHT,"Paper Orchard","Light · edited just now",true)}${lib(DARK,"Dusk Grove","Dark · edited 2 h ago")}${lib(T2,"Juniper Reef","Dark · edited yesterday")}${lib(T3,"Frost Atlas","Light · edited 3 days ago")}</div></div>
+  <div class="toast">Deleted “Ember Night”<b>Undo</b></div>`
+ +dot(1,330,76)+dot(2,22,200)+dot(3,780,736)});
+
+/* ---------- mobile ---------- */
+function mobile(t,{sheet}={}){
+  const strip=["bg","fg","accent","muted","keyword","string","function","type","variable"].map(k=>`<span class="${["bg","keyword"].includes(k)?"lkd":""}${sheet&&k==="keyword"?" sel":""}" style="background:${t[k]}"></span>`).join("");
+  return `<div class="app" data-chrome="${t.mode}" style="width:390px;height:844px">
+   <div class="m-bar">${logo}<span class="tname">${t.name}</span><span class="b sm i gh">${I.more}</span></div>
+   <div class="m-stage">${workbench(t,{hl:sheet?"keyword":null})}</div>
+   <div class="m-strip">${strip}</div>
+   <div class="m-thumb"><span class="b">${I.shuffle} Shuffle</span><span class="b p">${I.export} Export</span></div>
+   ${sheet?`<div class="sheet"><div class="grab"></div><div class="row"><span class="sw" style="background:${t.keyword}"></span><span class="nm">Keyword</span><span class="badge">${ratio(t.keyword,t.bg).toFixed(1)}</span><span class="lk on" style="width:26px;height:26px">${I.lock}</span></div>
+     <div class="sl">Lightness<i style="--x:74%;background:linear-gradient(90deg,#000,#5b3a6e,#b07ad0,#f1d9ff,#fff)"></i><b>74%</b></div>
+     <div class="sl">Chroma<i style="--x:38%;background:linear-gradient(90deg,#b9b4bc,#c59ad8,#d084ff)"></i><b>0.14</b></div>
+     <div class="sl">Hue<i style="--x:85%;background:linear-gradient(90deg,#f28b8b,#e7c06b,#9fd38a,#6fd0c8,#7fa8ff,#c08af2,#f28bc4)"></i><b>305°</b></div>
+     <div class="edrow"><span class="hexf" style="height:40px;line-height:38px;width:110px">${t.keyword}</span><span class="sp"></span><span class="b i on"><i>I</i></span><span class="b i"><b>B</b></span><span class="b i"><u>U</u></span></div>
+     <span class="b p" style="justify-content:center;height:46px;margin-top:auto">Done</span></div>`:""}
+   ${sheet?dot(2,180,380):dot(1,58,700)}
+  </div>`;
+}
+document.getElementById("m1").innerHTML=mobile(DARK);
+document.getElementById("m2").innerHTML=mobile(DARK,{sheet:true});
+document.querySelectorAll("#m1 .wb-ed, #m2 .wb-ed").forEach(e=>e.querySelector(".mini")?.remove());
+
+/* ---------- scale frames to fit ---------- */
+function fit(){document.querySelectorAll(".frame").forEach(f=>{const w=+f.dataset.w,h=+f.dataset.h,c=f.querySelector(".canvas");const s=f.clientWidth/w;c.style.transform=`scale(${s})`;if(!f.closest(".phone"))f.style.height=h*s+"px"})}
+addEventListener("resize",fit);fit();document.fonts?.ready.then(fit);
+</script>
+</body>
+</html>
