@@ -11,13 +11,18 @@ export function encodeTheme(t: ThemeState): string {
     const f = t.roles[id].fontStyle;
     return (f.includes("italic") ? "i" : "") + (f.includes("bold") ? "b" : "") || "-";
   }).join(",");
-  return ["1", t.mode === "dark" ? "d" : "l", encodeURIComponent(t.name), colors, styles].join(".");
+  // "." separates fields, so escape it in the name (encodeURIComponent leaves it alone).
+  const name = encodeURIComponent(t.name).replace(/\./g, "%2E");
+  return ["1", t.mode === "dark" ? "d" : "l", name, colors, styles].join(".");
 }
 
 export function decodeTheme(s: string): ThemeState | null {
   const parts = s.split(".");
-  if (parts.length !== 5 || parts[0] !== "1") return null;
-  const [, m, rawName, colors, styles] = parts;
+  if (parts.length < 5 || parts[0] !== "1") return null;
+  // Read fixed fields from both ends, so links made before dots were escaped still open.
+  const m = parts[1];
+  const rawName = parts.slice(2, -2).join(".");
+  const [colors, styles] = parts.slice(-2);
   if (colors.length !== ROLE_IDS.length * 6) return null;
   const styleList = styles.split(",");
   if (styleList.length !== ROLE_IDS.length) return null;

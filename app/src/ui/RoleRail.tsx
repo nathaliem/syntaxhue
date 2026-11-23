@@ -90,13 +90,25 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
   const bg = theme.roles.bg.color;
   const [lch, setLch] = useState<Oklch>(() => hexToOklch(role.color));
   const [hexText, setHexText] = useState(role.color);
+  const [typingHex, setTypingHex] = useState(false);
 
   // Sync when the color changes from outside (shuffle, undo, click in preview).
   useEffect(() => {
     if (oklchToHex(lch) !== role.color) setLch(hexToOklch(role.color));
-    setHexText(role.color);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role.color]);
+  // Never rewrite the hex field while someone is typing in it.
+  useEffect(() => {
+    if (!typingHex) setHexText(role.color);
+  }, [role.color, typingHex]);
+
+  const commitHex = () => {
+    setTypingHex(false);
+    const hex = normalizeHex(hexText);
+    // Short forms like #abc are only expanded once typing is done; one undo step per edit.
+    if (hex) dispatch({ type: "color", role: def.id, color: hex, commit: true });
+    else setHexText(role.color);
+  };
 
   const setFrom = (next: Oklch, commit: boolean) => {
     setLch(next);
@@ -150,12 +162,17 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
           <input
             value={hexText}
             spellCheck={false}
+            onFocus={() => setTypingHex(true)}
             onChange={(e) => {
               setHexText(e.target.value);
-              const hex = normalizeHex(e.target.value);
-              if (hex) dispatch({ type: "color", role: def.id, color: hex });
+              // Live preview only for complete 6-digit values.
+              const v = e.target.value.trim();
+              if (/^#?[0-9a-fA-F]{6}$/.test(v)) dispatch({ type: "color", role: def.id, color: normalizeHex(v)!, commit: false });
             }}
-            onBlur={() => setHexText(role.color)}
+            onBlur={commitHex}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.currentTarget.blur();
+            }}
             aria-invalid={!normalizeHex(hexText)}
           />
         </label>

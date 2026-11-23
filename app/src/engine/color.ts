@@ -31,6 +31,27 @@ export function rgbToHex(r: number, g: number, b: number): Hex {
   return "#" + [r, g, b].map((v) => Math.round(clamp(v, 0, 255)).toString(16).padStart(2, "0")).join("");
 }
 
+function oklchToLinearRgb({ l, c, h }: Oklch): [number, number, number] {
+  const hr = (h * Math.PI) / 180;
+  const a = c * Math.cos(hr);
+  const b = c * Math.sin(hr);
+  const l_ = (l + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m_ = (l - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s_ = (l - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [
+    4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_,
+    -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_,
+    -0.0041960863 * l_ - 0.7034186147 * m_ + 1.707614701 * s_,
+  ];
+}
+
+/** OKLCH -> hex, lowering chroma (not clipping channels) so the hue stays put when out of gamut. */
+export function oklchToHexInGamut(o: Oklch): Hex {
+  let c = o.c;
+  while (c > 0 && oklchToLinearRgb({ ...o, c }).some((v) => v < -1e-4 || v > 1 + 1e-4)) c -= 0.002;
+  return oklchToHex({ ...o, c: Math.max(0, c) });
+}
+
 /** OKLCH -> hex. Out-of-gamut values are clipped per channel. */
 export function oklchToHex({ l, c, h }: Oklch): Hex {
   const hr = (h * Math.PI) / 180;
@@ -96,6 +117,18 @@ export function fixContrast(color: Hex, bg: Hex, min: number): Hex {
 export function shiftL(hex: Hex, dl: number): Hex {
   const o = hexToOklch(hex);
   return oklchToHex({ ...o, l: clamp(o.l + dl) });
+}
+
+/** Perceptual distance between two colors (Euclidean in OKLab). ~0.02 is just noticeable. */
+export function colorDistance(a: Hex, b: Hex): number {
+  const lab = (hex: Hex) => {
+    const o = hexToOklch(hex);
+    const r = (o.h * Math.PI) / 180;
+    return [o.l, o.c * Math.cos(r), o.c * Math.sin(r)];
+  };
+  const A = lab(a);
+  const B = lab(b);
+  return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]);
 }
 
 /** Mix two colors in sRGB; t=0 -> a, t=1 -> b */

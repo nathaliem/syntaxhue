@@ -1,4 +1,4 @@
-import { contrast, fixContrast, oklchToHex, type Hex } from "./color";
+import { colorDistance, contrast, fixContrast, hexToOklch, oklchToHex, oklchToHexInGamut, type Hex } from "./color";
 
 export type Mode = "dark" | "light";
 export type FontStyle = "italic" | "bold";
@@ -77,27 +77,74 @@ const NOUN = ["Harbor", "Night", "Garden", "Signal", "Orchard", "Tide", "Grove",
 
 const DEFAULT_STYLE: Partial<Record<RoleId, FontStyle[]>> = { keyword: ["italic"], muted: ["italic"] };
 
+export const SYNTAX_IDS = ["keyword", "string", "function", "type", "variable", "constant", "operator"] as const;
+
+/** Two syntax colors closer than this (OKLab distance) are hard to tell apart in code. */
+export const MIN_SYNTAX_DISTANCE = 0.06;
+/** Syntax colors closer than this to the error color make normal code look like an error. */
+export const MIN_ERROR_DISTANCE = 0.08;
+const MAX_ATTEMPTS = 40;
+
 /**
- * Generate a full theme. Locked roles in `prev` are kept as-is.
- * All generated colors meet their role's minimum contrast against bg.
+ * How well a theme separates its syntax colors: 1 or more means it meets both minimums.
+ * Pairs where both colors are locked are the user's choice and don't count.
+ */
+export function distinctness(t: ThemeState): number {
+  let score = Infinity;
+  for (let i = 0; i < SYNTAX_IDS.length; i++) {
+    const a = t.roles[SYNTAX_IDS[i]];
+    for (let j = i + 1; j < SYNTAX_IDS.length; j++) {
+      const b = t.roles[SYNTAX_IDS[j]];
+      if (a.locked && b.locked) continue;
+      score = Math.min(score, colorDistance(a.color, b.color) / MIN_SYNTAX_DISTANCE);
+    }
+    if (!(a.locked && t.roles.error.locked)) {
+      score = Math.min(score, colorDistance(a.color, t.roles.error.color) / MIN_ERROR_DISTANCE);
+    }
+  }
+  return score;
+}
+
+/**
+ * Generate a full theme. Locked roles in `prev` are kept: as-is in the same mode, or with their
+ * hue and chroma carried into the other mode. All generated colors meet their role's minimum
+ * contrast against bg, and syntax colors are kept apart from each other and from the error color.
  */
 export function generate(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
+  let best: ThemeState | null = null;
+  let bestScore = -1;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const t = generateOnce((seed + attempt * 0x9e3779b1) >>> 0, mode, prev);
+    const score = distinctness(t);
+    if (score >= 1) return t;
+    if (score > bestScore) {
+      best = t;
+      bestScore = score;
+    }
+  }
+  return best!;
+}
+
+function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
   const r = mulberry32(seed);
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const dark = mode === "dark";
-  const keep = (id: RoleId) => (prev && prev.mode === mode && prev.roles[id].locked ? prev.roles[id] : null);
+  const sameMode = prev?.mode === mode;
+  const locked = (id: RoleId) => (prev?.roles[id].locked ? prev.roles[id] : null);
 
   const base = rnd(0, 360);
   const harm = Object.values(HARMONIES)[Math.floor(r() * 4)];
   const sat = rnd(0.08, 0.17);
   const hues = harm.map((o) => (base + o + rnd(-12, 12) + 360) % 360);
 
-  const colors = {} as Record<RoleId, Hex>;
-  const bgKept = keep("bg");
-  colors.bg = bgKept
-    ? bgKept.color
-    : oklchToHex({ l: dark ? rnd(0.17, 0.25) : rnd(0.96, 0.99), c: rnd(0.008, dark ? 0.04 : 0.02), h: base });
-  const bg = colors.bg;
+  let bg: Hex;
+  const bgLocked = locked("bg");
+  if (bgLocked && sameMode) bg = bgLocked.color;
+  else if (bgLocked) {
+    // Mode switch: keep the background's hue and a hint of its chroma, flip its lightness.
+    const o = hexToOklch(bgLocked.color);
+    bg = oklchToHex({ l: dark ? 0.21 : 0.975, c: Math.min(o.c, dark ? 0.04 : 0.02), h: o.h });
+  } else bg = oklchToHex({ l: dark ? rnd(0.17, 0.25) : rnd(0.96, 0.99), c: rnd(0.008, dark ? 0.04 : 0.02), h: base });
   const syntaxL = dark ? rnd(0.74, 0.84) : rnd(0.45, 0.55);
 
   const want: Record<Exclude<RoleId, "bg">, () => Hex> = {
@@ -119,21 +166,28 @@ export function generate(seed: number, mode: Mode, prev?: ThemeState): ThemeStat
 
   const roles = {} as Record<RoleId, RoleState>;
   for (const def of ROLES) {
-    const kept = keep(def.id);
-    if (kept) {
+    const fontStyle = prev?.roles[def.id]?.fontStyle ?? DEFAULT_STYLE[def.id] ?? [];
+    if (def.id === "bg") {
+      roles.bg = { color: bg, locked: !!bgLocked, fontStyle };
+      continue;
+    }
+    // Always draw from the random stream so locks don't shift the other roles' colors.
+    const raw = want[def.id as Exclude<RoleId, "bg">]();
+    const kept = locked(def.id);
+    if (kept && sameMode) {
       roles[def.id] = { ...kept };
       continue;
     }
-    const raw = def.id === "bg" ? colors.bg : want[def.id as Exclude<RoleId, "bg">]();
-    const color = def.min ? fixContrast(raw, bg, def.min) : raw;
-    roles[def.id] = {
-      color,
-      locked: false,
-      fontStyle: prev?.roles[def.id]?.fontStyle ?? DEFAULT_STYLE[def.id] ?? [],
-    };
+    let color = raw;
+    if (kept) {
+      // Mode switch: keep the locked hue and chroma, take the lightness this role needs in the new mode.
+      const o = hexToOklch(kept.color);
+      color = oklchToHexInGamut({ l: hexToOklch(raw).l, c: o.c, h: o.h });
+    }
+    roles[def.id] = { color: def.min ? fixContrast(color, bg, def.min) : color, locked: !!kept, fontStyle };
   }
 
-  const name = prev && prev.mode === mode && ROLE_IDS.every((id) => prev.roles[id].locked)
+  const name = prev && ROLE_IDS.every((id) => prev.roles[id].locked)
     ? prev.name
     : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
 

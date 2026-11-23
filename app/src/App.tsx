@@ -6,18 +6,32 @@ import { RoleRail } from "./ui/RoleRail";
 import { useThemeStore } from "./state";
 
 export default function App() {
-  const { theme, canUndo, canRedo, dispatch } = useThemeStore();
+  const { theme, canUndo, canRedo, dispatch, notice, dismissNotice, restorePrevious } = useThemeStore();
   const [selected, setSelected] = useState<RoleId | null>(null);
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const issues = contrastIssues(theme);
 
+  // A button clicked with the mouse shouldn't keep focus, or Space would press it again
+  // (e.g. unlock the color you just locked) instead of shuffling. Keyboard focus is untouched.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.detail === 0) return; // keyboard-triggered click
+      const b = (e.target as HTMLElement).closest("button");
+      if (b && !b.closest("dialog")) b.blur();
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   // Keyboard: Space shuffles, ⌘Z / ⌘⇧Z undo/redo — unless typing in a field or a dialog is open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = document.activeElement as HTMLElement | null;
-      const typing = el && (/INPUT|TEXTAREA|SELECT/.test(el.tagName) || el.isContentEditable);
+      const isSlider = el instanceof HTMLInputElement && el.type === "range";
+      const typing = el && !isSlider && (/INPUT|TEXTAREA|SELECT/.test(el.tagName) || el.isContentEditable);
       if (exportOpen || typing) return;
+      if (isSlider && e.code === "Space") return;
       if (e.code === "Space" && !(el && el.tagName === "BUTTON")) {
         e.preventDefault();
         dispatch({ type: "shuffle" });
@@ -70,6 +84,27 @@ export default function App() {
           </p>
         </aside>
         <section className="stage" aria-label="Preview">
+          {notice && (
+            <div className="notice" role="status">
+              {notice.kind === "badLink" ? (
+                <>
+                  <span>That link doesn't contain a theme Hueprint can read, so your last theme is shown.</span>
+                  <button className="btn sm" onClick={dismissNotice}>Dismiss</button>
+                </>
+              ) : notice.previous ? (
+                <>
+                  <span>You opened a shared theme. Your own theme is still saved.</span>
+                  <button className="btn sm" onClick={restorePrevious}>Back to my theme</button>
+                  <button className="btn sm primary" onClick={dismissNotice}>Keep this one</button>
+                </>
+              ) : (
+                <>
+                  <span>You opened a shared theme.</span>
+                  <button className="btn sm" onClick={dismissNotice}>Dismiss</button>
+                </>
+              )}
+            </div>
+          )}
           <p className="stage-hint">Click anything in the preview to edit the color behind it.</p>
           <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} />
         </section>

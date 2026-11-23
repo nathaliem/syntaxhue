@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { contrast, fixContrast, hexToOklch, oklchToHex } from "./color";
-import { contrastIssues, generate, ROLE_IDS, ROLES } from "./theme";
+import { contrastIssues, distinctness, generate, ROLE_IDS, ROLES } from "./theme";
+import { reducer, type History } from "../state";
 import { settingsSnippet, settingsSnippetText, themeFile, workbenchColors } from "./derive";
 import { decodeTheme, encodeTheme } from "./share";
 
@@ -96,5 +97,78 @@ describe("share", () => {
 
   it("has one entry per role", () => {
     expect(ROLES.map((r) => r.id)).toEqual([...ROLE_IDS]);
+  });
+});
+
+describe("distinct syntax colors", () => {
+  it.each(["dark", "light"] as const)("%s: syntax colors are distinct from each other and from error (500 seeds)", (mode) => {
+    const failing: number[] = [];
+    const t0 = performance.now();
+    for (let seed = 1; seed <= 500; seed++) if (distinctness(generate(seed, mode)) < 1) failing.push(seed);
+    const ms = (performance.now() - t0) / 500;
+    expect(failing, `seeds below threshold`).toEqual([]);
+    expect(ms, "average ms per shuffle").toBeLessThan(15);
+  });
+
+  it("still meets contrast after retries", () => {
+    for (let seed = 1; seed <= 200; seed++) expect(contrastIssues(generate(seed, "light"))).toEqual([]);
+  });
+});
+
+describe("mode switch", () => {
+  it("keeps locked roles locked, with their hue, and readable", () => {
+    const dark = generate(11, "dark");
+    dark.roles.keyword.locked = true;
+    dark.roles.bg.locked = true;
+    const light = generate(12, "light", dark);
+    expect(light.roles.keyword.locked).toBe(true);
+    expect(light.roles.bg.locked).toBe(true);
+    expect(light.roles.string.locked).toBe(false);
+    expect(hexToOklch(light.roles.bg.color).l).toBeGreaterThan(0.9);
+    const hueDiff = Math.abs(hexToOklch(light.roles.keyword.color).h - hexToOklch(dark.roles.keyword.color).h);
+    expect(Math.min(hueDiff, 360 - hueDiff)).toBeLessThan(8);
+    expect(contrastIssues(light)).toEqual([]);
+  });
+});
+
+describe("share names", () => {
+  it("round-trips names with dots, percent signs and unicode", () => {
+    for (const name of ["Night v1.2", "a.b.c", "100% Ember", "Café · Nacht"]) {
+      const t = { ...generate(4, "dark"), name };
+      expect(decodeTheme(encodeTheme(t))?.name).toBe(name);
+    }
+  });
+
+  it("still opens old links whose name contained an unescaped dot", () => {
+    const t = { ...generate(4, "dark"), name: "Night v1.2" };
+    const legacy = encodeTheme(t).replace("%2E", ".");
+    expect(decodeTheme(legacy)?.roles.bg.color).toBe(t.roles.bg.color);
+  });
+});
+
+describe("history", () => {
+  const start = (): History => ({ past: [], present: generate(1, "dark"), future: [] });
+
+  it("typing a hex value is one undo step", () => {
+    let h = start();
+    const original = h.present.roles.keyword.color;
+    h = reducer(h, { type: "color", role: "keyword", color: "#aabbcc", commit: false });
+    h = reducer(h, { type: "color", role: "keyword", color: "#abcdef", commit: false });
+    h = reducer(h, { type: "color", role: "keyword", color: "#abcdef", commit: true });
+    expect(h.past).toHaveLength(1);
+    h = reducer(h, { type: "undo" });
+    expect(h.present.roles.keyword.color).toBe(original);
+  });
+
+  it("a commit that changes nothing adds no undo step", () => {
+    const h = reducer(start(), { type: "color", role: "keyword", color: start().present.roles.keyword.color, commit: true });
+    expect(h.past).toHaveLength(0);
+  });
+
+  it("switching mode keeps locks", () => {
+    let h = reducer(start(), { type: "lock", role: "string" });
+    h = reducer(h, { type: "mode", mode: "light", seed: 5 });
+    expect(h.present.mode).toBe("light");
+    expect(h.present.roles.string.locked).toBe(true);
   });
 });
