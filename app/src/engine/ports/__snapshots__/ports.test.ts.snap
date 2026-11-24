@@ -942,6 +942,270 @@ exports[`port palette > matches its snapshot 2`] = `
 ]
 `;
 
+exports[`port sublime > matches its snapshot 1`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Dark",
+  "author": "Hueprint",
+  "variables": {
+    "bg": "#1e1408",
+    "fg": "#e5dcd4",
+    "accent": "#7b9dff",
+    "muted": "#877768",
+    "keyword": "#80c2ff",
+    "string": "#c4b532",
+    "function": "#c3bbff",
+    "type": "#ff9666",
+    "variable": "#e8cbac",
+    "constant": "#00ccf4",
+    "operator": "#a2bad8",
+    "error": "#f66d67",
+    "warning": "#f2af48",
+    "info": "#5fb8f2",
+    "success": "#74c878",
+    "border": "#362c20",
+    "widget": "#281d11",
+    "sidebar": "#170d03"
+  },
+  "globals": {
+    "background": "var(bg)",
+    "foreground": "var(fg)",
+    "caret": "var(accent)",
+    "accent": "var(accent)",
+    "line_highlight": "#e5dcd40d",
+    "selection": "#7b9dff4d",
+    "inactive_selection": "#7b9dff26",
+    "selection_border": "var(accent)",
+    "find_highlight": "var(warning)",
+    "find_highlight_foreground": "var(bg)",
+    "highlight": "var(warning)",
+    "invisibles": "#87776866",
+    "guide": "#e5dcd414",
+    "active_guide": "#e5dcd438",
+    "stack_guide": "#e5dcd424",
+    "brackets_foreground": "var(accent)",
+    "brackets_options": "underline",
+    "bracket_contents_foreground": "var(accent)",
+    "tags_foreground": "var(type)",
+    "misspelling": "var(error)",
+    "gutter": "var(bg)",
+    "gutter_foreground": "var(muted)",
+    "shadow": "#00000040"
+  },
+  "rules": [
+    {
+      "name": "Comments",
+      "scope": "comment, punctuation.definition.comment, markup.quote",
+      "foreground": "var(muted)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Keyword",
+      "scope": "keyword, storage, storage.type, storage.modifier, keyword.control",
+      "foreground": "var(keyword)",
+      "font_style": "italic"
+    },
+    {
+      "name": "String",
+      "scope": "string, string.regexp, punctuation.definition.string, markup.inline.raw",
+      "foreground": "var(string)"
+    },
+    {
+      "name": "Function",
+      "scope": "entity.name.function, support.function, meta.function-call",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Type",
+      "scope": "entity.name.type, entity.name.class, entity.name.namespace, support.type, support.class, entity.other.inherited-class",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Variable",
+      "scope": "variable, variable.parameter, variable.other.property, meta.object-literal.key",
+      "foreground": "var(variable)"
+    },
+    {
+      "name": "Number",
+      "scope": "constant.numeric, constant.language, constant.character, constant.other, support.constant, variable.other.constant, markup.underline.link",
+      "foreground": "var(constant)"
+    },
+    {
+      "name": "Operator",
+      "scope": "keyword.operator, punctuation, meta.brace",
+      "foreground": "var(operator)"
+    },
+    {
+      "name": "Type",
+      "scope": "entity.name.tag",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Function",
+      "scope": "entity.other.attribute-name, entity.name.section, markup.heading",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Invalid and deleted",
+      "scope": "invalid, markup.deleted, meta.diff.deleted",
+      "foreground": "var(error)"
+    },
+    {
+      "name": "Deprecated and changed",
+      "scope": "invalid.deprecated, markup.changed",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Inserted",
+      "scope": "markup.inserted, meta.diff.inserted",
+      "foreground": "var(success)"
+    },
+    {
+      "name": "Diff headers",
+      "scope": "meta.diff.header, meta.diff.range",
+      "foreground": "var(info)"
+    }
+  ]
+}
+",
+    "path": "fixture-dark.sublime-color-scheme",
+  },
+]
+`;
+
+exports[`port sublime > matches its snapshot 2`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Light",
+  "author": "Hueprint",
+  "variables": {
+    "bg": "#f7f9eb",
+    "fg": "#292a21",
+    "accent": "#824fa0",
+    "muted": "#80826e",
+    "keyword": "#007938",
+    "string": "#006957",
+    "function": "#745000",
+    "type": "#007c8e",
+    "variable": "#3b3d22",
+    "constant": "#924112",
+    "operator": "#385540",
+    "error": "#b63132",
+    "warning": "#a06200",
+    "info": "#006aa0",
+    "success": "#1e7729",
+    "border": "#dadccf",
+    "widget": "#f2f4e6",
+    "sidebar": "#eff1e3"
+  },
+  "globals": {
+    "background": "var(bg)",
+    "foreground": "var(fg)",
+    "caret": "var(accent)",
+    "accent": "var(accent)",
+    "line_highlight": "#292a210b",
+    "selection": "#824fa038",
+    "inactive_selection": "#824fa026",
+    "selection_border": "var(accent)",
+    "find_highlight": "var(warning)",
+    "find_highlight_foreground": "var(bg)",
+    "highlight": "var(warning)",
+    "invisibles": "#80826e66",
+    "guide": "#292a2114",
+    "active_guide": "#292a2138",
+    "stack_guide": "#292a2124",
+    "brackets_foreground": "var(accent)",
+    "brackets_options": "underline",
+    "bracket_contents_foreground": "var(accent)",
+    "tags_foreground": "var(type)",
+    "misspelling": "var(error)",
+    "gutter": "var(bg)",
+    "gutter_foreground": "var(muted)",
+    "shadow": "#00000040"
+  },
+  "rules": [
+    {
+      "name": "Comments",
+      "scope": "comment, punctuation.definition.comment, markup.quote",
+      "foreground": "var(muted)",
+      "font_style": "italic"
+    },
+    {
+      "name": "Keyword",
+      "scope": "keyword, storage, storage.type, storage.modifier, keyword.control",
+      "foreground": "var(keyword)",
+      "font_style": "italic"
+    },
+    {
+      "name": "String",
+      "scope": "string, string.regexp, punctuation.definition.string, markup.inline.raw",
+      "foreground": "var(string)"
+    },
+    {
+      "name": "Function",
+      "scope": "entity.name.function, support.function, meta.function-call",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Type",
+      "scope": "entity.name.type, entity.name.class, entity.name.namespace, support.type, support.class, entity.other.inherited-class",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Variable",
+      "scope": "variable, variable.parameter, variable.other.property, meta.object-literal.key",
+      "foreground": "var(variable)"
+    },
+    {
+      "name": "Number",
+      "scope": "constant.numeric, constant.language, constant.character, constant.other, support.constant, variable.other.constant, markup.underline.link",
+      "foreground": "var(constant)"
+    },
+    {
+      "name": "Operator",
+      "scope": "keyword.operator, punctuation, meta.brace",
+      "foreground": "var(operator)"
+    },
+    {
+      "name": "Type",
+      "scope": "entity.name.tag",
+      "foreground": "var(type)"
+    },
+    {
+      "name": "Function",
+      "scope": "entity.other.attribute-name, entity.name.section, markup.heading",
+      "foreground": "var(function)"
+    },
+    {
+      "name": "Invalid and deleted",
+      "scope": "invalid, markup.deleted, meta.diff.deleted",
+      "foreground": "var(error)"
+    },
+    {
+      "name": "Deprecated and changed",
+      "scope": "invalid.deprecated, markup.changed",
+      "foreground": "var(warning)"
+    },
+    {
+      "name": "Inserted",
+      "scope": "markup.inserted, meta.diff.inserted",
+      "foreground": "var(success)"
+    },
+    {
+      "name": "Diff headers",
+      "scope": "meta.diff.header, meta.diff.range",
+      "foreground": "var(info)"
+    }
+  ]
+}
+",
+    "path": "fixture-light.sublime-color-scheme",
+  },
+]
+`;
+
 exports[`port wezterm > matches its snapshot 1`] = `
 [
   {
