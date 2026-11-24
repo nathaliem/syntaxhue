@@ -23,55 +23,144 @@ async function openTab(user: ReturnType<typeof userEvent.setup>) {
   await user.click(screen.getByRole("button", { name: "Export" }));
   await user.click(screen.getByRole("tab", { name: "Extension (.vsix)" }));
 }
+const field = (name: string) => screen.getByRole("textbox", { name }) as HTMLInputElement;
+const download = () => screen.getByRole("button", { name: /^Download .*\.vsix$/ });
 const readBlob = (b: Blob) =>
   new Promise<Uint8Array>((res) => {
     const r = new FileReader();
     r.onload = () => res(new Uint8Array(r.result as ArrayBuffer));
     r.readAsArrayBuffer(b);
   });
+const pkgOf = async () =>
+  JSON.parse(new TextDecoder().decode(unzipStore(await readBlob(blobs[0]))["extension/package.json"]));
 
-describe("Export > Extension (.vsix)", () => {
-  it("won't download until there is a valid publisher id, and says why", async () => {
+describe("Export > Extension (.vsix) form", () => {
+  it("starts with suggestions from the theme and waits for a publisher id", async () => {
     const user = userEvent.setup();
     await openTab(user);
-    const button = screen.getByRole("button", { name: /^Download .*\.vsix$/ });
-    expect(button).toBeDisabled();
-    expect(screen.getByText(/Enter your Marketplace publisher id/)).toBeInTheDocument();
-    await user.type(screen.getByRole("textbox", { name: "Publisher id" }), "Not Valid");
-    expect(button).toBeDisabled();
-    expect(document.getElementById("ext-problems")).toHaveTextContent(/publisher id may only use/);
+    const themeName = (screen.getByRole("textbox", { name: "Theme name" }) as HTMLInputElement).value;
+    expect(field("Name")).toHaveValue(themeName);
+    expect(field("Extension id").value).toMatch(/^[a-z0-9-]+$/);
+    expect(field("Description").value).toContain(themeName);
+    expect(download()).toBeDisabled();
+    expect(field("Publisher id")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByText("Enter your publisher id.")).toBeInTheDocument();
+    expect(screen.getByText(/Fix the highlighted fields/)).toBeInTheDocument();
+    expect(field("Name in the license")).toHaveAttribute("aria-invalid", "false"); // not reported twice
   });
 
-  it("downloads a zip with the theme in it, named after the extension, and remembers the publisher", async () => {
+  it("checks each field as you type and points the message at the field", async () => {
     const user = userEvent.setup();
     await openTab(user);
-    await user.type(screen.getByRole("textbox", { name: "Publisher id" }), "someone");
-    const button = screen.getByRole("button", { name: /^Download .*\.vsix$/ });
-    expect(button).toBeEnabled();
-    await user.click(button);
-    expect(downloads).toHaveLength(1);
-    expect(downloads[0]).toMatch(/^[a-z0-9-]+-1\.0\.0\.vsix$/);
+    await user.type(field("Publisher id"), "Not Valid");
+    expect(field("Publisher id")).toHaveAttribute("aria-invalid", "true");
+    const msg = document.getElementById(field("Publisher id").getAttribute("aria-describedby")!)!;
+    expect(msg).toHaveTextContent(/lowercase letters, digits and hyphens/);
+
+    await user.clear(field("Publisher id"));
+    await user.type(field("Publisher id"), "someone");
+    expect(field("Publisher id")).toHaveAttribute("aria-invalid", "false");
+    expect(download()).toBeEnabled();
+
+    await user.clear(field("Version"));
+    await user.type(field("Version"), "1.0");
+    expect(field("Version")).toHaveAttribute("aria-invalid", "true");
+    expect(download()).toBeDisabled();
+    await user.type(field("Version"), ".1");
+    expect(download()).toBeEnabled();
+
+    await user.type(field("Repository (optional)"), "github.com/a/b");
+    expect(field("Repository (optional)")).toHaveAttribute("aria-invalid", "true");
+    expect(download()).toBeDisabled();
+  });
+
+  it("keeps focus while typing (fields are not remounted)", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "abc");
+    expect(field("Publisher id")).toHaveFocus();
+    expect(field("Publisher id")).toHaveValue("abc");
+  });
+
+  it("downloads a package built from every field, and remembers who you are", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    await user.clear(field("Name"));
+    await user.type(field("Name"), "Meadow Dark");
+    await user.clear(field("Extension id"));
+    await user.type(field("Extension id"), "meadow-dark");
+    await user.clear(field("Description"));
+    await user.type(field("Description"), "Greens at night.");
+    await user.type(field("Keywords (optional)"), "Green, calm, GREEN");
+    await user.type(field("Repository (optional)"), "https://github.com/someone/meadow");
+    await user.selectOptions(screen.getByRole("combobox", { name: "License" }), "ISC");
+    await user.click(download());
+
+    expect(downloads).toEqual(["meadow-dark-1.0.0.vsix"]);
+    const pkg = await pkgOf();
+    expect(pkg).toMatchObject({
+      name: "meadow-dark",
+      displayName: "Meadow Dark",
+      publisher: "someone",
+      description: "Greens at night.",
+      license: "ISC",
+      repository: { url: "https://github.com/someone/meadow" },
+    });
+    expect(pkg.keywords).toEqual(expect.arrayContaining(["green", "calm"]));
+    expect(pkg.keywords.filter((k: string) => k === "green")).toHaveLength(1);
     const files = unzipStore(await readBlob(blobs[0]));
-    expect(Object.keys(files)).toContain("extension.vsixmanifest");
-    expect(JSON.parse(new TextDecoder().decode(files["extension/package.json"])).publisher).toBe("someone");
-    expect(localStorage.getItem("hueprint.publisher")).toBe("someone");
+    expect(new TextDecoder().decode(files["extension/LICENSE.txt"])).toContain("ISC License");
+
+    const remembered = JSON.parse(localStorage.getItem("hueprint.extension")!);
+    expect(remembered).toMatchObject({
+      publisher: "someone",
+      license: "ISC",
+      repository: "https://github.com/someone/meadow",
+    });
+    expect(remembered).not.toHaveProperty("displayName"); // what this theme is called is not remembered
   });
 
-  it("starts with the remembered publisher", async () => {
-    localStorage.setItem("hueprint.publisher", "saved-one");
+  it("starts with what was remembered, and ignores a damaged save", async () => {
+    localStorage.setItem(
+      "hueprint.extension",
+      JSON.stringify({ publisher: "saved-one", license: "Unlicense", author: "A. B." }),
+    );
     const user = userEvent.setup();
     await openTab(user);
-    expect(screen.getByRole("textbox", { name: "Publisher id" })).toHaveValue("saved-one");
+    expect(field("Publisher id")).toHaveValue("saved-one");
+    expect(field("Name in the license")).toHaveValue("A. B.");
+    expect(screen.getByRole("combobox", { name: "License" })).toHaveValue("Unlicense");
   });
 
-  it("flags a bad version", async () => {
+  it("falls back to defaults when the saved details are damaged", async () => {
+    localStorage.setItem("hueprint.extension", "{not json");
     const user = userEvent.setup();
     await openTab(user);
-    await user.type(screen.getByRole("textbox", { name: "Publisher id" }), "someone");
-    const v = screen.getByRole("textbox", { name: "Version" });
-    await user.clear(v);
-    await user.type(v, "1.0");
-    expect(v).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByRole("button", { name: /^Download/ })).toBeDisabled();
+    expect(field("Publisher id")).toHaveValue("");
+    expect(screen.getByRole("combobox", { name: "License" })).toHaveValue("MIT");
+  });
+
+  it("suggests a repository without blocking, and can go back to the suggestions", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    expect(screen.getByRole("list", { name: "Suggestions" })).toHaveTextContent(/No repository/);
+    expect(download()).toBeEnabled();
+
+    const suggestedId = field("Extension id").value;
+    await user.clear(field("Extension id"));
+    await user.type(field("Extension id"), "other");
+    await user.click(screen.getByRole("button", { name: /Use suggested name/ }));
+    expect(field("Extension id")).toHaveValue(suggestedId);
+  });
+
+  it("uses the publisher id for the license name when none is given", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    await user.click(download());
+    const files = unzipStore(await readBlob(blobs[0]));
+    expect(new TextDecoder().decode(files["extension/LICENSE.txt"])).toMatch(/Copyright \(c\) \d{4} someone/);
   });
 });

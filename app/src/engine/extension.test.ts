@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { themeFile } from "./derive";
 import {
+  advice,
   extensionFiles,
+  fieldProblems,
+  parseKeywords,
   licenseText,
   LICENSES,
   packageJson,
@@ -113,5 +116,37 @@ describe("README and license", () => {
   it.each(LICENSES)("%s license carries the year and author", (license) => {
     const text = licenseText({ license, author: "Some One", year: 2026 });
     expect(text).toContain(license === "Unlicense" ? "public domain" : "2026 Some One");
+  });
+});
+
+describe("fieldProblems", () => {
+  it("says which field is wrong, and nothing for good options", () => {
+    expect(fieldProblems(dark, opts)).toEqual({});
+    const p = fieldProblems(dark, { ...opts, publisher: "", version: "x", author: " ", description: "" });
+    expect(Object.keys(p).sort()).toEqual(["author", "description", "publisher", "version"]);
+    expect(fieldProblems(dark, { ...opts, id: "" }).id).toMatch(/Enter an extension id/);
+    expect(fieldProblems(dark, { ...opts, displayName: "  " }).displayName).toMatch(/needs a name/);
+  });
+});
+
+describe("display name", () => {
+  it("overrides the theme name in the package and README, but not the theme label", () => {
+    const o = { ...opts, displayName: "Meadow Dark" };
+    expect(packageJson(dark, o).displayName).toBe("Meadow Dark");
+    expect(packageJson(dark, o).contributes.themes[0].label).toBe("Velvet Meadow");
+    expect(readme(dark, o)).toMatch(/^# Meadow Dark/);
+    expect(packageJson(dark, { ...opts, displayName: " " }).displayName).toBe("Velvet Meadow");
+  });
+});
+
+describe("advice and keywords", () => {
+  it("nudges about a missing repository and a long description, without blocking", () => {
+    expect(advice(opts).join(" ")).toMatch(/repository/);
+    expect(advice({ ...opts, repository: "https://x.y", description: "x".repeat(161) }).join(" ")).toMatch(/long/);
+    expect(advice({ ...opts, repository: "https://x.y" })).toEqual([]);
+  });
+  it("parses comma separated keywords, lowercased and de-duplicated", () => {
+    expect(parseKeywords(" Green, calm ,GREEN,, ")).toEqual(["green", "calm"]);
+    expect(parseKeywords("")).toEqual([]);
   });
 });

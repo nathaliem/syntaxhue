@@ -15,6 +15,8 @@ export interface ExtensionOptions {
   publisher: string;
   /** Extension id (the `name` field). Defaults to the theme name as a slug. */
   id?: string;
+  /** Name shown in the Marketplace and the extensions list. Defaults to the theme name. */
+  displayName?: string;
   version: string;
   description: string;
   license: LicenseId;
@@ -41,18 +43,51 @@ export function slugify(text: string, fallback = "theme"): string {
 const ID_RE = /^[a-z0-9][a-z0-9-]*$/;
 const SEMVER_RE = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
 
-/** Problems that would make the Marketplace refuse the package, in plain words. Empty when it is fine. */
-export function validateOptions(theme: ThemeState, o: ExtensionOptions): string[] {
-  const problems: string[] = [];
+export type Field = "publisher" | "id" | "displayName" | "version" | "description" | "author" | "repository";
+
+/** What is wrong, by field, in plain words. Empty when the package would be accepted. */
+export function fieldProblems(theme: ThemeState, o: ExtensionOptions): Partial<Record<Field, string>> {
+  const p: Partial<Record<Field, string>> = {};
   const id = o.id ?? slugify(theme.name);
-  if (!ID_RE.test(o.publisher)) problems.push("The publisher id may only use lowercase letters, digits and hyphens.");
-  if (!ID_RE.test(id)) problems.push("The extension id may only use lowercase letters, digits and hyphens.");
-  if (id.length > 64) problems.push("The extension id is longer than 64 characters.");
-  if (!SEMVER_RE.test(o.version)) problems.push("The version must look like 1.0.0.");
-  if (!o.description.trim()) problems.push("Add a short description; it is the line under the name in search.");
-  if (!theme.name.trim()) problems.push("The theme needs a name.");
-  if (o.repository && !/^https?:\/\//.test(o.repository)) problems.push("The repository must be a web address.");
-  return problems;
+  if (!o.publisher) p.publisher = "Enter your publisher id.";
+  else if (!ID_RE.test(o.publisher))
+    p.publisher = "The publisher id may only use lowercase letters, digits and hyphens.";
+  if (!id) p.id = "Enter an extension id.";
+  else if (!ID_RE.test(id)) p.id = "The extension id may only use lowercase letters, digits and hyphens.";
+  else if (id.length > 64) p.id = "The extension id is longer than 64 characters.";
+  if (!(o.displayName ?? theme.name).trim()) p.displayName = "The extension needs a name.";
+  if (!SEMVER_RE.test(o.version)) p.version = "The version must look like 1.0.0.";
+  if (!o.description.trim()) p.description = "Add a short description; it is the line under the name in search.";
+  if (!o.author.trim()) p.author = "Enter the name for the license.";
+  if (o.repository && !/^https?:\/\//.test(o.repository)) p.repository = "The repository must be a web address.";
+  return p;
+}
+
+/** Problems that would make the Marketplace refuse the package, as a list of messages. Empty when it is fine. */
+export function validateOptions(theme: ThemeState, o: ExtensionOptions): string[] {
+  return Object.values(fieldProblems(theme, o));
+}
+
+/** Things worth fixing that do not stop the package from being built. */
+export function advice(o: ExtensionOptions): string[] {
+  const tips: string[] = [];
+  if (!o.repository)
+    tips.push("No repository: the Marketplace page will have no link to the source, and vsce warns about it.");
+  if (o.description.length > 160)
+    tips.push("The description is long; search results cut it off after about 160 characters.");
+  return tips;
+}
+
+/** "a, B ,a" becomes ["a", "b"]. */
+export function parseKeywords(text: string): string[] {
+  return [
+    ...new Set(
+      text
+        .split(",")
+        .map((k) => k.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 export function themePath(id: string): string {
@@ -63,7 +98,7 @@ export function packageJson(theme: ThemeState, o: ExtensionOptions) {
   const id = o.id ?? slugify(theme.name);
   return {
     name: id,
-    displayName: theme.name,
+    displayName: o.displayName?.trim() || theme.name,
     description: o.description,
     version: o.version,
     publisher: o.publisher,
@@ -156,7 +191,7 @@ export function changelog(theme: ThemeState, o: Pick<ExtensionOptions, "version"
 export function readme(theme: ThemeState, o: ExtensionOptions): string {
   const shown = effectiveTheme(theme);
   const rows = ROLES.map((r) => `| ${r.label} | \`${shown.roles[r.id].color}\` |`).join("\n");
-  return `# ${theme.name}
+  return `# ${o.displayName?.trim() || theme.name}
 
 ${o.description}
 

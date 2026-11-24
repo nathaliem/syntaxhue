@@ -1,28 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
-import { slugify, validateOptions, type ExtensionOptions } from "../engine/extension";
-import { buildVsix, vsixFileName } from "../engine/vsix";
+import { ExtensionForm } from "./ExtensionForm";
 import { shareUrl } from "../state";
 
 type Tab = "settings" | "file" | "extension" | "link";
-
-const PUBLISHER_KEY = "hueprint.publisher";
-const YEAR = new Date().getFullYear();
 
 export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [tab, setTab] = useState<Tab>("settings");
   const [scoped, setScoped] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
-  const [publisher, setPublisher] = useState(() => {
-    try {
-      return localStorage.getItem(PUBLISHER_KEY) ?? "";
-    } catch {
-      return "";
-    }
-  });
-  const [version, setVersion] = useState("1.0.0");
 
   useEffect(() => {
     const d = ref.current;
@@ -39,31 +27,6 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "") || "theme";
-
-  const extOptions: ExtensionOptions = {
-    publisher: publisher.trim(),
-    version: version.trim(),
-    description: `${theme.name}: a ${theme.mode} color theme made with Hueprint.`,
-    license: "MIT",
-    author: publisher.trim(),
-    year: YEAR,
-  };
-  const extProblems = validateOptions(theme, extOptions);
-
-  const downloadVsix = () => {
-    if (extProblems.length) return;
-    try {
-      localStorage.setItem(PUBLISHER_KEY, extOptions.publisher);
-    } catch {
-      /* private mode: the field just won't be remembered */
-    }
-    const url = URL.createObjectURL(new Blob([buildVsix(theme, extOptions) as BlobPart], { type: "application/zip" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = vsixFileName(theme, extOptions);
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const copy = async (text: string, what: string) => {
     try {
@@ -170,51 +133,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
           </div>
         )}
 
-        {tab === "extension" && (
-          <div className="export-body">
-            <p>
-              A ready-to-install extension. Install it with <b>Extensions › ⋯ › Install from VSIX…</b> in VS Code, or
-              publish it to the Marketplace. It is built right here; nothing is uploaded.
-            </p>
-            <div className="field-row">
-              <label className="field">
-                <span>Publisher id</span>
-                <input
-                  value={publisher}
-                  onChange={(e) => setPublisher(e.target.value)}
-                  placeholder="your-publisher-id"
-                  spellCheck={false}
-                  autoCapitalize="none"
-                  aria-invalid={publisher !== "" && extProblems.some((p) => /publisher/i.test(p))}
-                  aria-describedby="ext-problems"
-                />
-              </label>
-              <label className="field narrow">
-                <span>Version</span>
-                <input
-                  value={version}
-                  onChange={(e) => setVersion(e.target.value)}
-                  spellCheck={false}
-                  aria-invalid={extProblems.some((p) => /version/i.test(p))}
-                  aria-describedby="ext-problems"
-                />
-              </label>
-            </div>
-            <p className="small" id="ext-problems" role="status">
-              {publisher === ""
-                ? "Enter your Marketplace publisher id. Any lowercase id works for a local install."
-                : extProblems.join(" ")}
-            </p>
-            <div className="export-actions">
-              <button className="btn primary" onClick={downloadVsix} disabled={extProblems.length > 0}>
-                Download {vsixFileName(theme, extOptions)}
-              </button>
-            </div>
-            <p className="small">
-              Extension id: <code>{slugify(theme.name)}</code>. Light and dark themes are separate extensions.
-            </p>
-          </div>
-        )}
+        {tab === "extension" && <ExtensionForm theme={theme} />}
 
         {tab === "link" && (
           <div className="export-body">

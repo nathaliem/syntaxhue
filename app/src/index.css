@@ -1157,3 +1157,34 @@ pre.code {
   opacity: 0.4;
   cursor: not-allowed;
 }
+.field-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+.field select {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.field label {
+  font-weight: 600;
+  color: var(--ink);
+}
+.field-msg {
+  font-size: 12px;
+  color: var(--ink-2);
+  min-height: 1.3em;
+}
+.field-msg.bad {
+  color: #b63132;
+}
+.tips {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
