@@ -33,3 +33,11 @@ await hueprintDrag({ vibe: "Saturation", slowdown: 4 });
 `slowdown: 4` keeps the main thread busy to imitate Chrome's 4x CPU throttling. It prints median, 95th
 percentile and max frame times, split into React and style/layout work. Last measured (production build, 4x):
 role sliders about 10 ms at p95, vibe sliders that recolor everything about 27 ms.
+
+## Hosting and deploys
+
+Hosted on Vercel (project `hueprint`, root directory `app`), connected to the GitHub repo:
+
+- **Pull requests and other branches** get their own preview URL; Vercel comments it on the PR.
+- **Pushes to `main`** deploy to production at https://hueprint.nathaliemaes.be (also `hueprint-silk.vercel.app`).
+- `vercel.json` sets long-lived caching for the hashed `/assets` files and basic security headers. The app keeps its state in the URL hash, so no rewrite rules are needed.
