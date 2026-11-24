@@ -636,6 +636,44 @@ code {
 }
 .wb-ln code {
   font: inherit;
+  position: relative;
+}
+.wb-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--w-guide);
+  pointer-events: none;
+}
+.wb-guide[data-active] {
+  background: var(--w-guide-active);
+}
+.wb-minimap {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  width: 84px;
+  padding: 0 8px 0 6px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.wb-minimap-slider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: var(--w-minimap-slider);
+}
+.wb-minimap-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.wb-minimap-row span {
+  height: 2px;
+  border-radius: 1px;
+  opacity: 0.75;
 }
 .wb .sel {
   background: var(--w-sel);

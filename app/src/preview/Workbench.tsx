@@ -1,9 +1,11 @@
 import { type CSSProperties, type MouseEvent } from "react";
-import { surfaces } from "../engine/derive";
+import { surfaces, workbenchColors } from "../engine/derive";
 import { effectiveTheme } from "../engine/vibe";
 import { ROLE_BY_ID, ROLE_IDS, type RoleId, type ThemeState } from "../engine/theme";
 import { type Sample } from "./samples";
 import { useTokens } from "./useTokens";
+import { Minimap } from "./Minimap";
+import { activeGuide, guideColumns, indentUnit } from "./indent";
 
 interface Props {
   theme: ThemeState;
@@ -31,6 +33,10 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
   const { lines, loading } = useTokens(sample.code, sample.lang);
   const hover = useTokens(sample.hover.signature, sample.lang).lines[0] ?? [];
   const CURSOR_LINE = sample.cursor;
+  const unit = indentUnit(sample.code);
+  const codeLines = sample.code.split("\n");
+  const active = activeGuide(codeLines, sample.cursor, unit);
+  const wc = workbenchColors(theme);
   const unquote = (text: string) => text.trim().replace(/^["']|["']$/g, "");
 
   const vars = {
@@ -44,6 +50,9 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
     "--w-line": s.lineHighlight,
     "--w-sel": s.selection,
     "--w-onaccent": s.onAccent,
+    "--w-guide": wc["editorIndentGuide.background1"],
+    "--w-guide-active": wc["editorIndentGuide.activeBackground1"],
+    "--w-minimap-slider": wc["minimapSlider.background"],
     ...Object.fromEntries(ROLE_IDS.map((id) => [`--r-${id}`, shown.roles[id].color])),
   } as CSSProperties;
 
@@ -163,6 +172,15 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
                     }
                   />
                   <code>
+                    {guideColumns(codeLines[i] ?? "", unit).map((col, k) => (
+                      <i
+                        key={k}
+                        className="wb-guide"
+                        aria-hidden="true"
+                        data-active={active?.index === k && i >= active.from && i <= active.to ? "" : undefined}
+                        style={{ left: `${col}ch` }}
+                      />
+                    ))}
                     {tokens.map((t, j) => {
                       const squiggle = n === sample.error && unquote(t.text) === sample.errorWord;
                       const sel = n === CURSOR_LINE && unquote(t.text) === sample.select;
@@ -182,6 +200,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
                 </div>
               );
             })}
+            <Minimap lines={lines} />
             <div className="wb-hover" style={{ top: `calc(${sample.error} * 1.62 * 13px + 4px)` }} {...r("bg")}>
               <div>
                 {hover.map((t, k) => (
