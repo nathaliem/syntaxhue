@@ -2,7 +2,8 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import App from "./App";
-import { ROLES } from "./engine/theme";
+import { encodeTheme } from "./engine/share";
+import { generate, ROLES } from "./engine/theme";
 
 describe("app shell (smoke)", () => {
   it("renders the top bar, role rail and preview", () => {
@@ -65,5 +66,48 @@ describe("app shell (smoke)", () => {
     expect(undo).toBeEnabled();
     await user.click(undo);
     expect(name.value).toBe(first);
+  });
+});
+
+describe("opening a share link", () => {
+  it("shows the shared-theme banner, applies the theme and its locks, and clears the hash", () => {
+    const t = generate(11, "light");
+    t.name = "Linked Palette";
+    t.roles.string.locked = true;
+    history.replaceState(null, "", `/#t=${encodeTheme(t)}`);
+    render(<App />);
+    expect(screen.getByRole("status")).toHaveTextContent("You opened a shared theme.");
+    expect(screen.getByRole("textbox", { name: "Theme name" })).toHaveValue("Linked Palette");
+    expect(screen.getByRole("button", { name: "Light" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Unlock String" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: new RegExp(`^Shuffle ${ROLES.length - 1} colors`) })).toBeInTheDocument();
+    expect(location.hash).toBe("");
+  });
+
+  it("still opens an old-format link", () => {
+    history.replaceState(
+      null,
+      "",
+      "/#t=1.l.Old%2ELink%20Test.f4f0fd2a272f407a20827d905d7700975592117240575cb83d364e955f00485233b631329d5f00006aa01e7729.-,-,-,i,i,ib,-,-,-,-,-,-,-,-,-",
+    );
+    render(<App />);
+    expect(screen.getByRole("status")).toHaveTextContent("You opened a shared theme.");
+    expect(screen.getByRole("textbox", { name: "Theme name" })).toHaveValue("Old.Link Test");
+  });
+
+  it("says so when the link can't be read", () => {
+    history.replaceState(null, "", "/#t=pnot-a-theme");
+    render(<App />);
+    expect(screen.getByRole("status")).toHaveTextContent("doesn't contain a theme Hueprint can read");
+  });
+
+  it("Export > Share link gives a compact link that opens the same theme", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Export" }));
+    await user.click(screen.getByRole("tab", { name: "Share link" }));
+    const link = (screen.getByRole("textbox", { name: "Share link" }) as HTMLInputElement).value;
+    expect(link).toMatch(/#t=p[A-Za-z0-9_-]+$/);
+    expect(link.length).toBeLessThan(300);
   });
 });

@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { migrate, parseTheme, validateTheme, type Migration } from "./schema";
-import { decodeTheme, encodeTheme } from "./share";
-import { generate, ROLE_IDS, THEME_VERSION } from "./theme";
+import { generate, THEME_VERSION } from "./theme";
 import v1Fixture from "./__fixtures__/theme-v1.json";
 
 const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v));
@@ -112,26 +111,5 @@ describe("migrations", () => {
 
   it("refuses data from a newer version than this app knows", () => {
     expect(migrate({ version: 4 }, migrations, 3)).toBeNull();
-  });
-});
-
-describe("share links carry the version", () => {
-  it("starts with the schema version", () => {
-    expect(encodeTheme(generate(5, "dark")).split(".")[0]).toBe(String(THEME_VERSION));
-  });
-
-  it("refuses links from another version instead of guessing", () => {
-    const link = encodeTheme(generate(5, "dark"));
-    const rest = link.split(".").slice(1).join(".");
-    expect(decodeTheme(`${THEME_VERSION + 1}.${rest}`)).toBeNull();
-    expect(decodeTheme(`0.${rest}`)).toBeNull();
-    expect(decodeTheme(`x.${rest}`)).toBeNull();
-    expect(decodeTheme(link)).not.toBeNull();
-  });
-
-  it("still opens every role of a v1 link", () => {
-    const t = generate(6, "light");
-    const back = decodeTheme(encodeTheme(t))!;
-    for (const id of ROLE_IDS) expect(back.roles[id].color).toBe(t.roles[id].color);
   });
 });
