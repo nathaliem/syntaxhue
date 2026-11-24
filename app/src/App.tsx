@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { contrastIssues, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
+import { FitToWidth } from "./preview/FitToWidth";
 import { Workbench } from "./preview/Workbench";
 import { ExportDialog } from "./ui/ExportDialog";
 import { RoleRail } from "./ui/RoleRail";
@@ -174,7 +175,9 @@ export default function App() {
             </div>
           )}
           <p className="stage-hint">Click anything in the preview to edit the color behind it.</p>
-          <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} />
+          <FitToWidth>
+            <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} />
+          </FitToWidth>
         </section>
       </div>
 
