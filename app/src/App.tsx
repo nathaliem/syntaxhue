@@ -82,6 +82,10 @@ export default function App() {
               ? "All colors pass contrast checks."
               : `${issues.length} color${issues.length > 1 ? "s" : ""} below the readable minimum.`}
           </p>
+          <p className="side-foot support">
+            Free and made by one person.{" "}
+            <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">Buy me a coffee ☕</a>
+          </p>
         </aside>
         <section className="stage" aria-label="Preview">
           {notice && (
