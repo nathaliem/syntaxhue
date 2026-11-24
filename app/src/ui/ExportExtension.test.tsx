@@ -228,4 +228,17 @@ describe("Export > Extension (.vsix) form", () => {
     expect(screen.getByText(/ovsx create-namespace someone/)).toBeInTheDocument();
     expect(screen.getByText("The extension id is already taken")).toBeInTheDocument();
   });
+
+  it("can ship the other mode too, and the package then has both themes", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    await user.click(screen.getByRole("checkbox", { name: /Also include the (light|dark) version/ }));
+    await user.click(download());
+    await waitFor(() => expect(downloads).toHaveLength(1));
+    const files = unzipStore(await readBlob(blobs[0]));
+    const themes = Object.keys(files).filter((n) => n.endsWith("-color-theme.json"));
+    expect(themes).toHaveLength(2);
+    expect((await pkgOf()).contributes.themes).toHaveLength(2);
+  });
 });

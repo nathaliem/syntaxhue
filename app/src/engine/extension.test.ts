@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { themeFile } from "./derive";
 import {
   advice,
+  counterpart,
+  themeEntries,
   screenshotsUsable,
   extensionFiles,
   fieldProblems,
@@ -15,7 +17,8 @@ import {
   validateOptions,
   type ExtensionOptions,
 } from "./extension";
-import { generate, ROLES } from "./theme";
+import { hexToOklch } from "./color";
+import { contrastIssues, generate, ROLES } from "./theme";
 
 const opts: ExtensionOptions = {
   publisher: "someone",
@@ -185,5 +188,51 @@ describe("assets", () => {
     expect(screenshotsUsable("https://gitlab.com/a/b.git")).toBe(true);
     expect(screenshotsUsable("https://bitbucket.org/a/b")).toBe(false);
     expect(screenshotsUsable("")).toBe(false);
+  });
+});
+
+describe("light and dark pair", () => {
+  const pairOpts = { ...opts, pair: true };
+
+  it("derives the other mode with the same hues and a different lightness", () => {
+    const other = counterpart(dark);
+    expect(other.mode).toBe("light");
+    expect(other.name).toBe(dark.name);
+    expect(counterpart(dark)).toEqual(other); // deterministic
+    expect(counterpart(other).mode).toBe("dark");
+    const keyword = (t: typeof dark) => hexToOklch(t.roles.keyword.color);
+    expect(Math.abs(keyword(other).h - keyword(dark).h)).toBeLessThan(8);
+    expect(keyword(other).l).toBeLessThan(keyword(dark).l);
+    expect(hexToOklch(other.roles.bg.color).l).toBeGreaterThan(0.9);
+  });
+
+  it("keeps the contrast minimums in the derived theme", () => {
+    expect(contrastIssues(counterpart(dark))).toEqual([]);
+    expect(contrastIssues(counterpart(light))).toEqual([]);
+  });
+
+  it("lists both themes, current mode first, with distinct labels and paths", () => {
+    const e = themeEntries(dark, pairOpts);
+    expect(e.map((x) => x.label)).toEqual(["Velvet Meadow Dark", "Velvet Meadow Light"]);
+    expect(e.map((x) => x.uiTheme)).toEqual(["vs-dark", "vs"]);
+    expect(e.map((x) => x.path)).toEqual([
+      "themes/velvet-meadow-dark-color-theme.json",
+      "themes/velvet-meadow-light-color-theme.json",
+    ]);
+    expect(themeEntries(light, pairOpts)[0].label).toBe("Velvet Meadow Light");
+    expect(themeEntries(dark, opts)).toHaveLength(1);
+  });
+
+  it("ships both theme files and points package.json at them", () => {
+    const files = extensionFiles(dark, pairOpts);
+    const pkg = JSON.parse(files["package.json"] as string);
+    expect(pkg.contributes.themes).toHaveLength(2);
+    for (const t of pkg.contributes.themes) expect(files[t.path.replace("./", "")]).toBeDefined();
+    const lightFile = JSON.parse(files["themes/velvet-meadow-light-color-theme.json"] as string);
+    expect(lightFile.type).toBe("light");
+    expect(lightFile.name).toBe("Velvet Meadow Light");
+    expect(files["themes/velvet-meadow-color-theme.json"]).toBeUndefined();
+    expect(pkg.keywords).toEqual(expect.arrayContaining(["dark", "light"]));
+    expect(files["README.md"]).toContain("Velvet Meadow Light");
   });
 });

@@ -1,5 +1,5 @@
 import { themeFile } from "./derive";
-import { ROLES, type ThemeState } from "./theme";
+import { generate, ROLE_IDS, ROLES, type ThemeState } from "./theme";
 import { effectiveTheme } from "./vibe";
 
 /**
@@ -24,6 +24,8 @@ export interface ExtensionOptions {
   author: string;
   year: number;
   keywords?: string[];
+  /** Ship the other mode as well, derived from the same palette (see `counterpart`). */
+  pair?: boolean;
   /** Repository URL; the Marketplace page links it, and `vsce` warns when it is missing. */
   repository?: string;
 }
@@ -90,8 +92,44 @@ export function parseKeywords(text: string): string[] {
   ];
 }
 
-export function themePath(id: string): string {
-  return `themes/${id}-color-theme.json`;
+export function themePath(id: string, mode?: "dark" | "light"): string {
+  return `themes/${id}${mode ? `-${mode}` : ""}-color-theme.json`;
+}
+
+/**
+ * The other mode of a theme: every color keeps its hue and chroma and gets the lightness it needs in the other
+ * mode (the same rule as switching mode with all colors locked), so contrast minimums still hold.
+ * Deterministic: the same theme always gives the same partner.
+ */
+export function counterpart(theme: ThemeState): ThemeState {
+  const locked = { ...theme, roles: { ...theme.roles } };
+  for (const id of ROLE_IDS) locked.roles[id] = { ...theme.roles[id], locked: true };
+  const other = generate(0, theme.mode === "dark" ? "light" : "dark", locked);
+  const roles = { ...other.roles };
+  for (const id of ROLE_IDS) roles[id] = { ...roles[id], locked: false };
+  return { ...other, roles, name: theme.name };
+}
+
+export interface ThemeEntry {
+  label: string;
+  uiTheme: "vs-dark" | "vs";
+  path: string;
+  theme: ThemeState;
+}
+
+/** The themes the extension contributes: just this one, or the dark and light pair (the current mode first). */
+export function themeEntries(theme: ThemeState, o: Pick<ExtensionOptions, "id" | "pair">): ThemeEntry[] {
+  const id = o.id ?? slugify(theme.name);
+  const entry = (t: ThemeState, paired: boolean): ThemeEntry => {
+    const label = paired ? `${theme.name} ${t.mode === "dark" ? "Dark" : "Light"}` : theme.name;
+    return {
+      label,
+      uiTheme: t.mode === "dark" ? "vs-dark" : "vs",
+      path: themePath(id, paired ? t.mode : undefined),
+      theme: { ...t, name: label },
+    };
+  };
+  return o.pair ? [entry(theme, true), entry(counterpart(theme), true)] : [entry(theme, false)];
 }
 
 /** Images that go into the package. Screenshots only make sense with a repository that can serve them (below). */
@@ -120,16 +158,12 @@ export function packageJson(theme: ThemeState, o: ExtensionOptions, assets: Exte
     ...(assets.icon ? { icon: "images/icon.png" } : {}),
     engines: { vscode: "^1.75.0" },
     categories: ["Themes"],
-    keywords: [...new Set(["theme", "color-theme", theme.mode, ...(o.keywords ?? [])])],
+    keywords: [
+      ...new Set(["theme", "color-theme", ...(o.pair ? ["dark", "light"] : [theme.mode]), ...(o.keywords ?? [])]),
+    ],
     ...(o.repository ? { repository: { type: "git", url: o.repository } } : {}),
     contributes: {
-      themes: [
-        {
-          label: theme.name,
-          uiTheme: theme.mode === "dark" ? "vs-dark" : "vs",
-          path: `./${themePath(id)}`,
-        },
-      ],
+      themes: themeEntries(theme, o).map(({ label, uiTheme, path }) => ({ label, uiTheme, path: `./${path}` })),
     },
   };
 }
@@ -214,13 +248,13 @@ export function readme(theme: ThemeState, o: ExtensionOptions, assets: Extension
 
 ${o.description}
 
-A ${theme.mode} color theme for Visual Studio Code.
+${o.pair ? "A dark and a light color theme" : `A ${theme.mode} color theme`} for Visual Studio Code.
 
 ## Use it
 
 1. Install the extension.
 2. Open the Command Palette (\`Ctrl+Shift+P\` / \`Cmd+Shift+P\`) and run **Preferences: Color Theme**.
-3. Pick **${theme.name}**.
+3. Pick ${o.pair ? `**${theme.name} Dark** or **${theme.name} Light**` : `**${theme.name}**`}.
 
 ## Palette
 
@@ -252,10 +286,11 @@ export function extensionFiles(
 ): Record<string, string | Uint8Array> {
   const problems = validateOptions(theme, o);
   if (problems.length) throw new Error(problems.join(" "));
-  const id = o.id ?? slugify(theme.name);
   const files: Record<string, string | Uint8Array> = {
     "package.json": JSON.stringify(packageJson(theme, o, assets), null, 2) + "\n",
-    [themePath(id)]: JSON.stringify(themeFile(theme), null, 2) + "\n",
+    ...Object.fromEntries(
+      themeEntries(theme, o).map((e) => [e.path, JSON.stringify(themeFile(e.theme), null, 2) + "\n"]),
+    ),
     "README.md": readme(theme, o, assets),
     "CHANGELOG.md": changelog(theme, o),
     LICENSE: licenseText(o),

@@ -58,6 +58,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
   });
   const [version, setVersion] = useState("1.0.0");
   const [shots, setShots] = useState(false);
+  const [pair, setPair] = useState(false);
   const [building, setBuilding] = useState(false);
   const [buildError, setBuildError] = useState<string | null>(null);
   const icon = useMemo(() => iconPng(theme), [theme]);
@@ -85,6 +86,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
     year: YEAR,
     keywords: parseKeywords(saved.keywords),
     repository: saved.repository.trim() || undefined,
+    pair,
   };
   const problems = fieldProblems(theme, options);
   const tips = advice(options);
@@ -209,6 +211,13 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
           </p>
         </div>
       </div>
+      <label className="check">
+        <input type="checkbox" checked={pair} onChange={(e) => setPair(e.target.checked)} />
+        Also include the {theme.mode === "dark" ? "light" : "dark"} version
+      </label>
+      <p className="small">
+        Same hues and chroma, with lightness re-solved so every text color still meets its contrast minimum.
+      </p>
       <label className="check">
         <input
           type="checkbox"
