@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { contrastIssues, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
+import { contrastIssues, ROLE_BY_ID, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
 import { FitToWidth } from "./preview/FitToWidth";
 import { Workbench } from "./preview/Workbench";
 import { ExportDialog } from "./ui/ExportDialog";
-import { RoleRail } from "./ui/RoleRail";
+import { BottomSheet } from "./ui/BottomSheet";
+import { RoleEditor, RoleRail } from "./ui/RoleRail";
+import { useIsMobile } from "./ui/useIsMobile";
 import { VibePanel } from "./ui/VibePanel";
 import { useThemeStore } from "./state";
 
@@ -57,8 +59,10 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [dispatch, exportOpen]);
 
+  const mobile = useIsMobile();
   const pick = (id: RoleId) => {
     setSelected(id);
+    if (mobile) return;
     requestAnimationFrame(() =>
       document.getElementById(`edit-${id}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" }),
     );
@@ -121,7 +125,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className="layout">
+      <div className={"layout" + (mobile && selected ? " sheet-open" : "")}>
         <aside className="side" aria-label="Theme colors">
           <RoleRail
             theme={theme}
@@ -130,6 +134,7 @@ export default function App() {
             onHover={setHovered}
             dispatch={dispatch}
             onStatus={showStatus}
+            inlineEditor={!mobile}
           />
           <p className="side-foot" role="status">
             {status ??
@@ -180,6 +185,12 @@ export default function App() {
           </FitToWidth>
         </section>
       </div>
+
+      {mobile && selected && (
+        <BottomSheet title={ROLE_BY_ID[selected].label} onClose={() => setSelected(null)}>
+          <RoleEditor key={selected} def={ROLE_BY_ID[selected]} theme={theme} dispatch={dispatch} />
+        </BottomSheet>
+      )}
 
       <ExportDialog theme={theme} open={exportOpen} onClose={() => setExportOpen(false)} />
     </div>

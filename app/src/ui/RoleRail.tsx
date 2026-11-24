@@ -12,11 +12,13 @@ interface Props {
   dispatch: Dispatch<Action>;
   /** Short messages for copy and paste ("Copied #4ba3f7"); the app shows them for a moment. */
   onStatus: (message: string) => void;
+  /** False on phones: the editor then lives in a bottom sheet instead of under the row. */
+  inlineEditor?: boolean;
 }
 
 const GROUPS: RoleDef["group"][] = ["Base", "Syntax", "Status"];
 
-export function RoleRail({ theme, selected, onSelect, onHover, dispatch, onStatus }: Props) {
+export function RoleRail({ theme, selected, onSelect, onHover, dispatch, onStatus, inlineEditor = true }: Props) {
   const allLocked = ROLES.every((r) => theme.roles[r.id].locked);
   return (
     <div className="rail" onMouseLeave={() => onHover(null)}>
@@ -36,6 +38,7 @@ export function RoleRail({ theme, selected, onSelect, onHover, dispatch, onStatu
               def={def}
               theme={theme}
               open={selected === def.id}
+              inlineEditor={inlineEditor}
               onToggle={() => onSelect(selected === def.id ? null : def.id)}
               onHover={onHover}
               dispatch={dispatch}
@@ -52,6 +55,7 @@ function RoleRow({
   def,
   theme,
   open,
+  inlineEditor,
   onToggle,
   onHover,
   dispatch,
@@ -60,6 +64,7 @@ function RoleRow({
   def: RoleDef;
   theme: ThemeState;
   open: boolean;
+  inlineEditor: boolean;
   onToggle: () => void;
   onHover: (id: RoleId | null) => void;
   dispatch: Dispatch<Action>;
@@ -107,7 +112,7 @@ function RoleRow({
         <button
           className="role-main"
           aria-expanded={open}
-          aria-controls={`edit-${def.id}`}
+          aria-controls={open ? `edit-${def.id}` : undefined}
           aria-keyshortcuts="Control+C Meta+C Control+V Meta+V"
           title="Click to edit. Copy this color with Ctrl/⌘+C, paste one with Ctrl/⌘+V."
           onClick={onToggle}
@@ -138,12 +143,12 @@ function RoleRow({
           <LockIcon locked={role.locked} />
         </button>
       </div>
-      {open && <Editor def={def} theme={theme} dispatch={dispatch} />}
+      {open && inlineEditor && <RoleEditor def={def} theme={theme} dispatch={dispatch} />}
     </div>
   );
 }
 
-function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dispatch: Dispatch<Action> }) {
+export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dispatch: Dispatch<Action> }) {
   const role = theme.roles[def.id];
   const bg = theme.roles.bg.color;
   const [lch, setLch] = useState<Oklch>(() => hexToOklch(role.color));

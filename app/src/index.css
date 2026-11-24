@@ -960,3 +960,72 @@ pre.code {
   display: flex;
   justify-content: flex-end;
 }
+
+/* ---------- mobile bottom sheet ---------- */
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -12px 40px -12px rgba(0, 0, 0, 0.35);
+  transition:
+    height 0.2s ease,
+    transform 0.2s ease;
+}
+.sheet[data-dragging="true"] {
+  transition: none;
+}
+.sheet-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 18px 16px 8px;
+  position: relative;
+  touch-action: none;
+}
+.sheet-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 22px;
+  border: none;
+  background: none;
+  cursor: grab;
+}
+.sheet-handle::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+}
+.sheet-title {
+  margin: 0;
+  font-size: 15px;
+}
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.layout.sheet-open {
+  padding-bottom: 55vh;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
+}
