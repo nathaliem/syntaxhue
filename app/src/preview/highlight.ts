@@ -1,4 +1,5 @@
 import { SCOPES } from "../engine/derive";
+import type { HighlighterCore, LanguageRegistration } from "shiki/core";
 import { ROLE_IDS, type RoleId } from "../engine/theme";
 
 export interface Token {
@@ -19,7 +20,19 @@ const FG_ROLE: RoleId = "fg";
 const standIn = (role: RoleId) => "#0000" + (ROLE_IDS.indexOf(role) + 1).toString(16).padStart(2, "0");
 const roleOf = new Map(ROLE_IDS.map((id) => [standIn(id), id]));
 
-export const LANG = "typescript";
+export type Lang = "typescript" | "python" | "rust" | "go" | "html" | "css" | "json" | "markdown";
+
+/** One lazy import per grammar: each becomes its own chunk, fetched only when that language is shown. */
+const GRAMMARS: Record<Lang, () => Promise<{ default: LanguageRegistration[] }>> = {
+  typescript: () => import("@shikijs/langs/typescript"),
+  python: () => import("@shikijs/langs/python"),
+  rust: () => import("@shikijs/langs/rust"),
+  go: () => import("@shikijs/langs/go"),
+  html: () => import("@shikijs/langs/html"),
+  css: () => import("@shikijs/langs/css"),
+  json: () => import("@shikijs/langs/json"),
+  markdown: () => import("@shikijs/langs/markdown"),
+};
 const THEME = "hueprint-roles";
 
 export function roleTheme() {
@@ -35,34 +48,48 @@ export function roleTheme() {
 
 export type Tokenize = (code: string) => Token[][];
 
-/** Plain text, one token per line: what shows while the grammar is still loading. */
+/** Plain text with the indentation split off, so a loading skeleton can draw bars that start at the code. */
 export function plainTokens(code: string): Token[][] {
-  return code.split("\n").map((text) => [{ text, role: null }]);
+  return code.split("\n").map((line) => {
+    const indent = /^\s*/.exec(line)![0];
+    const rest = line.slice(indent.length);
+    return [...(indent ? [{ text: indent, role: null }] : []), ...(rest ? [{ text: rest, role: null }] : [])];
+  });
 }
 
-let loading: Promise<Tokenize> | null = null;
+let core: Promise<HighlighterCore> | null = null;
+const tokenizers = new Map<Lang, Promise<Tokenize>>();
 
-/** Loads Shiki and the TypeScript grammar on first use, in a separate chunk. */
-export function loadTokenizer(): Promise<Tokenize> {
-  loading ??= (async () => {
-    const [{ createHighlighterCore }, { createJavaScriptRegexEngine }, ts] = await Promise.all([
+/** Shiki itself (engine and theme) loads once, in its own chunk, the first time any language is wanted. */
+function loadCore(): Promise<HighlighterCore> {
+  core ??= (async () => {
+    const [{ createHighlighterCore }, { createJavaScriptRegexEngine }] = await Promise.all([
       import("shiki/core"),
       import("shiki/engine/javascript"),
-      import("@shikijs/langs/typescript"),
     ]);
-    const highlighter = await createHighlighterCore({
-      themes: [roleTheme()],
-      langs: [ts.default],
-      engine: createJavaScriptRegexEngine(),
-    });
-    return (code) =>
-      highlighter.codeToTokensBase(code, { lang: LANG, theme: THEME }).map((line) =>
-        line.map((t) => {
-          const role = roleOf.get((t.color ?? "").toLowerCase()) ?? null;
-          return { text: t.content, role: role === FG_ROLE ? null : role };
-        }),
-      );
+    return createHighlighterCore({ themes: [roleTheme()], langs: [], engine: createJavaScriptRegexEngine() });
   })();
-  loading.catch(() => (loading = null)); // a failed load can be retried
-  return loading;
+  core.catch(() => (core = null)); // a failed load can be retried
+  return core;
+}
+
+/** A tokenizer for one language. Fetches its grammar on first use; later calls reuse it. */
+export function loadTokenizer(lang: Lang): Promise<Tokenize> {
+  let p = tokenizers.get(lang);
+  if (!p) {
+    p = (async () => {
+      const [highlighter, grammar] = await Promise.all([loadCore(), GRAMMARS[lang]()]);
+      await highlighter.loadLanguage(grammar.default);
+      return (code: string) =>
+        highlighter.codeToTokensBase(code, { lang, theme: THEME }).map((line) =>
+          line.map((t) => {
+            const role = roleOf.get((t.color ?? "").toLowerCase()) ?? null;
+            return { text: t.content, role: role === FG_ROLE ? null : role };
+          }),
+        );
+    })();
+    tokenizers.set(lang, p);
+    p.catch(() => tokenizers.delete(lang));
+  }
+  return p;
 }

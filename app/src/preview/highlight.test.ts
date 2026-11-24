@@ -6,14 +6,14 @@ import { loadTokenizer, plainTokens, roleTheme } from "./highlight";
 import { SAMPLE_TS } from "./sample";
 
 const roleAt = async (code: string, text: string) => {
-  const tokenize = await loadTokenizer();
+  const tokenize = await loadTokenizer("typescript");
   for (const line of tokenize(code)) for (const t of line) if (t.text === text) return t.role;
   throw new Error(`no token "${text}"`);
 };
 
 describe("Shiki tokenizer", () => {
   it("keeps the code intact: every line round-trips", async () => {
-    const tokenize = await loadTokenizer();
+    const tokenize = await loadTokenizer("typescript");
     const lines = tokenize(SAMPLE_TS).map((l) => l.map((t) => t.text).join(""));
     expect(lines).toEqual(SAMPLE_TS.split("\n"));
   });
@@ -30,7 +30,7 @@ describe("Shiki tokenizer", () => {
   });
 
   it("only produces roles that exist", async () => {
-    const tokenize = await loadTokenizer();
+    const tokenize = await loadTokenizer("typescript");
     const roles = new Set(tokenize(SAMPLE_TS).flatMap((l) => l.map((t) => t.role)));
     expect(roles.size).toBeGreaterThan(5);
     for (const r of roles) expect(r === null || SCOPES.some((s) => s.role === r) || r === "fg").toBe(true);

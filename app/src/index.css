@@ -1029,3 +1029,22 @@ pre.code {
     transition: none;
   }
 }
+
+/* While a grammar loads the code is drawn as grey bars of the right length, so nothing jumps when it arrives. */
+.wb-editor[data-loading] code span:not(.wb-cursor, .ws) {
+  color: transparent !important;
+  background: var(--w-border);
+  border-radius: 3px;
+  opacity: 0.6;
+  animation: wb-skel 1.2s ease-in-out infinite alternate;
+}
+@keyframes wb-skel {
+  to {
+    opacity: 0.25;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wb-editor[data-loading] code span:not(.wb-cursor, .ws) {
+    animation: none;
+  }
+}

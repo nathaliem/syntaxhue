@@ -31,7 +31,7 @@ const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folde
 export function Workbench({ theme, selected, highlighted, onPick }: Props) {
   const shown = effectiveTheme(theme); // roles with vibe applied; what the user sees and exports
   const s = surfaces(theme);
-  const lines = useTokens(SAMPLE_TS);
+  const { lines, loading } = useTokens(SAMPLE_TS, "typescript");
 
   const vars = {
     "--w-editor": s.editor,
@@ -140,7 +140,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
             src › engine › shuffle.ts › shuffle
           </div>
 
-          <div className="wb-editor" {...r("bg")}>
+          <div className="wb-editor" aria-busy={loading} data-loading={loading || undefined} {...r("bg")}>
             {lines.map((tokens, i) => {
               const n = i + 1;
               return (
@@ -169,7 +169,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
                       return (
                         <span
                           key={j}
-                          className={(squiggle ? "sq " : "") + (sel ? "sel" : "")}
+                          className={(squiggle ? "sq " : "") + (sel ? "sel " : "") + (/^\s+$/.test(t.text) ? "ws" : "")}
                           style={{ color: t.role ? `var(--r-${t.role})` : "var(--r-fg)", ...styleOf(t.role) }}
                           {...(squiggle ? r("error") : t.role ? r(t.role) : r("fg"))}
                         >
