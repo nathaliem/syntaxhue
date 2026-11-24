@@ -288,7 +288,7 @@ Pick colors that stay **readable** on any background.
 - Shuffle a whole palette in one click
 - Lock the colors you like
 - Export a \`settings.json\` snippet
-- See [contrast](https://syntaxhue.nathaliemaes.be) at a glance
+- See [contrast](https://syntaxhue.dev) at a glance
 
 ## Run it
 
@@ -303,7 +303,7 @@ Start with \`npm run dev\`, then open the app.
     modified: [8, 9, 10],
     added: [14],
     hover: {
-      signature: "[contrast](https://syntaxhue.nathaliemaes.be)",
+      signature: "[contrast](https://syntaxhue.dev)",
       error: "Link text should describe the destination. markdownlint",
     },
   },

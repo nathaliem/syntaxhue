@@ -268,7 +268,7 @@ ${gallery}
 
 ${o.license}. See the LICENSE file.
 
-Made with [SyntaxHue](https://syntaxhue.nathaliemaes.be).
+Made with [SyntaxHue](https://syntaxhue.dev).
 `;
 }
 

@@ -4,7 +4,7 @@ Make a VS Code color theme in minutes. Shuffle a readable palette, lock the colo
 see the result in a preview that uses the same TextMate grammars as VS Code. Every text color is kept above its
 contrast minimum, so the theme stays readable.
 
-Live at <https://syntaxhue.nathaliemaes.be>. Everything runs in your browser; nothing is uploaded.
+Live at <https://syntaxhue.dev>. Everything runs in your browser; nothing is uploaded.
 
 ## What it does
 
