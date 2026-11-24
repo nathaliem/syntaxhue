@@ -1427,3 +1427,13 @@ pre.code {
   color: #b63132;
   font-weight: 600;
 }
+
+.save-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.library-state.dirty {
+  color: var(--warn-text, #b45309);
+  font-weight: 600;
+}

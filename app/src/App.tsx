@@ -8,6 +8,7 @@ import { LanguageSwitch } from "./ui/LanguageSwitch";
 import { ExportDialog } from "./ui/ExportDialog";
 import { LibraryDrawer } from "./ui/LibraryDrawer";
 import { useLibrary } from "./ui/useLibrary";
+import { themesEqual } from "./engine/library";
 import { BottomSheet } from "./ui/BottomSheet";
 import { RoleEditor, RoleRail } from "./ui/RoleRail";
 import { useIsMobile } from "./ui/useIsMobile";
@@ -62,7 +63,7 @@ export default function App() {
         e.preventDefault();
         void library
           .save(theme)
-          .then((ok) => showStatus(ok ? `Saved “${theme.name}” to your library.` : "Couldn't save."));
+          .then((item) => showStatus(item ? `Saved “${theme.name}” to your library.` : "Couldn't save."));
       } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         dispatch({ type: e.shiftKey ? "redo" : "undo" });
@@ -110,6 +111,15 @@ export default function App() {
         >
           {saveState === "failed" ? "Not saved" : "Saved"}
         </span>
+        {library.linked && (
+          <span
+            className={"save-state library-state" + (themesEqual(library.linked.theme, theme) ? "" : " dirty")}
+            role="status"
+            title="Whether this theme matches the copy in your library. Press ⌘S to update it."
+          >
+            {themesEqual(library.linked.theme, theme) ? "In library" : "Unsaved changes"}
+          </span>
+        )}
         <div className="bar-actions">
           <button
             className="btn primary"

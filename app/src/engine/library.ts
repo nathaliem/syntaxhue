@@ -22,6 +22,18 @@ export interface LibraryStore {
   remove(id: string): Promise<void>;
 }
 
+/**
+ * Whether two themes are the same work: name, mode, colors, font styles and vibe. Lock flags are ignored, so locking
+ * a color doesn't count as changing the theme.
+ */
+export function themesEqual(a: ThemeState, b: ThemeState): boolean {
+  const strip = (t: ThemeState) => ({
+    ...t,
+    roles: Object.fromEntries(Object.entries(t.roles).map(([k, r]) => [k, { color: r.color, fontStyle: r.fontStyle }])),
+  });
+  return JSON.stringify(strip(a)) === JSON.stringify(strip(b));
+}
+
 export function newId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `t-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }

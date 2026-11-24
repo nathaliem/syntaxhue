@@ -59,11 +59,68 @@ describe("Library drawer", () => {
     const user = userEvent.setup();
     render(<App />);
     await openLibrary(user);
-    const save = within(drawer()).getByRole("button", { name: "Save current" });
-    await user.click(save);
+    await user.click(within(drawer()).getByRole("button", { name: "Save current" }));
     await within(drawer()).findByRole("list", { name: "Saved themes" });
-    await user.click(save);
+    await user.click(await within(drawer()).findByRole("button", { name: "Save as new" }));
     await waitFor(() => expect(within(drawer()).getAllByRole("listitem")).toHaveLength(1));
+  });
+
+  it("shows unsaved changes against the library copy, and Update overwrites that copy", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.clear(nameInput());
+    await user.type(nameInput(), "Original");
+    await openLibrary(user);
+    await user.click(within(drawer()).getByRole("button", { name: "Save current" }));
+    const update = await within(drawer()).findByRole("button", { name: "Update “Original”" });
+    expect(update).toBeDisabled();
+    await user.keyboard("{Escape}");
+    expect(screen.getByText("In library")).toBeInTheDocument();
+
+    await user.clear(nameInput());
+    await user.type(nameInput(), "Renamed");
+    expect(screen.getByText("Unsaved changes")).toBeInTheDocument();
+
+    await openLibrary(user);
+    await user.click(await within(drawer()).findByRole("button", { name: "Update “Original”" }));
+    await within(drawer()).findByRole("button", { name: "Open Renamed" });
+    expect(within(drawer()).getAllByRole("listitem")).toHaveLength(1);
+    await user.keyboard("{Escape}");
+    expect(screen.getByText("In library")).toBeInTheDocument();
+  });
+
+  it("Save as new keeps the original and makes the copy the one being edited", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.clear(nameInput());
+    await user.type(nameInput(), "Base");
+    await openLibrary(user);
+    await user.click(within(drawer()).getByRole("button", { name: "Save current" }));
+    await within(drawer()).findByRole("button", { name: "Open Base" });
+    await user.keyboard("{Escape}");
+    await user.clear(nameInput());
+    await user.type(nameInput(), "Variant");
+    await openLibrary(user);
+    await user.click(await within(drawer()).findByRole("button", { name: "Save as new" }));
+    await within(drawer()).findByRole("button", { name: "Open Variant" });
+    expect(within(drawer()).getByRole("button", { name: "Open Base" })).toBeInTheDocument();
+    expect(within(drawer()).getByRole("button", { name: "Update “Variant”" })).toBeInTheDocument();
+  });
+
+  it("remembers which library theme you were editing after a reload", async () => {
+    const user = userEvent.setup();
+    const first = render(<App />);
+    await user.clear(nameInput());
+    await user.type(nameInput(), "Reloaded");
+    await openLibrary(user);
+    await user.click(within(drawer()).getByRole("button", { name: "Save current" }));
+    await within(drawer()).findByRole("button", { name: "Open Reloaded" });
+    window.dispatchEvent(new Event("pagehide")); // flush the autosave, as closing the tab does
+    first.unmount();
+    cleanup();
+
+    render(<App />);
+    expect(await screen.findByText("In library")).toBeInTheDocument();
   });
 
   it("saves with ⌘S and says so", async () => {

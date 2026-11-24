@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { SavedTheme } from "../engine/library";
+import { themesEqual, type SavedTheme } from "../engine/library";
 import type { ThemeState } from "../engine/theme";
 import type { Action } from "../state";
 import { ago } from "./ago";
@@ -52,11 +52,16 @@ export function LibraryDrawer({
     onClose();
   };
 
-  const save = async () => {
-    setSaved((await library.save(theme)) ? `Saved “${theme.name}”.` : null);
+  const { linked } = library;
+  const unchanged = linked ? themesEqual(linked.theme, theme) : false;
+
+  const save = async (how: "update" | "new") => {
+    const item = await library.save(theme, how);
+    setSaved(item ? `Saved “${theme.name}”.` : null);
   };
 
   const openItem = (item: SavedTheme) => {
+    library.open(item);
     dispatch({ type: "load", theme: item.theme });
     onClose();
   };
@@ -77,9 +82,20 @@ export function LibraryDrawer({
           </button>
         </header>
 
-        <button className="btn primary" onClick={() => void save()}>
-          Save current
-        </button>
+        {linked ? (
+          <div className="save-row">
+            <button className="btn primary" onClick={() => void save("update")} disabled={unchanged}>
+              Update “{linked.theme.name}”
+            </button>
+            <button className="btn" onClick={() => void save("new")}>
+              Save as new
+            </button>
+          </div>
+        ) : (
+          <button className="btn primary" onClick={() => void save("new")}>
+            Save current
+          </button>
+        )}
         {saved && (
           <p className="small" role="status">
             {saved}
