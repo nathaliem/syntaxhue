@@ -1,5 +1,861 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`port alacritty > matches its snapshot 1`] = `
+[
+  {
+    "content": "# Fixture Dark, made with Hueprint
+
+[colors.primary]
+background = "#1e1408"
+foreground = "#e5dcd4"
+
+[colors.cursor]
+text = "#1e1408"
+cursor = "#7b9dff"
+
+[colors.selection]
+text = "#e5dcd4"
+background = "#3a3d52"
+
+[colors.normal]
+black = "#463c31"
+red = "#f66d67"
+green = "#74c878"
+yellow = "#f2af48"
+blue = "#5fb8f2"
+purple = "#a4c7fe"
+cyan = "#d8c2ff"
+white = "#c7beb5"
+
+[colors.bright]
+black = "#877768"
+red = "#fe9089"
+green = "#81e286"
+yellow = "#feca80"
+blue = "#86ceff"
+purple = "#c8ddff"
+cyan = "#eadffe"
+white = "#e5dcd4"
+",
+    "path": "fixture-dark.toml",
+  },
+]
+`;
+
+exports[`port alacritty > matches its snapshot 2`] = `
+[
+  {
+    "content": "# Fixture Light, made with Hueprint
+
+[colors.primary]
+background = "#f7f9eb"
+foreground = "#292a21"
+
+[colors.cursor]
+text = "#f7f9eb"
+cursor = "#824fa0"
+
+[colors.selection]
+text = "#292a21"
+background = "#ddd4db"
+
+[colors.normal]
+black = "#292a21"
+red = "#b63132"
+green = "#1e7729"
+yellow = "#a06200"
+blue = "#006aa0"
+purple = "#056d4b"
+cyan = "#745000"
+white = "#dee0d3"
+
+[colors.bright]
+black = "#80826e"
+red = "#a60419"
+green = "#036518"
+yellow = "#895301"
+blue = "#045886"
+purple = "#015a3d"
+cyan = "#5f4100"
+white = "#f7f9eb"
+",
+    "path": "fixture-light.toml",
+  },
+]
+`;
+
+exports[`port ghostty > matches its snapshot 1`] = `
+[
+  {
+    "content": "palette = 0=#463c31
+palette = 1=#f66d67
+palette = 2=#74c878
+palette = 3=#f2af48
+palette = 4=#5fb8f2
+palette = 5=#a4c7fe
+palette = 6=#d8c2ff
+palette = 7=#c7beb5
+palette = 8=#877768
+palette = 9=#fe9089
+palette = 10=#81e286
+palette = 11=#feca80
+palette = 12=#86ceff
+palette = 13=#c8ddff
+palette = 14=#eadffe
+palette = 15=#e5dcd4
+background = #1e1408
+foreground = #e5dcd4
+cursor-color = #7b9dff
+cursor-text = #1e1408
+selection-background = #3a3d52
+selection-foreground = #e5dcd4
+",
+    "path": "fixture-dark",
+  },
+]
+`;
+
+exports[`port ghostty > matches its snapshot 2`] = `
+[
+  {
+    "content": "palette = 0=#292a21
+palette = 1=#b63132
+palette = 2=#1e7729
+palette = 3=#a06200
+palette = 4=#006aa0
+palette = 5=#056d4b
+palette = 6=#745000
+palette = 7=#dee0d3
+palette = 8=#80826e
+palette = 9=#a60419
+palette = 10=#036518
+palette = 11=#895301
+palette = 12=#045886
+palette = 13=#015a3d
+palette = 14=#5f4100
+palette = 15=#f7f9eb
+background = #f7f9eb
+foreground = #292a21
+cursor-color = #824fa0
+cursor-text = #f7f9eb
+selection-background = #ddd4db
+selection-foreground = #292a21
+",
+    "path": "fixture-light",
+  },
+]
+`;
+
+exports[`port iterm2 > matches its snapshot 1`] = `
+[
+  {
+    "content": "<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- #463c31 -->
+	<key>Ansi 0 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.192157</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.235294</real>
+		<key>Red Component</key>
+		<real>0.274510</real>
+	</dict>
+	<!-- #f66d67 -->
+	<key>Ansi 1 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.403922</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.427451</real>
+		<key>Red Component</key>
+		<real>0.964706</real>
+	</dict>
+	<!-- #74c878 -->
+	<key>Ansi 2 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.470588</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.784314</real>
+		<key>Red Component</key>
+		<real>0.454902</real>
+	</dict>
+	<!-- #f2af48 -->
+	<key>Ansi 3 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.282353</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.686275</real>
+		<key>Red Component</key>
+		<real>0.949020</real>
+	</dict>
+	<!-- #5fb8f2 -->
+	<key>Ansi 4 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.949020</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.721569</real>
+		<key>Red Component</key>
+		<real>0.372549</real>
+	</dict>
+	<!-- #a4c7fe -->
+	<key>Ansi 5 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.996078</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.780392</real>
+		<key>Red Component</key>
+		<real>0.643137</real>
+	</dict>
+	<!-- #d8c2ff -->
+	<key>Ansi 6 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>1.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.760784</real>
+		<key>Red Component</key>
+		<real>0.847059</real>
+	</dict>
+	<!-- #c7beb5 -->
+	<key>Ansi 7 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.709804</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.745098</real>
+		<key>Red Component</key>
+		<real>0.780392</real>
+	</dict>
+	<!-- #877768 -->
+	<key>Ansi 8 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.407843</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.466667</real>
+		<key>Red Component</key>
+		<real>0.529412</real>
+	</dict>
+	<!-- #fe9089 -->
+	<key>Ansi 9 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.537255</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.564706</real>
+		<key>Red Component</key>
+		<real>0.996078</real>
+	</dict>
+	<!-- #81e286 -->
+	<key>Ansi 10 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.525490</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.886275</real>
+		<key>Red Component</key>
+		<real>0.505882</real>
+	</dict>
+	<!-- #feca80 -->
+	<key>Ansi 11 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.501961</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.792157</real>
+		<key>Red Component</key>
+		<real>0.996078</real>
+	</dict>
+	<!-- #86ceff -->
+	<key>Ansi 12 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>1.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.807843</real>
+		<key>Red Component</key>
+		<real>0.525490</real>
+	</dict>
+	<!-- #c8ddff -->
+	<key>Ansi 13 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>1.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.866667</real>
+		<key>Red Component</key>
+		<real>0.784314</real>
+	</dict>
+	<!-- #eadffe -->
+	<key>Ansi 14 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.996078</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.874510</real>
+		<key>Red Component</key>
+		<real>0.917647</real>
+	</dict>
+	<!-- #e5dcd4 -->
+	<key>Ansi 15 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.831373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.862745</real>
+		<key>Red Component</key>
+		<real>0.898039</real>
+	</dict>
+	<!-- #1e1408 -->
+	<key>Background Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.031373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.078431</real>
+		<key>Red Component</key>
+		<real>0.117647</real>
+	</dict>
+	<!-- #e5dcd4 -->
+	<key>Foreground Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.831373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.862745</real>
+		<key>Red Component</key>
+		<real>0.898039</real>
+	</dict>
+	<!-- #7b9dff -->
+	<key>Cursor Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>1.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.615686</real>
+		<key>Red Component</key>
+		<real>0.482353</real>
+	</dict>
+	<!-- #1e1408 -->
+	<key>Cursor Text Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.031373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.078431</real>
+		<key>Red Component</key>
+		<real>0.117647</real>
+	</dict>
+	<!-- #3a3d52 -->
+	<key>Selection Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.321569</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.239216</real>
+		<key>Red Component</key>
+		<real>0.227451</real>
+	</dict>
+	<!-- #e5dcd4 -->
+	<key>Selected Text Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.831373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.862745</real>
+		<key>Red Component</key>
+		<real>0.898039</real>
+	</dict>
+</dict>
+</plist>
+",
+    "path": "fixture-dark.itermcolors",
+  },
+]
+`;
+
+exports[`port iterm2 > matches its snapshot 2`] = `
+[
+  {
+    "content": "<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- #292a21 -->
+	<key>Ansi 0 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.129412</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.164706</real>
+		<key>Red Component</key>
+		<real>0.160784</real>
+	</dict>
+	<!-- #b63132 -->
+	<key>Ansi 1 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.196078</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.192157</real>
+		<key>Red Component</key>
+		<real>0.713725</real>
+	</dict>
+	<!-- #1e7729 -->
+	<key>Ansi 2 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.160784</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.466667</real>
+		<key>Red Component</key>
+		<real>0.117647</real>
+	</dict>
+	<!-- #a06200 -->
+	<key>Ansi 3 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.384314</real>
+		<key>Red Component</key>
+		<real>0.627451</real>
+	</dict>
+	<!-- #006aa0 -->
+	<key>Ansi 4 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.627451</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.415686</real>
+		<key>Red Component</key>
+		<real>0.000000</real>
+	</dict>
+	<!-- #056d4b -->
+	<key>Ansi 5 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.294118</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.427451</real>
+		<key>Red Component</key>
+		<real>0.019608</real>
+	</dict>
+	<!-- #745000 -->
+	<key>Ansi 6 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.313725</real>
+		<key>Red Component</key>
+		<real>0.454902</real>
+	</dict>
+	<!-- #dee0d3 -->
+	<key>Ansi 7 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.827451</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.878431</real>
+		<key>Red Component</key>
+		<real>0.870588</real>
+	</dict>
+	<!-- #80826e -->
+	<key>Ansi 8 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.431373</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.509804</real>
+		<key>Red Component</key>
+		<real>0.501961</real>
+	</dict>
+	<!-- #a60419 -->
+	<key>Ansi 9 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.098039</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.015686</real>
+		<key>Red Component</key>
+		<real>0.650980</real>
+	</dict>
+	<!-- #036518 -->
+	<key>Ansi 10 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.094118</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.396078</real>
+		<key>Red Component</key>
+		<real>0.011765</real>
+	</dict>
+	<!-- #895301 -->
+	<key>Ansi 11 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.003922</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.325490</real>
+		<key>Red Component</key>
+		<real>0.537255</real>
+	</dict>
+	<!-- #045886 -->
+	<key>Ansi 12 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.525490</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.345098</real>
+		<key>Red Component</key>
+		<real>0.015686</real>
+	</dict>
+	<!-- #015a3d -->
+	<key>Ansi 13 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.239216</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.352941</real>
+		<key>Red Component</key>
+		<real>0.003922</real>
+	</dict>
+	<!-- #5f4100 -->
+	<key>Ansi 14 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.000000</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.254902</real>
+		<key>Red Component</key>
+		<real>0.372549</real>
+	</dict>
+	<!-- #f7f9eb -->
+	<key>Ansi 15 Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.921569</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.976471</real>
+		<key>Red Component</key>
+		<real>0.968627</real>
+	</dict>
+	<!-- #f7f9eb -->
+	<key>Background Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.921569</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.976471</real>
+		<key>Red Component</key>
+		<real>0.968627</real>
+	</dict>
+	<!-- #292a21 -->
+	<key>Foreground Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.129412</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.164706</real>
+		<key>Red Component</key>
+		<real>0.160784</real>
+	</dict>
+	<!-- #824fa0 -->
+	<key>Cursor Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.627451</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.309804</real>
+		<key>Red Component</key>
+		<real>0.509804</real>
+	</dict>
+	<!-- #f7f9eb -->
+	<key>Cursor Text Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.921569</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.976471</real>
+		<key>Red Component</key>
+		<real>0.968627</real>
+	</dict>
+	<!-- #ddd4db -->
+	<key>Selection Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.858824</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.831373</real>
+		<key>Red Component</key>
+		<real>0.866667</real>
+	</dict>
+	<!-- #292a21 -->
+	<key>Selected Text Color</key>
+	<dict>
+		<key>Alpha Component</key>
+		<real>1</real>
+		<key>Blue Component</key>
+		<real>0.129412</real>
+		<key>Color Space</key>
+		<string>sRGB</string>
+		<key>Green Component</key>
+		<real>0.164706</real>
+		<key>Red Component</key>
+		<real>0.160784</real>
+	</dict>
+</dict>
+</plist>
+",
+    "path": "fixture-light.itermcolors",
+  },
+]
+`;
+
+exports[`port kitty > matches its snapshot 1`] = `
+[
+  {
+    "content": "# Fixture Dark, made with Hueprint
+foreground #e5dcd4
+background #1e1408
+selection_foreground #e5dcd4
+selection_background #3a3d52
+cursor #7b9dff
+cursor_text_color #1e1408
+color0 #463c31
+color1 #f66d67
+color2 #74c878
+color3 #f2af48
+color4 #5fb8f2
+color5 #a4c7fe
+color6 #d8c2ff
+color7 #c7beb5
+color8 #877768
+color9 #fe9089
+color10 #81e286
+color11 #feca80
+color12 #86ceff
+color13 #c8ddff
+color14 #eadffe
+color15 #e5dcd4
+",
+    "path": "fixture-dark.conf",
+  },
+]
+`;
+
+exports[`port kitty > matches its snapshot 2`] = `
+[
+  {
+    "content": "# Fixture Light, made with Hueprint
+foreground #292a21
+background #f7f9eb
+selection_foreground #292a21
+selection_background #ddd4db
+cursor #824fa0
+cursor_text_color #f7f9eb
+color0 #292a21
+color1 #b63132
+color2 #1e7729
+color3 #a06200
+color4 #006aa0
+color5 #056d4b
+color6 #745000
+color7 #dee0d3
+color8 #80826e
+color9 #a60419
+color10 #036518
+color11 #895301
+color12 #045886
+color13 #015a3d
+color14 #5f4100
+color15 #f7f9eb
+",
+    "path": "fixture-light.conf",
+  },
+]
+`;
+
 exports[`port palette > matches its snapshot 1`] = `
 [
   {
@@ -82,6 +938,114 @@ exports[`port palette > matches its snapshot 2`] = `
 }
 ",
     "path": "palette.json",
+  },
+]
+`;
+
+exports[`port wezterm > matches its snapshot 1`] = `
+[
+  {
+    "content": "[colors]
+foreground = "#e5dcd4"
+background = "#1e1408"
+cursor_bg = "#7b9dff"
+cursor_fg = "#1e1408"
+cursor_border = "#7b9dff"
+selection_fg = "#e5dcd4"
+selection_bg = "#3a3d52"
+ansi = ["#463c31", "#f66d67", "#74c878", "#f2af48", "#5fb8f2", "#a4c7fe", "#d8c2ff", "#c7beb5"]
+brights = ["#877768", "#fe9089", "#81e286", "#feca80", "#86ceff", "#c8ddff", "#eadffe", "#e5dcd4"]
+
+[metadata]
+name = "Fixture Dark"
+",
+    "path": "fixture-dark.toml",
+  },
+]
+`;
+
+exports[`port wezterm > matches its snapshot 2`] = `
+[
+  {
+    "content": "[colors]
+foreground = "#292a21"
+background = "#f7f9eb"
+cursor_bg = "#824fa0"
+cursor_fg = "#f7f9eb"
+cursor_border = "#824fa0"
+selection_fg = "#292a21"
+selection_bg = "#ddd4db"
+ansi = ["#292a21", "#b63132", "#1e7729", "#a06200", "#006aa0", "#056d4b", "#745000", "#dee0d3"]
+brights = ["#80826e", "#a60419", "#036518", "#895301", "#045886", "#015a3d", "#5f4100", "#f7f9eb"]
+
+[metadata]
+name = "Fixture Light"
+",
+    "path": "fixture-light.toml",
+  },
+]
+`;
+
+exports[`port windows-terminal > matches its snapshot 1`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Dark",
+  "black": "#463c31",
+  "red": "#f66d67",
+  "green": "#74c878",
+  "yellow": "#f2af48",
+  "blue": "#5fb8f2",
+  "purple": "#a4c7fe",
+  "cyan": "#d8c2ff",
+  "white": "#c7beb5",
+  "brightBlack": "#877768",
+  "brightRed": "#fe9089",
+  "brightGreen": "#81e286",
+  "brightYellow": "#feca80",
+  "brightBlue": "#86ceff",
+  "brightPurple": "#c8ddff",
+  "brightCyan": "#eadffe",
+  "brightWhite": "#e5dcd4",
+  "background": "#1e1408",
+  "foreground": "#e5dcd4",
+  "cursorColor": "#7b9dff",
+  "selectionBackground": "#3a3d52"
+}
+",
+    "path": "fixture-dark.json",
+  },
+]
+`;
+
+exports[`port windows-terminal > matches its snapshot 2`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Light",
+  "black": "#292a21",
+  "red": "#b63132",
+  "green": "#1e7729",
+  "yellow": "#a06200",
+  "blue": "#006aa0",
+  "purple": "#056d4b",
+  "cyan": "#745000",
+  "white": "#dee0d3",
+  "brightBlack": "#80826e",
+  "brightRed": "#a60419",
+  "brightGreen": "#036518",
+  "brightYellow": "#895301",
+  "brightBlue": "#045886",
+  "brightPurple": "#015a3d",
+  "brightCyan": "#5f4100",
+  "brightWhite": "#f7f9eb",
+  "background": "#f7f9eb",
+  "foreground": "#292a21",
+  "cursorColor": "#824fa0",
+  "selectionBackground": "#ddd4db"
+}
+",
+    "path": "fixture-light.json",
   },
 ]
 `;
