@@ -1,0 +1,87 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`port palette > matches its snapshot 1`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Dark",
+  "mode": "dark",
+  "roles": {
+    "bg": "#1e1408",
+    "fg": "#e5dcd4",
+    "accent": "#7b9dff",
+    "muted": "#877768",
+    "keyword": "#80c2ff",
+    "string": "#c4b532",
+    "function": "#c3bbff",
+    "type": "#ff9666",
+    "variable": "#e8cbac",
+    "constant": "#00ccf4",
+    "operator": "#a2bad8",
+    "error": "#f66d67",
+    "warning": "#f2af48",
+    "info": "#5fb8f2",
+    "success": "#74c878"
+  },
+  "surfaces": {
+    "editor": "#1e1408",
+    "sidebar": "#170d03",
+    "activityBar": "#120901",
+    "panel": "#170d03",
+    "tabInactive": "#170d03",
+    "widget": "#281d11",
+    "input": "#261c10",
+    "border": "#362c20",
+    "lineHighlight": "#e5dcd40d",
+    "selection": "#7b9dff4d",
+    "onAccent": "#111418"
+  }
+}
+",
+    "path": "palette.json",
+  },
+]
+`;
+
+exports[`port palette > matches its snapshot 2`] = `
+[
+  {
+    "content": "{
+  "name": "Fixture Light",
+  "mode": "light",
+  "roles": {
+    "bg": "#f7f9eb",
+    "fg": "#292a21",
+    "accent": "#824fa0",
+    "muted": "#80826e",
+    "keyword": "#007938",
+    "string": "#006957",
+    "function": "#745000",
+    "type": "#007c8e",
+    "variable": "#3b3d22",
+    "constant": "#924112",
+    "operator": "#385540",
+    "error": "#b63132",
+    "warning": "#a06200",
+    "info": "#006aa0",
+    "success": "#1e7729"
+  },
+  "surfaces": {
+    "editor": "#f7f9eb",
+    "sidebar": "#eff1e3",
+    "activityBar": "#e8eadc",
+    "panel": "#eff1e3",
+    "tabInactive": "#eff1e3",
+    "widget": "#f2f4e6",
+    "input": "#edefe1",
+    "border": "#dadccf",
+    "lineHighlight": "#292a210b",
+    "selection": "#824fa038",
+    "onAccent": "#ffffff"
+  }
+}
+",
+    "path": "palette.json",
+  },
+]
+`;
