@@ -18,3 +18,18 @@ npm run check         # everything CI runs: lint, format, build, test
 - `src/test/setup.ts` — shared test setup; component tests live next to the code as `*.test.tsx`
 
 See `../REQUIREMENTS.md` for the full spec and `../concepts.html` for the concept book.
+
+## Performance check
+
+Dragging a slider should update the preview in under 50 ms per frame, even on a slow machine (HP-407).
+`perf/drag-harness.js` measures it: build and serve the production app, show the Browser pane or window
+(hidden pages get throttled animation frames), then run in the page console:
+
+```js
+await hueprintDrag({ role: "Keyword", slider: "Lightness", slowdown: 4 });
+await hueprintDrag({ vibe: "Saturation", slowdown: 4 });
+```
+
+`slowdown: 4` keeps the main thread busy to imitate Chrome's 4x CPU throttling. It prints median, 95th
+percentile and max frame times, split into React and style/layout work. Last measured (production build, 4x):
+role sliders about 10 ms at p95, vibe sliders that recolor everything about 27 ms.
