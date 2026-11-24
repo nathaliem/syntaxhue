@@ -1,8 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "../App";
+import { decodePng } from "../engine/png";
 import { unzipStore } from "../engine/zip";
+
+vi.mock("../preview/screenshot", () => ({
+  allScreenshots: vi.fn(async () => [
+    { lang: "typescript", label: "TypeScript", png: new Uint8Array([9, 9]) },
+    { lang: "python", label: "Python", png: new Uint8Array([8, 8]) },
+  ]),
+}));
 
 let blobs: Blob[] = [];
 let downloads: string[] = [];
@@ -162,5 +170,52 @@ describe("Export > Extension (.vsix) form", () => {
     await user.click(download());
     const files = unzipStore(await readBlob(blobs[0]));
     expect(new TextDecoder().decode(files["extension/LICENSE.txt"])).toMatch(/Copyright \(c\) \d{4} someone/);
+  });
+
+  it("puts a 128 px icon of the palette in the package and shows it", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    expect(screen.getByRole("img", { name: "Icon preview" })).toHaveAttribute(
+      "src",
+      expect.stringMatching(/^data:image\/png;base64,/),
+    );
+    await user.type(field("Publisher id"), "someone");
+    await user.click(download());
+    const files = unzipStore(await readBlob(blobs[0]));
+    expect(decodePng(files["extension/images/icon.png"])).toMatchObject({ width: 128, height: 128 });
+    expect((await pkgOf()).icon).toBe("images/icon.png");
+  });
+
+  it("offers screenshots only with a GitHub or GitLab repository, and then adds them to the package and README", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    const box = screen.getByRole("checkbox", { name: /screenshot per language/ });
+    expect(box).toBeDisabled();
+    expect(screen.getByText(/Needs a GitHub or GitLab repository/)).toBeInTheDocument();
+
+    await user.type(field("Repository (optional)"), "https://github.com/someone/meadow");
+    expect(box).toBeEnabled();
+    await user.click(box);
+    await user.click(download());
+    await waitFor(() => expect(downloads).toHaveLength(1));
+    const files = unzipStore(await readBlob(blobs[0]));
+    expect([...files["extension/images/screenshot-python.png"]]).toEqual([8, 8]);
+    const readme = new TextDecoder().decode(files["extension/README.md"]);
+    expect(readme).toContain("![Python](images/screenshot-python.png)");
+  });
+
+  it("says so when the package cannot be built, and stays usable", async () => {
+    const { allScreenshots } = await import("../preview/screenshot");
+    vi.mocked(allScreenshots).mockRejectedValueOnce(new Error("Canvas is not available in this browser"));
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    await user.type(field("Repository (optional)"), "https://github.com/someone/meadow");
+    await user.click(screen.getByRole("checkbox", { name: /screenshot per language/ }));
+    await user.click(download());
+    expect(await screen.findByRole("alert")).toHaveTextContent("Canvas is not available");
+    expect(downloads).toHaveLength(0);
+    expect(download()).toBeEnabled();
   });
 });

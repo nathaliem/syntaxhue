@@ -2,6 +2,7 @@ import { type CSSProperties, type MouseEvent } from "react";
 import { surfaces, workbenchColors } from "../engine/derive";
 import { effectiveTheme } from "../engine/vibe";
 import { ROLE_BY_ID, ROLE_IDS, type RoleId, type ThemeState } from "../engine/theme";
+import { FILES } from "./files";
 import { type Sample } from "./samples";
 import { useTokens } from "./useTokens";
 import { Minimap } from "./Minimap";
@@ -14,18 +15,6 @@ interface Props {
   onPick: (role: RoleId) => void;
   sample: Sample;
 }
-
-const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folder?: boolean; active?: boolean }[] = [
-  { name: "src", depth: 0, folder: true },
-  { name: "engine", depth: 1, folder: true },
-  { name: "color.ts", depth: 2 },
-  { name: "", depth: 2, active: true, role: "warning", badge: "M" },
-  { name: "export.ts", depth: 2, role: "success", badge: "U" },
-  { name: "contrast.ts", depth: 2, role: "error", badge: "1" },
-  { name: "App.tsx", depth: 1 },
-  { name: "package.json", depth: 0 },
-  { name: "README.md", depth: 0 },
-];
 
 export function Workbench({ theme, selected, highlighted, onPick, sample }: Props) {
   const shown = effectiveTheme(theme); // roles with vibe applied; what the user sees and exports

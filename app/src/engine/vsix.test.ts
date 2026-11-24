@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { themeFile } from "./derive";
 import { type ExtensionOptions } from "./extension";
+import { iconPng } from "./icon";
+import { decodePng } from "./png";
 import { buildVsix, vsixEntries, vsixFileName } from "./vsix";
 import { generate } from "./theme";
 import { crc32, unzipStore, zipStore } from "./zip";
@@ -81,7 +83,7 @@ describe(".vsix", () => {
   });
 
   it("lists, as assets, only files that are in the package", () => {
-    const paths = [...entries["extension.vsixmanifest"].matchAll(/Path="([^"]+)"/g)].map((m) => m[1]);
+    const paths = [...(entries["extension.vsixmanifest"] as string).matchAll(/Path="([^"]+)"/g)].map((m) => m[1]);
     expect(paths.length).toBeGreaterThan(3);
     for (const p of paths) expect(zip[p], p).toBeDefined();
     expect(entries["extension.vsixmanifest"]).toContain("<License>extension/LICENSE.txt</License>");
@@ -90,10 +92,10 @@ describe(".vsix", () => {
   it("is well-formed XML", () => {
     const parse = (x: string) => new DOMParser().parseFromString(x, "application/xml");
     for (const name of ["[Content_Types].xml", "extension.vsixmanifest"]) {
-      expect(parse(entries[name]).querySelector("parsererror"), name).toBeNull();
+      expect(parse(entries[name] as string).querySelector("parsererror"), name).toBeNull();
     }
     // without a repository the optional property is left out entirely
-    const bare = vsixEntries(theme, { ...opts, repository: undefined })["extension.vsixmanifest"];
+    const bare = vsixEntries(theme, { ...opts, repository: undefined })["extension.vsixmanifest"] as string;
     expect(parse(bare).querySelector("parsererror")).toBeNull();
     expect(bare).not.toContain("Links.Source");
   });
@@ -105,5 +107,23 @@ describe(".vsix", () => {
   it("names the file after the extension and version", () => {
     expect(vsixFileName(theme, opts)).toBe("velvet-meadow-1.2.3.vsix");
     expect(vsixFileName(theme, { ...opts, id: "meadow" })).toBe("meadow-1.2.3.vsix");
+  });
+});
+
+describe(".vsix assets", () => {
+  const icon = iconPng(theme);
+
+  it("stores the icon, declares it in the manifest and has a content type for PNG", () => {
+    const entries = vsixEntries(theme, opts, { icon });
+    expect(entries["extension/images/icon.png"]).toBe(icon);
+    expect(entries["extension.vsixmanifest"]).toContain("<Icon>extension/images/icon.png</Icon>");
+    expect(entries["[Content_Types].xml"]).toContain('Extension=".png" ContentType="image/png"');
+    const zip = unzipStore(buildVsix(theme, opts, { icon }));
+    expect(decodePng(zip["extension/images/icon.png"])).toMatchObject({ width: 128, height: 128 });
+    expect(JSON.parse(text(zip["extension/package.json"])).icon).toBe("images/icon.png");
+  });
+
+  it("has no icon entry without an icon", () => {
+    expect(vsixEntries(theme, opts)["extension.vsixmanifest"]).not.toContain("<Icon>");
   });
 });

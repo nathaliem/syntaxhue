@@ -1,15 +1,19 @@
-import { useId, useState, type ReactNode } from "react";
+import { useId, useMemo, useState, type ReactNode } from "react";
 import {
   advice,
   fieldProblems,
   LICENSES,
   parseKeywords,
+  screenshotsUsable,
   slugify,
+  type ExtensionAssets,
   type ExtensionOptions,
   type Field,
   type LicenseId,
 } from "../engine/extension";
 import type { ThemeState } from "../engine/theme";
+import { iconPng } from "../engine/icon";
+import { allScreenshots } from "../preview/screenshot";
 import { buildVsix, vsixFileName } from "../engine/vsix";
 
 const KEY = "hueprint.extension";
@@ -52,6 +56,11 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
     description: null,
   });
   const [version, setVersion] = useState("1.0.0");
+  const [shots, setShots] = useState(false);
+  const [building, setBuilding] = useState(false);
+  const [buildError, setBuildError] = useState<string | null>(null);
+  const icon = useMemo(() => iconPng(theme), [theme]);
+  const iconUrl = useMemo(() => "data:image/png;base64," + toBase64(icon), [icon]);
 
   const suggested = {
     displayName: theme.name,
@@ -84,19 +93,33 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
   // The license name falls back to the publisher id, so don't report it twice while that is still empty.
   const problem = (f: Field) => (f === "author" && !options.publisher ? undefined : problems[f]);
 
-  const download = () => {
-    if (!ready) return;
+  const usable = screenshotsUsable(options.repository);
+
+  const download = async () => {
+    if (!ready || building) return;
     try {
       localStorage.setItem(KEY, JSON.stringify(saved));
     } catch {
       /* private mode: details just won't be remembered */
     }
-    const url = URL.createObjectURL(new Blob([buildVsix(theme, options) as BlobPart], { type: "application/zip" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = vsixFileName(theme, options);
-    a.click();
-    URL.revokeObjectURL(url);
+    setBuildError(null);
+    setBuilding(true);
+    try {
+      const assets: ExtensionAssets = { icon };
+      if (shots && usable) assets.screenshots = await allScreenshots(theme);
+      const url = URL.createObjectURL(
+        new Blob([buildVsix(theme, options, assets) as BlobPart], { type: "application/zip" }),
+      );
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = vsixFileName(theme, options);
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setBuildError(e instanceof Error ? e.message : "Something went wrong while building the package.");
+    } finally {
+      setBuilding(false);
+    }
   };
 
   return (
@@ -176,6 +199,29 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
           hint="Comma separated. “theme”, “color-theme” and the mode are added for you."
         />
       </div>
+      <div className="icon-row">
+        <img src={iconUrl} width={64} height={64} alt="Icon preview" />
+        <div>
+          <b>Icon</b>
+          <p className="small">
+            Made from your palette, 128 × 128 px, as the Marketplace asks. It goes into the package automatically.
+          </p>
+        </div>
+      </div>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={shots && usable}
+          disabled={!usable}
+          onChange={(e) => setShots(e.target.checked)}
+        />
+        Add a screenshot per language to the README
+      </label>
+      <p className="small">
+        {usable
+          ? "Commit the package's images folder to your repository too: the Marketplace loads the pictures from there."
+          : "Needs a GitHub or GitLab repository above. The Marketplace loads README pictures from the repository, not from the package."}
+      </p>
       {tips.length > 0 && ready && (
         <ul className="tips" aria-label="Suggestions">
           {tips.map((t) => (
@@ -184,9 +230,14 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
         </ul>
       )}
       <div className="export-actions">
-        <button className="btn primary" onClick={download} disabled={!ready}>
-          Download {vsixFileName(theme, options)}
+        <button className="btn primary" onClick={() => void download()} disabled={!ready || building}>
+          {building ? "Building…" : `Download ${vsixFileName(theme, options)}`}
         </button>
+        {buildError && (
+          <span className="small field-msg bad" role="alert">
+            {buildError}
+          </span>
+        )}
         {!ready && <span className="small">Fix the highlighted fields to download.</span>}
         {(over.displayName !== null || over.id !== null || over.description !== null) && (
           <button className="btn" onClick={() => setOver({ displayName: null, id: null, description: null })}>
@@ -261,4 +312,10 @@ function TextField({
       )}
     </Shell>
   );
+}
+
+function toBase64(bytes: Uint8Array): string {
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
 }

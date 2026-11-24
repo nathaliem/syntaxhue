@@ -1188,3 +1188,16 @@ pre.code {
   font-size: 13px;
   color: var(--ink-2);
 }
+.icon-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.icon-row img {
+  border-radius: 14px;
+  image-rendering: auto;
+  flex: none;
+}
+.icon-row p {
+  margin: 2px 0 0;
+}

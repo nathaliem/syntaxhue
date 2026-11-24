@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { themeFile } from "./derive";
 import {
   advice,
+  screenshotsUsable,
   extensionFiles,
   fieldProblems,
   parseKeywords,
@@ -88,12 +89,12 @@ describe("extensionFiles", () => {
     expect(Object.keys(files).sort()).toEqual(
       [".vscodeignore", "CHANGELOG.md", "LICENSE", "README.md", "package.json", themePath("velvet-meadow")].sort(),
     );
-    const pkg = JSON.parse(files["package.json"]);
+    const pkg = JSON.parse(files["package.json"] as string);
     expect(files[pkg.contributes.themes[0].path.replace("./", "")]).toBeDefined();
   });
 
   it("ships the same theme file the download button writes", () => {
-    expect(JSON.parse(files[themePath("velvet-meadow")])).toEqual(themeFile(dark));
+    expect(JSON.parse(files[themePath("velvet-meadow")] as string)).toEqual(themeFile(dark));
   });
 
   it("is deterministic", () => {
@@ -148,5 +149,41 @@ describe("advice and keywords", () => {
   it("parses comma separated keywords, lowercased and de-duplicated", () => {
     expect(parseKeywords(" Green, calm ,GREEN,, ")).toEqual(["green", "calm"]);
     expect(parseKeywords("")).toEqual([]);
+  });
+});
+
+describe("assets", () => {
+  const icon = new Uint8Array([1, 2, 3]);
+  const shots = [
+    { lang: "typescript", label: "TypeScript", png: new Uint8Array([4]) },
+    { lang: "python", label: "Python", png: new Uint8Array([5]) },
+  ];
+  const repo = "https://github.com/someone/velvet-meadow";
+
+  it("adds the icon to the package and points package.json at it", () => {
+    const files = extensionFiles(dark, opts, { icon });
+    expect(files["images/icon.png"]).toBe(icon);
+    expect(JSON.parse(files["package.json"] as string).icon).toBe("images/icon.png");
+    expect(JSON.parse(extensionFiles(dark, opts)["package.json"] as string)).not.toHaveProperty("icon");
+  });
+
+  it("includes screenshots and links them in the README only when a GitHub or GitLab repository can serve them", () => {
+    const withRepo = extensionFiles(dark, { ...opts, repository: repo }, { icon, screenshots: shots });
+    expect(withRepo["images/screenshot-python.png"]).toBe(shots[1].png);
+    expect(withRepo["README.md"]).toContain("## Screenshots");
+    expect(withRepo["README.md"]).toContain("![TypeScript](images/screenshot-typescript.png)");
+
+    for (const repository of [undefined, "https://example.com/a/b", "https://github.com/onlyowner"]) {
+      const files = extensionFiles(dark, { ...opts, repository }, { icon, screenshots: shots });
+      expect(Object.keys(files).some((f) => f.includes("screenshot"))).toBe(false);
+      expect(files["README.md"]).not.toContain("Screenshots");
+    }
+  });
+
+  it("recognises usable repositories", () => {
+    expect(screenshotsUsable(repo)).toBe(true);
+    expect(screenshotsUsable("https://gitlab.com/a/b.git")).toBe(true);
+    expect(screenshotsUsable("https://bitbucket.org/a/b")).toBe(false);
+    expect(screenshotsUsable("")).toBe(false);
   });
 });

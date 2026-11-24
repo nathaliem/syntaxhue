@@ -1,6 +1,6 @@
-import { extensionFiles, packageJson, slugify, type ExtensionOptions } from "./extension";
+import { extensionFiles, packageJson, slugify, type ExtensionAssets, type ExtensionOptions } from "./extension";
 import type { ThemeState } from "./theme";
-import { zipStore } from "./zip";
+import { zipStore, type ZipInput } from "./zip";
 
 /**
  * Builds the `.vsix`: the zip VS Code installs. Layout and manifest follow what `@vscode/vsce` writes for a
@@ -12,11 +12,11 @@ const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 
 const CONTENT_TYPES = `<?xml version="1.0" encoding="utf-8"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".txt" ContentType="text/plain"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".png" ContentType="image/png"/><Default Extension=".txt" ContentType="text/plain"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>
 `;
 
-function manifest(theme: ThemeState, o: ExtensionOptions): string {
-  const pkg = packageJson(theme, o);
+function manifest(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets): string {
+  const pkg = packageJson(theme, o, assets);
   const prop = (id: string, value: string) => `      <Property Id="${id}" Value="${esc(value)}" />`;
   const repo = pkg.repository?.url;
   return `<?xml version="1.0" encoding="utf-8"?>
@@ -36,7 +36,7 @@ ${prop("Microsoft.VisualStudio.Code.ExtensionKind", "ui,workspace")}
 ${prop("Microsoft.VisualStudio.Code.LocalizedLanguages", "")}
 ${repo ? prop("Microsoft.VisualStudio.Services.Links.Source", repo) + "\n" : ""}    </Properties>
     <License>extension/LICENSE.txt</License>
-  </Metadata>
+${assets.icon ? "    <Icon>extension/images/icon.png</Icon>\n" : ""}  </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Code"/>
   </Installation>
@@ -52,11 +52,11 @@ ${repo ? prop("Microsoft.VisualStudio.Services.Links.Source", repo) + "\n" : ""}
 }
 
 /** The `.vsix` entries by path. Throws when the options would make the Marketplace refuse the package. */
-export function vsixEntries(theme: ThemeState, o: ExtensionOptions): Record<string, string> {
-  const files = extensionFiles(theme, o);
-  const entries: Record<string, string> = {
+export function vsixEntries(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets = {}): ZipInput {
+  const files = extensionFiles(theme, o, assets);
+  const entries: ZipInput = {
     "[Content_Types].xml": CONTENT_TYPES,
-    "extension.vsixmanifest": manifest(theme, o),
+    "extension.vsixmanifest": manifest(theme, o, assets),
   };
   for (const [path, text] of Object.entries(files)) {
     if (path === ".vscodeignore") continue; // only tells vsce what to leave out; not part of the package
@@ -65,8 +65,8 @@ export function vsixEntries(theme: ThemeState, o: ExtensionOptions): Record<stri
   return entries;
 }
 
-export function buildVsix(theme: ThemeState, o: ExtensionOptions): Uint8Array {
-  return zipStore(vsixEntries(theme, o));
+export function buildVsix(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets = {}): Uint8Array {
+  return zipStore(vsixEntries(theme, o, assets));
 }
 
 export function vsixFileName(theme: ThemeState, o: Pick<ExtensionOptions, "id" | "version">): string {

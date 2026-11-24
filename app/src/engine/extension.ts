@@ -94,7 +94,21 @@ export function themePath(id: string): string {
   return `themes/${id}-color-theme.json`;
 }
 
-export function packageJson(theme: ThemeState, o: ExtensionOptions) {
+/** Images that go into the package. Screenshots only make sense with a repository that can serve them (below). */
+export interface ExtensionAssets {
+  icon?: Uint8Array;
+  screenshots?: { lang: string; label: string; png: Uint8Array }[];
+}
+
+/**
+ * Relative image links in a Marketplace README are resolved by `vsce` against the repository, so they only work
+ * for a GitHub or GitLab repository that has the `images/` folder committed.
+ */
+export function screenshotsUsable(repository?: string): boolean {
+  return !!repository && /^https:\/\/(www\.)?(github|gitlab)\.com\/[^/]+\/[^/]+/.test(repository);
+}
+
+export function packageJson(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets = {}) {
   const id = o.id ?? slugify(theme.name);
   return {
     name: id,
@@ -103,6 +117,7 @@ export function packageJson(theme: ThemeState, o: ExtensionOptions) {
     version: o.version,
     publisher: o.publisher,
     license: o.license,
+    ...(assets.icon ? { icon: "images/icon.png" } : {}),
     engines: { vscode: "^1.75.0" },
     categories: ["Themes"],
     keywords: [...new Set(["theme", "color-theme", theme.mode, ...(o.keywords ?? [])])],
@@ -188,9 +203,13 @@ export function changelog(theme: ThemeState, o: Pick<ExtensionOptions, "version"
 }
 
 /** The README the Marketplace shows: what it is, how to turn it on, and the palette it is built from. */
-export function readme(theme: ThemeState, o: ExtensionOptions): string {
+export function readme(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets = {}): string {
   const shown = effectiveTheme(theme);
   const rows = ROLES.map((r) => `| ${r.label} | \`${shown.roles[r.id].color}\` |`).join("\n");
+  const shots = screenshotsUsable(o.repository) ? (assets.screenshots ?? []) : [];
+  const gallery = shots.length
+    ? `\n## Screenshots\n\n${shots.map((s) => `![${s.label}](images/screenshot-${s.lang}.png)`).join("\n\n")}\n`
+    : "";
   return `# ${o.displayName?.trim() || theme.name}
 
 ${o.description}
@@ -210,7 +229,7 @@ A ${theme.mode} color theme for Visual Studio Code.
 ${rows}
 
 Text colors are kept at or above WCAG contrast minimums against the background.
-
+${gallery}
 ## License
 
 ${o.license}. See the LICENSE file.
@@ -226,16 +245,25 @@ const VSCODEIGNORE = `.vscode/**
 `;
 
 /** Every file of the extension, by path inside the package. Throws when the options are not valid. */
-export function extensionFiles(theme: ThemeState, o: ExtensionOptions): Record<string, string> {
+export function extensionFiles(
+  theme: ThemeState,
+  o: ExtensionOptions,
+  assets: ExtensionAssets = {},
+): Record<string, string | Uint8Array> {
   const problems = validateOptions(theme, o);
   if (problems.length) throw new Error(problems.join(" "));
   const id = o.id ?? slugify(theme.name);
-  return {
-    "package.json": JSON.stringify(packageJson(theme, o), null, 2) + "\n",
+  const files: Record<string, string | Uint8Array> = {
+    "package.json": JSON.stringify(packageJson(theme, o, assets), null, 2) + "\n",
     [themePath(id)]: JSON.stringify(themeFile(theme), null, 2) + "\n",
-    "README.md": readme(theme, o),
+    "README.md": readme(theme, o, assets),
     "CHANGELOG.md": changelog(theme, o),
     LICENSE: licenseText(o),
     ".vscodeignore": VSCODEIGNORE,
   };
+  if (assets.icon) files["images/icon.png"] = assets.icon;
+  if (screenshotsUsable(o.repository)) {
+    for (const s of assets.screenshots ?? []) files[`images/screenshot-${s.lang}.png`] = s.png;
+  }
+  return files;
 }
