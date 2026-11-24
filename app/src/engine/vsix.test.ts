@@ -59,8 +59,8 @@ describe(".vsix", () => {
       "extension.vsixmanifest",
       "extension/package.json",
       "extension/themes/velvet-meadow-color-theme.json",
-      "extension/README.md",
-      "extension/CHANGELOG.md",
+      "extension/readme.md",
+      "extension/changelog.md",
       "extension/LICENSE.txt",
     ]);
     expect(Object.keys(zip).some((n) => n.includes(".vscodeignore"))).toBe(false);

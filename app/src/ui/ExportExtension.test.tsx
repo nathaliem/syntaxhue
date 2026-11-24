@@ -201,7 +201,7 @@ describe("Export > Extension (.vsix) form", () => {
     await waitFor(() => expect(downloads).toHaveLength(1));
     const files = unzipStore(await readBlob(blobs[0]));
     expect([...files["extension/images/screenshot-python.png"]]).toEqual([8, 8]);
-    const readme = new TextDecoder().decode(files["extension/README.md"]);
+    const readme = new TextDecoder().decode(files["extension/readme.md"]);
     expect(readme).toContain("![Python](images/screenshot-python.png)");
   });
 

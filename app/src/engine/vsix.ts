@@ -5,7 +5,7 @@ import { zipStore, type ZipInput } from "./zip";
 /**
  * Builds the `.vsix`: the zip VS Code installs. Layout and manifest follow what `@vscode/vsce` writes for a
  * theme extension: `[Content_Types].xml` and `extension.vsixmanifest` at the top, the extension's own files
- * under `extension/`, with the license stored as `LICENSE.txt`. (HP-1107 checks it against real vsce output.)
+ * under `extension/`, with the license stored as `LICENSE.txt`. (HP-1107 checks it against real vsce output in CI.)
  */
 
 const esc = (s: string) =>
@@ -14,6 +14,13 @@ const esc = (s: string) =>
 const CONTENT_TYPES = `<?xml version="1.0" encoding="utf-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".json" ContentType="application/json"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".png" ContentType="image/png"/><Default Extension=".txt" ContentType="text/plain"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>
 `;
+
+/** The official packager stores these under other names (found by the CI comparison with real vsce output). */
+const PACKAGED_NAME: Record<string, string> = {
+  LICENSE: "LICENSE.txt",
+  "README.md": "readme.md",
+  "CHANGELOG.md": "changelog.md",
+};
 
 function manifest(theme: ThemeState, o: ExtensionOptions, assets: ExtensionAssets): string {
   const pkg = packageJson(theme, o, assets);
@@ -43,8 +50,8 @@ ${assets.icon ? "    <Icon>extension/images/icon.png</Icon>\n" : ""}  </Metadata
   <Dependencies/>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
-    <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
-    <Asset Type="Microsoft.VisualStudio.Services.Content.Changelog" Path="extension/CHANGELOG.md" Addressable="true" />
+    <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/readme.md" Addressable="true" />
+    <Asset Type="Microsoft.VisualStudio.Services.Content.Changelog" Path="extension/changelog.md" Addressable="true" />
     <Asset Type="Microsoft.VisualStudio.Services.Content.License" Path="extension/LICENSE.txt" Addressable="true" />
   </Assets>
 </PackageManifest>
@@ -60,7 +67,7 @@ export function vsixEntries(theme: ThemeState, o: ExtensionOptions, assets: Exte
   };
   for (const [path, text] of Object.entries(files)) {
     if (path === ".vscodeignore") continue; // only tells vsce what to leave out; not part of the package
-    entries[`extension/${path === "LICENSE" ? "LICENSE.txt" : path}`] = text;
+    entries[`extension/${PACKAGED_NAME[path] ?? path}`] = text;
   }
   return entries;
 }
