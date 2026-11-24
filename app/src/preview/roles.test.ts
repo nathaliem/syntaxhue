@@ -33,7 +33,7 @@ const EXPECTED: [Lang, string, RoleId][] = [
   ["json", '"#4ba3f7"', "string"],
   ["markdown", "Features", "function"],
   ["markdown", "settings.json", "string"],
-  ["markdown", "https://syntaxhue.nathaliemaes.be", "constant"],
+  ["markdown", "https://syntaxhue.dev", "constant"],
   ["markdown", "Free and made by one person.", "muted"],
 ];
 

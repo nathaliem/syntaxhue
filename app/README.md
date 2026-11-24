@@ -37,5 +37,5 @@ role sliders about 10 ms at p95, vibe sliders that recolor everything about 27 m
 Hosted on Vercel (project `hueprint`, root directory `app`), connected to the GitHub repo:
 
 - **Pull requests and other branches** get their own preview URL; Vercel comments it on the PR.
-- **Pushes to `main`** deploy to production at https://syntaxhue.nathaliemaes.be (also `hueprint-silk.vercel.app`).
+- **Pushes to `main`** deploy to production at https://syntaxhue.dev (also `hueprint-silk.vercel.app`).
 - `vercel.json` sets long-lived caching for the hashed `/assets` files and basic security headers. The app keeps its state in the URL hash, so no rewrite rules are needed.
