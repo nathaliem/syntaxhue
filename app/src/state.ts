@@ -95,6 +95,15 @@ function readSaved(): ThemeState | null {
   }
 }
 
+/** Forgets the autosaved theme, so the next start begins with a fresh one. */
+export function clearSavedTheme(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* storage unavailable: nothing to clear */
+  }
+}
+
 function clearHash() {
   history.replaceState(null, "", location.pathname + location.search);
 }
