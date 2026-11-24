@@ -1,8 +1,9 @@
-import { useMemo, type CSSProperties, type MouseEvent } from "react";
+import { type CSSProperties, type MouseEvent } from "react";
 import { surfaces } from "../engine/derive";
 import { effectiveTheme } from "../engine/vibe";
 import { ROLE_BY_ID, ROLE_IDS, type RoleId, type ThemeState } from "../engine/theme";
-import { SAMPLE_TS, tokenizeLine } from "./tokenize";
+import { SAMPLE_TS } from "./sample";
+import { useTokens } from "./useTokens";
 
 interface Props {
   theme: ThemeState;
@@ -30,7 +31,7 @@ const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folde
 export function Workbench({ theme, selected, highlighted, onPick }: Props) {
   const shown = effectiveTheme(theme); // roles with vibe applied; what the user sees and exports
   const s = surfaces(theme);
-  const lines = useMemo(() => SAMPLE_TS.split("\n").map(tokenizeLine), []);
+  const lines = useTokens(SAMPLE_TS);
 
   const vars = {
     "--w-editor": s.editor,

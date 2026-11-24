@@ -169,7 +169,8 @@ interface TokenRule {
   settings: { foreground: string; fontStyle?: string };
 }
 
-const SCOPES: { role: RoleId; scope: string[] }[] = [
+/** Which TextMate scopes each role colors. The exported theme and the preview's tokenizer both read this. */
+export const SCOPES: { role: RoleId; scope: string[] }[] = [
   { role: "muted", scope: ["comment", "punctuation.definition.comment"] },
   { role: "keyword", scope: ["keyword", "storage", "storage.type", "storage.modifier", "keyword.control"] },
   { role: "string", scope: ["string", "string.regexp", "punctuation.definition.string"] },
