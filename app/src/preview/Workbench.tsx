@@ -47,7 +47,11 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
   const styleOf = (id: RoleId | null): CSSProperties | undefined => {
     if (!id) return undefined;
     const f = theme.roles[id].fontStyle;
-    return { fontStyle: f.includes("italic") ? "italic" : "normal", fontWeight: f.includes("bold") ? 700 : 400 };
+    return {
+      fontStyle: f.includes("italic") ? "italic" : "normal",
+      fontWeight: f.includes("bold") ? 700 : 400,
+      textDecoration: f.includes("underline") ? "underline" : "none",
+    };
   };
 
   const handleClick = (e: MouseEvent) => {

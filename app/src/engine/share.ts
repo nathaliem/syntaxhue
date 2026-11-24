@@ -3,13 +3,15 @@ import { ROLE_IDS, type FontStyle, type ThemeState } from "./theme";
 
 /**
  * Compact URL encoding: v1.<mode>.<name>.<hex,hex,...>.<styles>
- * styles: per role, "i" italic, "b" bold, "-" none; locks: "l" suffix per role in a bitmask.
+ * styles: per role, "i" italic, "b" bold, "u" underline, "-" none; locks: "l" suffix per role in a bitmask.
  */
 export function encodeTheme(t: ThemeState): string {
   const colors = ROLE_IDS.map((id) => t.roles[id].color.slice(1)).join("");
   const styles = ROLE_IDS.map((id) => {
     const f = t.roles[id].fontStyle;
-    return (f.includes("italic") ? "i" : "") + (f.includes("bold") ? "b" : "") || "-";
+    return (
+      (f.includes("italic") ? "i" : "") + (f.includes("bold") ? "b" : "") + (f.includes("underline") ? "u" : "") || "-"
+    );
   }).join(",");
   // "." separates fields, so escape it in the name (encodeURIComponent leaves it alone).
   const name = encodeURIComponent(t.name).replace(/\./g, "%2E");
@@ -40,6 +42,7 @@ export function decodeTheme(s: string): ThemeState | null {
     const fontStyle: FontStyle[] = [];
     if (st.includes("i")) fontStyle.push("italic");
     if (st.includes("b")) fontStyle.push("bold");
+    if (st.includes("u")) fontStyle.push("underline");
     roles[ROLE_IDS[i]] = { color, locked: false, fontStyle };
   }
   return { version: 1, name, mode: m === "l" ? "light" : "dark", roles };

@@ -244,6 +244,14 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
             >
               <b>B</b>
             </button>
+            <button
+              className={"btn sm icon" + (role.fontStyle.includes("underline") ? " on" : "")}
+              aria-pressed={role.fontStyle.includes("underline")}
+              onClick={() => dispatch({ type: "style", role: def.id, style: "underline" })}
+              title="Underline"
+            >
+              <u>U</u>
+            </button>
           </span>
         )}
       </div>

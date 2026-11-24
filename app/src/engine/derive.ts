@@ -190,7 +190,7 @@ export function tokenRules(t: ThemeState): TokenRule[] {
 
 export function semanticRules(
   t: ThemeState,
-): Record<string, string | { foreground: string; italic?: boolean; bold?: boolean }> {
+): Record<string, string | { foreground: string; italic?: boolean; bold?: boolean; underline?: boolean }> {
   const rule = (id: RoleId) => {
     const r = t.roles[id];
     if (!r.fontStyle.length) return r.color;
@@ -198,6 +198,7 @@ export function semanticRules(
       foreground: r.color,
       ...(r.fontStyle.includes("italic") && { italic: true }),
       ...(r.fontStyle.includes("bold") && { bold: true }),
+      ...(r.fontStyle.includes("underline") && { underline: true }),
     };
   };
   return {

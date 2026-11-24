@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { contrast, fixContrast, hexToOklch, oklchToHex } from "./color";
 import { contrastIssues, distinctness, generate, ROLE_IDS, ROLES, shuffleLabel, unlockedCount } from "./theme";
 import { reducer, type History } from "../state";
-import { settingsSnippet, settingsSnippetText, themeFile, workbenchColors } from "./derive";
+import { semanticRules, settingsSnippet, settingsSnippetText, themeFile, tokenRules, workbenchColors } from "./derive";
 import { decodeTheme, encodeTheme } from "./share";
 
 describe("color", () => {
@@ -78,6 +78,27 @@ describe("export", () => {
     const f = themeFile(t);
     expect(f.type).toBe("dark");
     expect(f.tokenColors.length).toBeGreaterThan(5);
+  });
+});
+
+describe("underline", () => {
+  it("is exported as a TextMate fontStyle and a semantic flag", () => {
+    const t = generate(3, "dark");
+    t.roles.type.fontStyle = ["bold", "underline"];
+    const rule = tokenRules(t).find((r) => r.scope.includes("entity.name.class"))!;
+    expect(rule.settings.fontStyle).toBe("bold underline");
+    expect(semanticRules(t).class).toMatchObject({ bold: true, underline: true });
+    expect(semanticRules(t).class).not.toHaveProperty("italic");
+  });
+
+  it("survives a share link with the other styles", () => {
+    const t = generate(4, "dark");
+    t.roles.string.fontStyle = ["italic", "underline"];
+    t.roles.type.fontStyle = ["bold", "italic", "underline"];
+    const back = decodeTheme(encodeTheme(t))!;
+    expect([...back.roles.string.fontStyle].sort()).toEqual(["italic", "underline"]);
+    expect([...back.roles.type.fontStyle].sort()).toEqual(["bold", "italic", "underline"]);
+    expect(back.roles.keyword.fontStyle).toEqual(t.roles.keyword.fontStyle);
   });
 });
 

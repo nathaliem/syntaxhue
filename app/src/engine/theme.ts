@@ -1,7 +1,7 @@
 import { colorDistance, contrast, fixContrast, hexToOklch, oklchToHex, oklchToHexInGamut, type Hex } from "./color";
 
 export type Mode = "dark" | "light";
-export type FontStyle = "italic" | "bold";
+export type FontStyle = "italic" | "bold" | "underline";
 
 export const ROLE_IDS = [
   "bg",
