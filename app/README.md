@@ -17,8 +17,6 @@ npm run check         # everything CI runs: lint, format, build, test
 - `src/ui/` — role rail with color editor, export dialog
 - `src/test/setup.ts` — shared test setup; component tests live next to the code as `*.test.tsx`
 
-See `../REQUIREMENTS.md` for the full spec and `../concepts.html` for the concept book.
-
 ## Performance check
 
 Dragging a slider should update the preview in under 50 ms per frame, even on a slow machine (HP-407).

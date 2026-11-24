@@ -6,6 +6,8 @@ import type { Lang } from "./preview/highlight";
 import { sampleFor } from "./preview/samples";
 import { LanguageSwitch } from "./ui/LanguageSwitch";
 import { ExportDialog } from "./ui/ExportDialog";
+import { LibraryDrawer } from "./ui/LibraryDrawer";
+import { useLibrary } from "./ui/useLibrary";
 import { BottomSheet } from "./ui/BottomSheet";
 import { RoleEditor, RoleRail } from "./ui/RoleRail";
 import { useIsMobile } from "./ui/useIsMobile";
@@ -18,6 +20,8 @@ export default function App() {
   const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const library = useLibrary();
   const issues = contrastIssues(theme);
 
   // A short message from the role rail (copy, paste) that temporarily replaces the contrast summary.
@@ -49,11 +53,16 @@ export default function App() {
       const el = document.activeElement as HTMLElement | null;
       const isSlider = el instanceof HTMLInputElement && el.type === "range";
       const typing = el && !isSlider && (/INPUT|TEXTAREA|SELECT/.test(el.tagName) || el.isContentEditable);
-      if (exportOpen || typing) return;
+      if (exportOpen || libraryOpen || typing) return;
       if (isSlider && e.code === "Space") return;
       if (e.code === "Space" && !(el && el.tagName === "BUTTON")) {
         e.preventDefault();
         dispatch({ type: "shuffle" });
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        void library
+          .save(theme)
+          .then((ok) => showStatus(ok ? `Saved “${theme.name}” to your library.` : "Couldn't save."));
       } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         dispatch({ type: e.shiftKey ? "redo" : "undo" });
@@ -61,7 +70,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch, exportOpen]);
+  }, [dispatch, exportOpen, libraryOpen, library, theme, showStatus]);
 
   const mobile = useIsMobile();
   const pick = (id: RoleId) => {
@@ -79,6 +88,9 @@ export default function App() {
           <img src="/favicon.svg" alt="" width="28" height="28" />
           <span>SyntaxHue</span>
         </div>
+        <button className="btn" onClick={() => setLibraryOpen(true)}>
+          Library
+        </button>
         <label className="name">
           <span className="sr-only">Theme name</span>
           <input
@@ -199,6 +211,13 @@ export default function App() {
         </BottomSheet>
       )}
 
+      <LibraryDrawer
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
+        theme={theme}
+        dispatch={dispatch}
+        library={library}
+      />
       <ExportDialog theme={theme} open={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
   );

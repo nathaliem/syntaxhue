@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-/** Phones get a bottom sheet instead of the inline editor. Matches DESIGN.md: under 768 px. */
+/** Phones get a bottom sheet instead of the inline editor. Phones are under 768 px wide. */
 export const MOBILE_QUERY = "(max-width: 767px)";
 
 export function useIsMobile(): boolean {

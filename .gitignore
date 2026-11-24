@@ -1,6 +1,35 @@
+# Dependencies and build output
 node_modules
-.DS_Store
 dist
-*.local
+dist-ssr
+*.tsbuildinfo
+
+# Deployment and local environment
 .vercel
 .env*
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Test output
+coverage
+
+# Editors and OS
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.sw?
+
+# Local tool settings (Claude Code and similar)
+.claude/
+
+# Private planning documents and backups (kept locally, not published)
+REQUIREMENTS.md
+DESIGN.md
+BACKLOG.md
+private/
