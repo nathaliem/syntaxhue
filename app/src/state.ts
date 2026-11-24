@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { generate, type FontStyle, type Mode, type RoleId, type ThemeState } from "./engine/theme";
+import { generate, unlockedCount, type FontStyle, type Mode, type RoleId, type ThemeState } from "./engine/theme";
 import { decodeTheme, encodeTheme } from "./engine/share";
 
 const HISTORY_LIMIT = 50;
@@ -40,6 +40,8 @@ export function reducer(h: History, a: Action): History {
   const t = h.present;
   switch (a.type) {
     case "shuffle":
+      // Nothing to change when every color is locked; don't add an empty undo step.
+      if (unlockedCount(t) === 0) return h;
       return push(h, generate(a.seed ?? newSeed(), t.mode, t));
     case "mode":
       // Pass the current theme so locked colors carry over to the new mode.

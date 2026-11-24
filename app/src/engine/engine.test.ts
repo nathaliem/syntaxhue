@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { contrast, fixContrast, hexToOklch, oklchToHex } from "./color";
-import { contrastIssues, distinctness, generate, ROLE_IDS, ROLES } from "./theme";
+import { contrastIssues, distinctness, generate, ROLE_IDS, ROLES, shuffleLabel, unlockedCount } from "./theme";
 import { reducer, type History } from "../state";
 import { settingsSnippet, settingsSnippetText, themeFile, workbenchColors } from "./derive";
 import { decodeTheme, encodeTheme } from "./share";
@@ -180,5 +180,23 @@ describe("history", () => {
     h = reducer(h, { type: "mode", mode: "light", seed: 5 });
     expect(h.present.mode).toBe("light");
     expect(h.present.roles.string.locked).toBe(true);
+  });
+
+  it("shuffle label counts unlocked colors", () => {
+    expect(shuffleLabel(11)).toBe("Shuffle 11 colors");
+    expect(shuffleLabel(1)).toBe("Shuffle 1 color");
+    expect(shuffleLabel(0)).toBe("All colors locked");
+    let h = reducer(start(), { type: "lock", role: "string" });
+    expect(unlockedCount(h.present)).toBe(ROLES.length - 1);
+    h = reducer(h, { type: "lockAll", locked: true });
+    expect(unlockedCount(h.present)).toBe(0);
+    h = reducer(h, { type: "lockAll", locked: false });
+    expect(unlockedCount(h.present)).toBe(ROLES.length);
+  });
+
+  it("shuffle with everything locked changes nothing and adds no undo step", () => {
+    const locked = reducer(start(), { type: "lockAll", locked: true });
+    const after = reducer(locked, { type: "shuffle", seed: 9 });
+    expect(after).toBe(locked);
   });
 });

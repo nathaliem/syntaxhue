@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { contrastIssues, type RoleId } from "./engine/theme";
+import { contrastIssues, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
 import { Workbench } from "./preview/Workbench";
 import { ExportDialog } from "./ui/ExportDialog";
 import { RoleRail } from "./ui/RoleRail";
@@ -11,6 +11,7 @@ export default function App() {
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const issues = contrastIssues(theme);
+  const unlocked = unlockedCount(theme);
 
   // A button clicked with the mouse shouldn't keep focus, or Space would press it again
   // (e.g. unlock the color you just locked) instead of shuffling. Keyboard focus is untouched.
@@ -70,9 +71,10 @@ export default function App() {
           <button
             className="btn primary"
             onClick={() => dispatch({ type: "shuffle" })}
-            title="Shuffle unlocked colors (Space)"
+            disabled={unlocked === 0}
+            title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
           >
-            Shuffle <kbd>Space</kbd>
+            {shuffleLabel(unlocked)} <kbd>Space</kbd>
           </button>
           <div className="seg" role="group" aria-label="Theme mode">
             <button aria-pressed={theme.mode === "dark"} onClick={() => dispatch({ type: "mode", mode: "dark" })}>

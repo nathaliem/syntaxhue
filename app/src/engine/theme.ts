@@ -99,6 +99,17 @@ export const ROLES: RoleDef[] = [
 
 export const ROLE_BY_ID = Object.fromEntries(ROLES.map((r) => [r.id, r])) as Record<RoleId, RoleDef>;
 
+/** How many roles a shuffle would change. */
+export function unlockedCount(theme: ThemeState): number {
+  return ROLES.filter((r) => !theme.roles[r.id].locked).length;
+}
+
+/** Text for the shuffle button: "Shuffle 11 colors", "Shuffle 1 color" or "All colors locked". */
+export function shuffleLabel(unlocked: number): string {
+  if (unlocked === 0) return "All colors locked";
+  return `Shuffle ${unlocked} color${unlocked === 1 ? "" : "s"}`;
+}
+
 export interface RoleState {
   color: Hex;
   locked: boolean;
