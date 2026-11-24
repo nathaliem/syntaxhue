@@ -69,6 +69,9 @@ describe("app shell (smoke)", () => {
   });
 });
 
+/** The banner above the preview (the rail footer is also a live region). */
+const banner = () => within(screen.getByRole("region", { name: "Preview" })).getByRole("status");
+
 describe("opening a share link", () => {
   it("shows the shared-theme banner, applies the theme and its locks, and clears the hash", () => {
     const t = generate(11, "light");
@@ -76,7 +79,7 @@ describe("opening a share link", () => {
     t.roles.string.locked = true;
     history.replaceState(null, "", `/#t=${encodeTheme(t)}`);
     render(<App />);
-    expect(screen.getByRole("status")).toHaveTextContent("You opened a shared theme.");
+    expect(banner()).toHaveTextContent("You opened a shared theme.");
     expect(screen.getByRole("textbox", { name: "Theme name" })).toHaveValue("Linked Palette");
     expect(screen.getByRole("button", { name: "Light" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "Unlock String" })).toBeInTheDocument();
@@ -91,14 +94,14 @@ describe("opening a share link", () => {
       "/#t=1.l.Old%2ELink%20Test.f4f0fd2a272f407a20827d905d7700975592117240575cb83d364e955f00485233b631329d5f00006aa01e7729.-,-,-,i,i,ib,-,-,-,-,-,-,-,-,-",
     );
     render(<App />);
-    expect(screen.getByRole("status")).toHaveTextContent("You opened a shared theme.");
+    expect(banner()).toHaveTextContent("You opened a shared theme.");
     expect(screen.getByRole("textbox", { name: "Theme name" })).toHaveValue("Old.Link Test");
   });
 
   it("says so when the link can't be read", () => {
     history.replaceState(null, "", "/#t=pnot-a-theme");
     render(<App />);
-    expect(screen.getByRole("status")).toHaveTextContent("doesn't contain a theme Hueprint can read");
+    expect(banner()).toHaveTextContent("doesn't contain a theme Hueprint can read");
   });
 
   it("Export > Share link gives a compact link that opens the same theme", async () => {

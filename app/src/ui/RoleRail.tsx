@@ -1,4 +1,4 @@
-import { useEffect, useState, type Dispatch } from "react";
+import { useEffect, useState, type ClipboardEvent, type Dispatch, type KeyboardEvent } from "react";
 import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
 import { parseCssColor } from "../engine/parseColor";
 import { ROLES, type RoleDef, type RoleId, type ThemeState } from "../engine/theme";
@@ -10,11 +10,13 @@ interface Props {
   onSelect: (id: RoleId | null) => void;
   onHover: (id: RoleId | null) => void;
   dispatch: Dispatch<Action>;
+  /** Short messages for copy and paste ("Copied #4ba3f7"); the app shows them for a moment. */
+  onStatus: (message: string) => void;
 }
 
 const GROUPS: RoleDef["group"][] = ["Base", "Syntax", "Status"];
 
-export function RoleRail({ theme, selected, onSelect, onHover, dispatch }: Props) {
+export function RoleRail({ theme, selected, onSelect, onHover, dispatch, onStatus }: Props) {
   const allLocked = ROLES.every((r) => theme.roles[r.id].locked);
   return (
     <div className="rail" onMouseLeave={() => onHover(null)}>
@@ -37,6 +39,7 @@ export function RoleRail({ theme, selected, onSelect, onHover, dispatch }: Props
               onToggle={() => onSelect(selected === def.id ? null : def.id)}
               onHover={onHover}
               dispatch={dispatch}
+              onStatus={onStatus}
             />
           ))}
         </section>
@@ -52,6 +55,7 @@ function RoleRow({
   onToggle,
   onHover,
   dispatch,
+  onStatus,
 }: {
   def: RoleDef;
   theme: ThemeState;
@@ -59,16 +63,58 @@ function RoleRow({
   onToggle: () => void;
   onHover: (id: RoleId | null) => void;
   dispatch: Dispatch<Action>;
+  onStatus: (message: string) => void;
 }) {
   const role = theme.roles[def.id];
   const bg = theme.roles.bg.color;
   const ratio = def.min ? contrast(role.color, bg) : null;
   const fails = ratio !== null && ratio < def.min;
 
+  // Ctrl/⌘+C on a focused row copies its color; Ctrl/⌘+V pastes any CSS color from the clipboard onto it.
+  // Copy listens for the key itself, because browsers differ on whether a copy event fires when nothing is
+  // selected; writing to the clipboard needs no permission prompt. Paste uses the paste event, which fires on
+  // a focused button everywhere and also needs no prompt. The copy event is still handled (Edit menu).
+  const copyColor = async () => {
+    try {
+      await navigator.clipboard.writeText(role.color);
+      onStatus(`Copied ${role.color}`);
+    } catch {
+      onStatus("Couldn't copy to the clipboard");
+    }
+  };
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === "c") {
+      e.preventDefault();
+      void copyColor();
+    }
+  };
+  const onCopy = (e: ClipboardEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.clipboardData.setData("text/plain", role.color);
+    onStatus(`Copied ${role.color}`);
+  };
+  const onPaste = (e: ClipboardEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const hex = parseCssColor(e.clipboardData.getData("text"));
+    if (!hex) return onStatus("Couldn't read a color from the clipboard");
+    dispatch({ type: "color", role: def.id, color: hex, commit: true });
+    onStatus(`Pasted ${hex} into ${def.label}`);
+  };
+
   return (
     <div className={"role" + (open ? " open" : "")} onMouseEnter={() => onHover(def.id)}>
       <div className="role-row">
-        <button className="role-main" aria-expanded={open} aria-controls={`edit-${def.id}`} onClick={onToggle}>
+        <button
+          className="role-main"
+          aria-expanded={open}
+          aria-controls={`edit-${def.id}`}
+          aria-keyshortcuts="Control+C Meta+C Control+V Meta+V"
+          title="Click to edit. Copy this color with Ctrl/⌘+C, paste one with Ctrl/⌘+V."
+          onClick={onToggle}
+          onKeyDown={onKeyDown}
+          onCopy={onCopy}
+          onPaste={onPaste}
+        >
           <span className="swatch" style={{ background: role.color }} />
           <span className="role-label">{def.label}</span>
           <span className="role-hex">{role.color}</span>

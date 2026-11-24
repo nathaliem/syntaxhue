@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { contrastIssues, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
 import { Workbench } from "./preview/Workbench";
 import { ExportDialog } from "./ui/ExportDialog";
@@ -12,6 +12,16 @@ export default function App() {
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const issues = contrastIssues(theme);
+
+  // A short message from the role rail (copy, paste) that temporarily replaces the contrast summary.
+  const [status, setStatus] = useState<string | null>(null);
+  const statusTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const showStatus = useCallback((message: string) => {
+    setStatus(message);
+    clearTimeout(statusTimer.current);
+    statusTimer.current = setTimeout(() => setStatus(null), 2500);
+  }, []);
+  useEffect(() => () => clearTimeout(statusTimer.current), []);
   const unlocked = unlockedCount(theme);
 
   // A button clicked with the mouse shouldn't keep focus, or Space would press it again
@@ -112,11 +122,19 @@ export default function App() {
 
       <div className="layout">
         <aside className="side" aria-label="Theme colors">
-          <RoleRail theme={theme} selected={selected} onSelect={setSelected} onHover={setHovered} dispatch={dispatch} />
-          <p className="side-foot">
-            {issues.length === 0
-              ? "All colors pass contrast checks."
-              : `${issues.length} color${issues.length > 1 ? "s" : ""} below the readable minimum.`}
+          <RoleRail
+            theme={theme}
+            selected={selected}
+            onSelect={setSelected}
+            onHover={setHovered}
+            dispatch={dispatch}
+            onStatus={showStatus}
+          />
+          <p className="side-foot" role="status">
+            {status ??
+              (issues.length === 0
+                ? "All colors pass contrast checks."
+                : `${issues.length} color${issues.length > 1 ? "s" : ""} below the readable minimum.`)}
           </p>
           <p className="side-foot support">
             Free and made by one person.{" "}
