@@ -1,9 +1,9 @@
 import { isHex } from "./color";
-import { ROLE_IDS, type FontStyle, type ThemeState } from "./theme";
+import { ROLE_IDS, THEME_VERSION, type FontStyle, type ThemeState } from "./theme";
 
 /**
- * Compact URL encoding: v1.<mode>.<name>.<hex,hex,...>.<styles>
- * styles: per role, "i" italic, "b" bold, "u" underline, "-" none; locks: "l" suffix per role in a bitmask.
+ * Compact URL encoding: <version>.<mode>.<name>.<hex,hex,...>.<styles>  (version = THEME_VERSION)
+ * styles: per role, "i" italic, "b" bold, "u" underline, "-" none. Locks are not part of the link.
  */
 export function encodeTheme(t: ThemeState): string {
   const colors = ROLE_IDS.map((id) => t.roles[id].color.slice(1)).join("");
@@ -15,12 +15,13 @@ export function encodeTheme(t: ThemeState): string {
   }).join(",");
   // "." separates fields, so escape it in the name (encodeURIComponent leaves it alone).
   const name = encodeURIComponent(t.name).replace(/\./g, "%2E");
-  return ["1", t.mode === "dark" ? "d" : "l", name, colors, styles].join(".");
+  return [String(THEME_VERSION), t.mode === "dark" ? "d" : "l", name, colors, styles].join(".");
 }
 
 export function decodeTheme(s: string): ThemeState | null {
   const parts = s.split(".");
-  if (parts.length < 5 || parts[0] !== "1") return null;
+  // The first field is the schema version. Links from a newer app (or garbage) are refused, not guessed at.
+  if (parts.length < 5 || parts[0] !== String(THEME_VERSION)) return null;
   // Read fixed fields from both ends, so links made before dots were escaped still open.
   const m = parts[1];
   const rawName = parts.slice(2, -2).join(".");
@@ -45,5 +46,5 @@ export function decodeTheme(s: string): ThemeState | null {
     if (st.includes("u")) fontStyle.push("underline");
     roles[ROLE_IDS[i]] = { color, locked: false, fontStyle };
   }
-  return { version: 1, name, mode: m === "l" ? "light" : "dark", roles };
+  return { version: THEME_VERSION, name, mode: m === "l" ? "light" : "dark", roles };
 }

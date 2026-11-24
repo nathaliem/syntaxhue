@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "name": "Juniper Circuit",
+  "mode": "dark",
+  "roles": {
+    "bg": {
+      "color": "#13191b",
+      "locked": false,
+      "fontStyle": []
+    },
+    "fg": {
+      "color": "#d4e0e5",
+      "locked": false,
+      "fontStyle": []
+    },
+    "accent": {
+      "color": "#eb8836",
+      "locked": false,
+      "fontStyle": []
+    },
+    "muted": {
+      "color": "#687f88",
+      "locked": false,
+      "fontStyle": ["italic"]
+    },
+    "keyword": {
+      "color": "#f78ce2",
+      "locked": false,
+      "fontStyle": ["italic"]
+    },
+    "string": {
+      "color": "#c6b850",
+      "locked": true,
+      "fontStyle": []
+    },
+    "function": {
+      "color": "#81aeff",
+      "locked": false,
+      "fontStyle": []
+    },
+    "type": {
+      "color": "#ff81a3",
+      "locked": false,
+      "fontStyle": []
+    },
+    "variable": {
+      "color": "#aedae5",
+      "locked": false,
+      "fontStyle": []
+    },
+    "constant": {
+      "color": "#8dc86a",
+      "locked": false,
+      "fontStyle": []
+    },
+    "operator": {
+      "color": "#ccacc4",
+      "locked": false,
+      "fontStyle": []
+    },
+    "error": {
+      "color": "#f66d67",
+      "locked": false,
+      "fontStyle": []
+    },
+    "warning": {
+      "color": "#f2af48",
+      "locked": false,
+      "fontStyle": []
+    },
+    "info": {
+      "color": "#5fb8f2",
+      "locked": false,
+      "fontStyle": []
+    },
+    "success": {
+      "color": "#74c878",
+      "locked": false,
+      "fontStyle": []
+    }
+  }
+}

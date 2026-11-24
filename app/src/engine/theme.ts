@@ -116,8 +116,11 @@ export interface RoleState {
   fontStyle: FontStyle[];
 }
 
+/** Bump when the saved shape of ThemeState changes, and add a migration in schema.ts. */
+export const THEME_VERSION = 1;
+
 export interface ThemeState {
-  version: 1;
+  version: typeof THEME_VERSION;
   name: string;
   mode: Mode;
   roles: Record<RoleId, RoleState>;
@@ -296,7 +299,7 @@ function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
       ? prev.name
       : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
 
-  return { version: 1, name, mode, roles };
+  return { version: THEME_VERSION, name, mode, roles };
 }
 
 export interface ContrastIssue {

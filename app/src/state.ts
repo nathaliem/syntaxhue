@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { generate, unlockedCount, type FontStyle, type Mode, type RoleId, type ThemeState } from "./engine/theme";
+import { parseTheme } from "./engine/schema";
 import { decodeTheme, encodeTheme } from "./engine/share";
 
 const HISTORY_LIMIT = 50;
@@ -88,8 +89,7 @@ function readSaved(): ThemeState | null {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return null;
-    const t = JSON.parse(saved) as ThemeState;
-    return t?.version === 1 && t.roles?.bg ? t : null;
+    return parseTheme(JSON.parse(saved)); // null for corrupt data or a version we can't read
   } catch {
     return null; // storage unavailable or corrupt
   }
