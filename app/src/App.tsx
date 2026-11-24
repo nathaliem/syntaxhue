@@ -15,7 +15,7 @@ import { VibePanel } from "./ui/VibePanel";
 import { useThemeStore } from "./state";
 
 export default function App() {
-  const { theme, canUndo, canRedo, dispatch, notice, dismissNotice, restorePrevious } = useThemeStore();
+  const { theme, canUndo, canRedo, saveState, dispatch, notice, dismissNotice, restorePrevious } = useThemeStore();
   const [selected, setSelected] = useState<RoleId | null>(null);
   const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
@@ -99,6 +99,17 @@ export default function App() {
             spellCheck={false}
           />
         </label>
+        <span
+          className={"save-state" + (saveState === "failed" ? " bad" : "")}
+          role="status"
+          title={
+            saveState === "failed"
+              ? "Your browser isn't letting us store data, so this theme will be lost when you close the tab. Use Share link to keep it."
+              : "Your changes are saved in this browser."
+          }
+        >
+          {saveState === "failed" ? "Not saved" : "Saved"}
+        </span>
         <div className="bar-actions">
           <button
             className="btn primary"

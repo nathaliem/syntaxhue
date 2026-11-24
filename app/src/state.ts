@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import {
   generate,
   unlockedCount,
@@ -118,6 +118,22 @@ function readSaved(): ThemeState | null {
   }
 }
 
+/** Whether the last write of the current theme reached browser storage. */
+export type SaveState = "saved" | "failed";
+
+/** Edits are written after this long without another edit, and at once when the page is hidden or closed. */
+const SAVE_DELAY_MS = 250;
+
+/** Writes the current theme. False when the browser refuses (storage blocked, full, or disabled). */
+function persist(t: ThemeState): boolean {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(t));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Forgets the autosaved theme, so the next start begins with a fresh one. */
 export function clearSavedTheme(): void {
   try {
@@ -177,18 +193,36 @@ export function useThemeStore() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
+  // The newest theme that still has to be written. It is written after a short pause, and immediately when the
+  // page is hidden or closed, so closing the tab right after an edit doesn't lose it.
+  const [saveState, setSaveState] = useState<SaveState>("saved");
+  const unsaved = useRef<ThemeState | null>(null);
+  const flush = useCallback(() => {
+    const t = unsaved.current;
+    if (!t) return;
+    unsaved.current = null;
+    setSaveState(persist(t) ? "saved" : "failed");
+  }, []);
+
   useEffect(() => {
     // Don't overwrite the user's own saved theme just because they opened a link.
     if (unsavedShared && h.present === unsavedShared) return;
-    const id = setTimeout(() => {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(h.present));
-      } catch {
-        /* ignore */
-      }
-    }, 250);
+    unsaved.current = h.present;
+    const id = setTimeout(flush, SAVE_DELAY_MS);
     return () => clearTimeout(id);
-  }, [h.present, unsavedShared]);
+  }, [h.present, unsavedShared, flush]);
+
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") flush();
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [flush]);
 
   const dismissNotice = useCallback(() => {
     setNotice(null);
@@ -205,6 +239,7 @@ export function useThemeStore() {
     theme: h.present,
     canUndo: h.past.length > 0,
     canRedo: h.future.length > 0,
+    saveState,
     dispatch,
     notice,
     dismissNotice,

@@ -1416,3 +1416,14 @@ pre.code {
   margin: 6px 0 0;
   padding-left: 18px;
 }
+
+/* ---------- save state ---------- */
+.save-state {
+  font-size: 13px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.save-state.bad {
+  color: #b63132;
+  font-weight: 600;
+}

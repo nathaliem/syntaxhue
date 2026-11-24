@@ -53,7 +53,6 @@ app/src/
   ui/        React components: role rail and editor, export dialog, library drawer, import panel.
   state.ts   The theme store: undo/redo, autosave, share-link handling.
 app/ci/      Checks that need more than a unit test (comparison with vsce, color keys, fidelity fixtures).
-docs/        Notes and pictures from comparing the preview with real VS Code.
 ```
 
 The main idea is that a theme is **15 roles plus four vibe sliders** (`ThemeState` in `engine/theme.ts`). Everything
@@ -126,7 +125,7 @@ VS Code version you compared with.
 the importer. Changing it changes all three, so run the whole suite and look at the preview.
 
 **Check the preview against VS Code.** `app/ci/fidelity.sh` builds three fixture themes into a throwaway VS Code
-profile so you can compare them side by side; `docs/fidelity/README.md` describes the method and what has been compared.
+profile so you can compare them side by side with the preview.
 
 ### Conduct
 
