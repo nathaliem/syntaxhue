@@ -135,4 +135,4 @@ still to be added.
 
 ## License
 
-The license has not been chosen yet and will be added as a `LICENSE` file before the repository is made public.
+[MIT](LICENSE). By contributing you agree that your contribution is released under the same license.
