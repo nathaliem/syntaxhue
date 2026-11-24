@@ -6,12 +6,15 @@ export interface Token {
 }
 
 const KEYWORDS = new Set(
-  "import export from const let var function return if else for while of in new class extends implements interface type enum async await try catch throw default switch case break continue as typeof keyof readonly public private static".split(" "),
+  "import export from const let var function return if else for while of in new class extends implements interface type enum async await try catch throw default switch case break continue as typeof keyof readonly public private static".split(
+    " ",
+  ),
 );
 const CONSTANTS = new Set(["true", "false", "null", "undefined", "this"]);
 const BUILTIN_TYPES = new Set(["string", "number", "boolean", "void", "unknown", "any", "never"]);
 
-const RE = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)|(=>|===|!==|&&|\|\||[-+*/%=<>!?:|&]+)|([{}()[\];,.])|(\s+)|(.)/gm;
+const RE =
+  /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)|(=>|===|!==|&&|\|\||[-+*/%=<>!?:|&]+)|([{}()[\];,.])|(\s+)|(.)/gm;
 
 /** Small TypeScript-ish tokenizer for the preview. Not a real grammar; M1 swaps in Shiki. */
 export function tokenizeLine(line: string): Token[] {
@@ -28,7 +31,8 @@ export function tokenizeLine(line: string): Token[] {
       const rest = line.slice(RE.lastIndex);
       if (KEYWORDS.has(ident)) role = "keyword";
       else if (CONSTANTS.has(ident)) role = "constant";
-      else if (BUILTIN_TYPES.has(ident) || /^[A-Z]/.test(ident)) role = /^\s*\(/.test(rest) && !/^[A-Z]/.test(ident) ? "function" : "type";
+      else if (BUILTIN_TYPES.has(ident) || /^[A-Z]/.test(ident))
+        role = /^\s*\(/.test(rest) && !/^[A-Z]/.test(ident) ? "function" : "type";
       else if (/^\s*(<[^>]*>)?\(/.test(rest)) role = "function";
       else if (/^[A-Z_]{2,}$/.test(ident)) role = "constant";
       else role = "variable";

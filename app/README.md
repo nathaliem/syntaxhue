@@ -7,6 +7,9 @@ npm install
 npm run dev     # http://localhost:5173
 npm test        # color engine tests
 npm run build
+npm run lint          # oxlint, warnings fail
+npm run format        # Prettier, writes changes (format:check only verifies)
+npm run check         # everything CI runs: lint, format, build, test
 ```
 
 - `src/engine/` — color math (OKLCH, WCAG contrast), theme generator, VS Code key derivation, export and share-link encoding

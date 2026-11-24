@@ -4,9 +4,21 @@ export type Mode = "dark" | "light";
 export type FontStyle = "italic" | "bold";
 
 export const ROLE_IDS = [
-  "bg", "fg", "accent", "muted",
-  "keyword", "string", "function", "type", "variable", "constant", "operator",
-  "error", "warning", "info", "success",
+  "bg",
+  "fg",
+  "accent",
+  "muted",
+  "keyword",
+  "string",
+  "function",
+  "type",
+  "variable",
+  "constant",
+  "operator",
+  "error",
+  "warning",
+  "info",
+  "success",
 ] as const;
 export type RoleId = (typeof ROLE_IDS)[number];
 
@@ -21,16 +33,63 @@ export interface RoleDef {
 }
 
 export const ROLES: RoleDef[] = [
-  { id: "bg", label: "Background", group: "Base", min: 0, hint: "Editor background. Sidebar, tabs and panels are derived from it." },
+  {
+    id: "bg",
+    label: "Background",
+    group: "Base",
+    min: 0,
+    hint: "Editor background. Sidebar, tabs and panels are derived from it.",
+  },
   { id: "fg", label: "Text", group: "Base", min: 7, hint: "Default text in the editor and UI." },
-  { id: "accent", label: "Accent", group: "Base", min: 3, hint: "Focus borders, active tab, status bar, buttons, badges." },
-  { id: "muted", label: "Comments", group: "Base", min: 3, hint: "Comments, line numbers, inactive tabs and secondary text.", styleable: true },
-  { id: "keyword", label: "Keyword", group: "Syntax", min: 4.5, hint: "import, const, if, return, function…", styleable: true },
-  { id: "string", label: "String", group: "Syntax", min: 4.5, hint: "Strings and regular expressions.", styleable: true },
+  {
+    id: "accent",
+    label: "Accent",
+    group: "Base",
+    min: 3,
+    hint: "Focus borders, active tab, status bar, buttons, badges.",
+  },
+  {
+    id: "muted",
+    label: "Comments",
+    group: "Base",
+    min: 3,
+    hint: "Comments, line numbers, inactive tabs and secondary text.",
+    styleable: true,
+  },
+  {
+    id: "keyword",
+    label: "Keyword",
+    group: "Syntax",
+    min: 4.5,
+    hint: "import, const, if, return, function…",
+    styleable: true,
+  },
+  {
+    id: "string",
+    label: "String",
+    group: "Syntax",
+    min: 4.5,
+    hint: "Strings and regular expressions.",
+    styleable: true,
+  },
   { id: "function", label: "Function", group: "Syntax", min: 4.5, hint: "Function and method names.", styleable: true },
   { id: "type", label: "Type", group: "Syntax", min: 4.5, hint: "Types, classes and interfaces.", styleable: true },
-  { id: "variable", label: "Variable", group: "Syntax", min: 4.5, hint: "Variables, parameters and properties.", styleable: true },
-  { id: "constant", label: "Number", group: "Syntax", min: 4.5, hint: "Numbers, booleans and constants.", styleable: true },
+  {
+    id: "variable",
+    label: "Variable",
+    group: "Syntax",
+    min: 4.5,
+    hint: "Variables, parameters and properties.",
+    styleable: true,
+  },
+  {
+    id: "constant",
+    label: "Number",
+    group: "Syntax",
+    min: 4.5,
+    hint: "Numbers, booleans and constants.",
+    styleable: true,
+  },
   { id: "operator", label: "Operator", group: "Syntax", min: 4.5, hint: "Operators and punctuation.", styleable: true },
   { id: "error", label: "Error", group: "Status", min: 4.5, hint: "Error squiggles, deleted files, failing tests." },
   { id: "warning", label: "Warning", group: "Status", min: 4.5, hint: "Warnings and modified files." },
@@ -72,8 +131,42 @@ const HARMONIES: Record<string, number[]> = {
   split: [0, 150, 210, 40, 180, -40],
 };
 
-const ADJ = ["Quiet", "Ember", "Velvet", "Paper", "Neon", "Moss", "Harbor", "Dusk", "Frost", "Copper", "Lunar", "Saffron", "Cobalt", "Juniper", "Static", "Amber"];
-const NOUN = ["Harbor", "Night", "Garden", "Signal", "Orchard", "Tide", "Grove", "Circuit", "Lantern", "Atlas", "Bloom", "Meadow", "Reef", "Quarry", "Comet", "Hollow"];
+const ADJ = [
+  "Quiet",
+  "Ember",
+  "Velvet",
+  "Paper",
+  "Neon",
+  "Moss",
+  "Harbor",
+  "Dusk",
+  "Frost",
+  "Copper",
+  "Lunar",
+  "Saffron",
+  "Cobalt",
+  "Juniper",
+  "Static",
+  "Amber",
+];
+const NOUN = [
+  "Harbor",
+  "Night",
+  "Garden",
+  "Signal",
+  "Orchard",
+  "Tide",
+  "Grove",
+  "Circuit",
+  "Lantern",
+  "Atlas",
+  "Bloom",
+  "Meadow",
+  "Reef",
+  "Quarry",
+  "Comet",
+  "Hollow",
+];
 
 const DEFAULT_STYLE: Partial<Record<RoleId, FontStyle[]>> = { keyword: ["italic"], muted: ["italic"] };
 
@@ -187,9 +280,10 @@ function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
     roles[def.id] = { color: def.min ? fixContrast(color, bg, def.min) : color, locked: !!kept, fontStyle };
   }
 
-  const name = prev && ROLE_IDS.every((id) => prev.roles[id].locked)
-    ? prev.name
-    : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
+  const name =
+    prev && ROLE_IDS.every((id) => prev.roles[id].locked)
+      ? prev.name
+      : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
 
   return { version: 1, name, mode, roles };
 }

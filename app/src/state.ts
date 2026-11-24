@@ -80,9 +80,7 @@ export function reducer(h: History, a: Action): History {
 
 // ---------- startup and share links ----------
 
-export type Notice =
-  | { kind: "shared"; previous: ThemeState | null }
-  | { kind: "badLink" };
+export type Notice = { kind: "shared"; previous: ThemeState | null } | { kind: "badLink" };
 
 function readSaved(): ThemeState | null {
   try {

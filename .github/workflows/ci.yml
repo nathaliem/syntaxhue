@@ -25,7 +25,9 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
       - name: Lint
-        run: npx oxlint --deny-warnings
+        run: npm run lint
+      - name: Check formatting
+        run: npm run format:check
       - name: Type-check and build
         run: npm run build
       - name: Test

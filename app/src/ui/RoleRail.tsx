@@ -44,8 +44,20 @@ export function RoleRail({ theme, selected, onSelect, onHover, dispatch }: Props
   );
 }
 
-function RoleRow({ def, theme, open, onToggle, onHover, dispatch }: {
-  def: RoleDef; theme: ThemeState; open: boolean; onToggle: () => void; onHover: (id: RoleId | null) => void; dispatch: Dispatch<Action>;
+function RoleRow({
+  def,
+  theme,
+  open,
+  onToggle,
+  onHover,
+  dispatch,
+}: {
+  def: RoleDef;
+  theme: ThemeState;
+  open: boolean;
+  onToggle: () => void;
+  onHover: (id: RoleId | null) => void;
+  dispatch: Dispatch<Action>;
 }) {
   const role = theme.roles[def.id];
   const bg = theme.roles.bg.color;
@@ -55,18 +67,17 @@ function RoleRow({ def, theme, open, onToggle, onHover, dispatch }: {
   return (
     <div className={"role" + (open ? " open" : "")} onMouseEnter={() => onHover(def.id)}>
       <div className="role-row">
-        <button
-          className="role-main"
-          aria-expanded={open}
-          aria-controls={`edit-${def.id}`}
-          onClick={onToggle}
-        >
+        <button className="role-main" aria-expanded={open} aria-controls={`edit-${def.id}`} onClick={onToggle}>
           <span className="swatch" style={{ background: role.color }} />
           <span className="role-label">{def.label}</span>
           <span className="role-hex">{role.color}</span>
           {ratio !== null && (
-            <span className={"ratio" + (fails ? " bad" : "")} title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1`}>
-              {fails ? "⚠ " : ""}{ratio.toFixed(1)}
+            <span
+              className={"ratio" + (fails ? " bad" : "")}
+              title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1`}
+            >
+              {fails ? "⚠ " : ""}
+              {ratio.toFixed(1)}
             </span>
           )}
         </button>
@@ -118,7 +129,15 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
   const ratio = def.min ? contrast(role.color, bg) : null;
   const fails = ratio !== null && ratio < def.min;
 
-  const slider = (key: keyof Oklch, label: string, min: number, max: number, step: number, fmt: (v: number) => string, track: string) => (
+  const slider = (
+    key: keyof Oklch,
+    label: string,
+    min: number,
+    max: number,
+    step: number,
+    fmt: (v: number) => string,
+    track: string,
+  ) => (
     <label className="slider">
       <span className="slider-l">{label}</span>
       <input
@@ -136,7 +155,8 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
     </label>
   );
 
-  const stops = (f: (t: number) => Oklch) => `linear-gradient(90deg, ${Array.from({ length: 9 }, (_, i) => oklchToHex(f(i / 8))).join(",")})`;
+  const stops = (f: (t: number) => Oklch) =>
+    `linear-gradient(90deg, ${Array.from({ length: 9 }, (_, i) => oklchToHex(f(i / 8))).join(",")})`;
 
   const eyedropper = "EyeDropper" in window;
   const pick = async () => {
@@ -153,9 +173,33 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
   return (
     <div className="editor" id={`edit-${def.id}`}>
       <p className="hint">{def.hint}</p>
-      {slider("l", "Lightness", 0, 1, 0.005, (v) => `${Math.round(v * 100)}%`, stops((t) => ({ ...lch, l: t })))}
-      {slider("c", "Chroma", 0, 0.37, 0.002, (v) => v.toFixed(2), stops((t) => ({ ...lch, c: t * 0.37 })))}
-      {slider("h", "Hue", 0, 360, 1, (v) => `${Math.round(v)}°`, stops((t) => ({ ...lch, h: t * 360 })))}
+      {slider(
+        "l",
+        "Lightness",
+        0,
+        1,
+        0.005,
+        (v) => `${Math.round(v * 100)}%`,
+        stops((t) => ({ ...lch, l: t })),
+      )}
+      {slider(
+        "c",
+        "Chroma",
+        0,
+        0.37,
+        0.002,
+        (v) => v.toFixed(2),
+        stops((t) => ({ ...lch, c: t * 0.37 })),
+      )}
+      {slider(
+        "h",
+        "Hue",
+        0,
+        360,
+        1,
+        (v) => `${Math.round(v)}°`,
+        stops((t) => ({ ...lch, h: t * 360 })),
+      )}
       <div className="editor-row">
         <label className="hex-in">
           <span className="sr-only">Hex color</span>
@@ -167,7 +211,8 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
               setHexText(e.target.value);
               // Live preview only for complete 6-digit values.
               const v = e.target.value.trim();
-              if (/^#?[0-9a-fA-F]{6}$/.test(v)) dispatch({ type: "color", role: def.id, color: normalizeHex(v)!, commit: false });
+              if (/^#?[0-9a-fA-F]{6}$/.test(v))
+                dispatch({ type: "color", role: def.id, color: normalizeHex(v)!, commit: false });
             }}
             onBlur={commitHex}
             onKeyDown={(e) => {
@@ -176,18 +221,41 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
             aria-invalid={!normalizeHex(hexText)}
           />
         </label>
-        {eyedropper && <button className="btn sm" onClick={pick}>Pick from screen</button>}
+        {eyedropper && (
+          <button className="btn sm" onClick={pick}>
+            Pick from screen
+          </button>
+        )}
         {def.styleable && (
           <span className="styles" role="group" aria-label="Font style">
-            <button className={"btn sm icon" + (role.fontStyle.includes("italic") ? " on" : "")} aria-pressed={role.fontStyle.includes("italic")} onClick={() => dispatch({ type: "style", role: def.id, style: "italic" })} title="Italic"><i>I</i></button>
-            <button className={"btn sm icon" + (role.fontStyle.includes("bold") ? " on" : "")} aria-pressed={role.fontStyle.includes("bold")} onClick={() => dispatch({ type: "style", role: def.id, style: "bold" })} title="Bold"><b>B</b></button>
+            <button
+              className={"btn sm icon" + (role.fontStyle.includes("italic") ? " on" : "")}
+              aria-pressed={role.fontStyle.includes("italic")}
+              onClick={() => dispatch({ type: "style", role: def.id, style: "italic" })}
+              title="Italic"
+            >
+              <i>I</i>
+            </button>
+            <button
+              className={"btn sm icon" + (role.fontStyle.includes("bold") ? " on" : "")}
+              aria-pressed={role.fontStyle.includes("bold")}
+              onClick={() => dispatch({ type: "style", role: def.id, style: "bold" })}
+              title="Bold"
+            >
+              <b>B</b>
+            </button>
           </span>
         )}
       </div>
       {fails && (
         <div className="warn" role="status">
-          <span>Hard to read: {ratio!.toFixed(1)}:1, needs {def.min}:1.</span>
-          <button className="btn sm" onClick={() => dispatch({ type: "color", role: def.id, color: fixContrast(role.color, bg, def.min) })}>
+          <span>
+            Hard to read: {ratio!.toFixed(1)}:1, needs {def.min}:1.
+          </span>
+          <button
+            className="btn sm"
+            onClick={() => dispatch({ type: "color", role: def.id, color: fixContrast(role.color, bg, def.min) })}
+          >
             Fix contrast
           </button>
         </div>
@@ -198,7 +266,16 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
 
 function LockIcon({ locked }: { locked: boolean }) {
   return (
-    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+    <svg
+      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
       <rect x="4" y="9" width="12" height="8" rx="2" fill={locked ? "currentColor" : "none"} />
       <path d={locked ? "M7 9V6a3 3 0 0 1 6 0v3" : "M7 9V6a3 3 0 0 1 5.8-1"} />
     </svg>

@@ -1,6 +1,10 @@
 // Color math: OKLCH <-> sRGB hex, WCAG contrast.
 export type Hex = string; // "#rrggbb"
-export interface Oklch { l: number; c: number; h: number }
+export interface Oklch {
+  l: number;
+  c: number;
+  h: number;
+}
 
 const clamp = (x: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, x));
 
@@ -28,7 +32,16 @@ export function hexToRgb(hex: Hex): [number, number, number] {
 }
 
 export function rgbToHex(r: number, g: number, b: number): Hex {
-  return "#" + [r, g, b].map((v) => Math.round(clamp(v, 0, 255)).toString(16).padStart(2, "0")).join("");
+  return (
+    "#" +
+    [r, g, b]
+      .map((v) =>
+        Math.round(clamp(v, 0, 255))
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")
+  );
 }
 
 function oklchToLinearRgb({ l, c, h }: Oklch): [number, number, number] {
@@ -63,11 +76,7 @@ export function oklchToHex({ l, c, h }: Oklch): Hex {
   const r = 4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_;
   const g = -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_;
   const bl = -0.0041960863 * l_ - 0.7034186147 * m_ + 1.707614701 * s_;
-  return rgbToHex(
-    linearToSrgb(clamp(r)) * 255,
-    linearToSrgb(clamp(g)) * 255,
-    linearToSrgb(clamp(bl)) * 255,
-  );
+  return rgbToHex(linearToSrgb(clamp(r)) * 255, linearToSrgb(clamp(g)) * 255, linearToSrgb(clamp(bl)) * 255);
 }
 
 export function hexToOklch(hex: Hex): Oklch {
@@ -140,7 +149,12 @@ export function mix(a: Hex, b: Hex, t: number): Hex {
 
 /** Append alpha (0..1) as 8-digit hex, the format VS Code accepts. */
 export function withAlpha(hex: Hex, alpha: number): string {
-  return hex + Math.round(clamp(alpha) * 255).toString(16).padStart(2, "0");
+  return (
+    hex +
+    Math.round(clamp(alpha) * 255)
+      .toString(16)
+      .padStart(2, "0")
+  );
 }
 
 /** Text color (near-black or white) readable on top of `bg`. */

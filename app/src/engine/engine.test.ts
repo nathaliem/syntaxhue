@@ -64,7 +64,9 @@ describe("export", () => {
   });
 
   it("snippet text is valid JSON when wrapped in braces", () => {
-    const text = settingsSnippetText(t).replace(/^\/\/.*\n/, "").replace(/,\s*$/, "");
+    const text = settingsSnippetText(t)
+      .replace(/^\/\/.*\n/, "")
+      .replace(/,\s*$/, "");
     expect(() => JSON.parse(`{${text}}`)).not.toThrow();
   });
 
@@ -101,14 +103,17 @@ describe("share", () => {
 });
 
 describe("distinct syntax colors", () => {
-  it.each(["dark", "light"] as const)("%s: syntax colors are distinct from each other and from error (500 seeds)", (mode) => {
-    const failing: number[] = [];
-    const t0 = performance.now();
-    for (let seed = 1; seed <= 500; seed++) if (distinctness(generate(seed, mode)) < 1) failing.push(seed);
-    const ms = (performance.now() - t0) / 500;
-    expect(failing, `seeds below threshold`).toEqual([]);
-    expect(ms, "average ms per shuffle").toBeLessThan(15);
-  });
+  it.each(["dark", "light"] as const)(
+    "%s: syntax colors are distinct from each other and from error (500 seeds)",
+    (mode) => {
+      const failing: number[] = [];
+      const t0 = performance.now();
+      for (let seed = 1; seed <= 500; seed++) if (distinctness(generate(seed, mode)) < 1) failing.push(seed);
+      const ms = (performance.now() - t0) / 500;
+      expect(failing, `seeds below threshold`).toEqual([]);
+      expect(ms, "average ms per shuffle").toBeLessThan(15);
+    },
+  );
 
   it("still meets contrast after retries", () => {
     for (let seed = 1; seed <= 200; seed++) expect(contrastIssues(generate(seed, "light"))).toEqual([]);
@@ -161,7 +166,12 @@ describe("history", () => {
   });
 
   it("a commit that changes nothing adds no undo step", () => {
-    const h = reducer(start(), { type: "color", role: "keyword", color: start().present.roles.keyword.color, commit: true });
+    const h = reducer(start(), {
+      type: "color",
+      role: "keyword",
+      color: start().present.roles.keyword.color,
+      commit: true,
+    });
     expect(h.past).toHaveLength(0);
   });
 

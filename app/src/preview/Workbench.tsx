@@ -69,7 +69,11 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
         <style>{`.wb [data-role="${highlighted ?? selected}"]{outline:2px dashed var(--hl-ring);outline-offset:-2px;border-radius:3px}`}</style>
       )}
       <div className="wb-title" {...r("bg")}>
-        <span className="wb-dots" aria-hidden="true"><i /><i /><i /></span>
+        <span className="wb-dots" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
         <span {...r("muted")}>shuffle.ts — hueprint</span>
       </div>
 
@@ -78,13 +82,19 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
           {["files", "search", "git", "run", "ext"].map((n, i) => (
             <span key={n} className={"wb-ai" + (i === 0 ? " on" : "")} {...(i === 0 ? r("accent") : r("muted"))}>
               <Icon name={n} />
-              {n === "git" && <b className="wb-badge" {...r("accent")}>3</b>}
+              {n === "git" && (
+                <b className="wb-badge" {...r("accent")}>
+                  3
+                </b>
+              )}
             </span>
           ))}
         </nav>
 
         <aside className="wb-side" {...r("bg")}>
-          <div className="wb-side-h" {...r("muted")}>Explorer</div>
+          <div className="wb-side-h" {...r("muted")}>
+            Explorer
+          </div>
           {FILES.map((f) => (
             <div
               key={f.name}
@@ -92,28 +102,59 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
               style={{ paddingLeft: 12 + f.depth * 12 }}
               {...(f.active ? r("accent") : f.role ? r(f.role) : r("fg"))}
             >
-              <span className="wb-chev" aria-hidden="true">{f.folder ? "›" : ""}</span>
-              <span className="wb-fname" style={f.role ? { color: `var(--r-${f.role})` } : undefined}>{f.name}</span>
-              {f.badge && <span className="wb-fbadge" style={{ color: `var(--r-${f.role})` }}>{f.badge}</span>}
+              <span className="wb-chev" aria-hidden="true">
+                {f.folder ? "›" : ""}
+              </span>
+              <span className="wb-fname" style={f.role ? { color: `var(--r-${f.role})` } : undefined}>
+                {f.name}
+              </span>
+              {f.badge && (
+                <span className="wb-fbadge" style={{ color: `var(--r-${f.role})` }}>
+                  {f.badge}
+                </span>
+              )}
             </div>
           ))}
         </aside>
 
         <main className="wb-main">
           <div className="wb-tabs" {...r("bg")}>
-            <span className="wb-tab active" {...r("accent")}>shuffle.ts</span>
-            <span className="wb-tab" {...r("muted")}>color.ts</span>
-            <span className="wb-tab" {...r("muted")}>export.ts</span>
+            <span className="wb-tab active" {...r("accent")}>
+              shuffle.ts
+            </span>
+            <span className="wb-tab" {...r("muted")}>
+              color.ts
+            </span>
+            <span className="wb-tab" {...r("muted")}>
+              export.ts
+            </span>
           </div>
-          <div className="wb-crumbs" {...r("muted")}>src › engine › shuffle.ts › shuffle</div>
+          <div className="wb-crumbs" {...r("muted")}>
+            src › engine › shuffle.ts › shuffle
+          </div>
 
           <div className="wb-editor" {...r("bg")}>
             {lines.map((tokens, i) => {
               const n = i + 1;
               return (
                 <div key={i} className={"wb-ln" + (n === CURSOR_LINE ? " cur" : "")}>
-                  <span className="wb-num" {...r("muted")} style={n === CURSOR_LINE ? { color: "var(--r-fg)" } : undefined}>{n}</span>
-                  <span className="wb-gutter" style={n >= 16 && n <= 18 ? { background: "var(--r-info)" } : n === 12 ? { background: "var(--r-success)" } : undefined} />
+                  <span
+                    className="wb-num"
+                    {...r("muted")}
+                    style={n === CURSOR_LINE ? { color: "var(--r-fg)" } : undefined}
+                  >
+                    {n}
+                  </span>
+                  <span
+                    className="wb-gutter"
+                    style={
+                      n >= 16 && n <= 18
+                        ? { background: "var(--r-info)" }
+                        : n === 12
+                          ? { background: "var(--r-success)" }
+                          : undefined
+                    }
+                  />
                   <code>
                     {tokens.map((t, j) => {
                       const squiggle = n === SQUIGGLE_LINE && t.text === "lighten";
@@ -145,20 +186,50 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
                 <span style={{ color: "var(--r-operator)" }}>):</span>{" "}
                 <span style={{ color: "var(--r-type)" }}>string</span>
               </div>
-              <div className="wb-hover-err" {...r("error")}>Cannot find name 'lighten'. ts(2304)</div>
+              <div className="wb-hover-err" {...r("error")}>
+                Cannot find name 'lighten'. ts(2304)
+              </div>
             </div>
           </div>
 
           <div className="wb-panel" {...r("bg")}>
             <div className="wb-ptabs">
-              <span {...r("muted")}>Problems <b className="wb-pcount" {...r("accent")}>1</b></span>
-              <span className="active" {...r("accent")}>Terminal</span>
+              <span {...r("muted")}>
+                Problems{" "}
+                <b className="wb-pcount" {...r("accent")}>
+                  1
+                </b>
+              </span>
+              <span className="active" {...r("accent")}>
+                Terminal
+              </span>
               <span {...r("muted")}>Output</span>
             </div>
             <div className="wb-term">
-              <div><span {...r("success")} style={{ color: "var(--r-success)" }}>➜</span> <span {...r("info")} style={{ color: "var(--r-info)" }}>hueprint</span> <span {...r("fg")}>npm test</span></div>
-              <div><span {...r("success")} style={{ color: "var(--r-success)" }}>✓</span> <span {...r("fg")}>contrast.test.ts (12)</span></div>
-              <div><span {...r("error")} style={{ color: "var(--r-error)" }}>✗</span> <span {...r("fg")}>shuffle.test.ts</span> <span {...r("warning")} style={{ color: "var(--r-warning)" }}>1 warning</span></div>
+              <div>
+                <span {...r("success")} style={{ color: "var(--r-success)" }}>
+                  ➜
+                </span>{" "}
+                <span {...r("info")} style={{ color: "var(--r-info)" }}>
+                  hueprint
+                </span>{" "}
+                <span {...r("fg")}>npm test</span>
+              </div>
+              <div>
+                <span {...r("success")} style={{ color: "var(--r-success)" }}>
+                  ✓
+                </span>{" "}
+                <span {...r("fg")}>contrast.test.ts (12)</span>
+              </div>
+              <div>
+                <span {...r("error")} style={{ color: "var(--r-error)" }}>
+                  ✗
+                </span>{" "}
+                <span {...r("fg")}>shuffle.test.ts</span>{" "}
+                <span {...r("warning")} style={{ color: "var(--r-warning)" }}>
+                  1 warning
+                </span>
+              </div>
             </div>
           </div>
         </main>
@@ -166,7 +237,9 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
 
       <footer className="wb-status" {...r("accent")}>
         <span>⎇ main</span>
-        <span><span className="wb-st-err">✕ 1</span> ⚠ 0</span>
+        <span>
+          <span className="wb-st-err">✕ 1</span> ⚠ 0
+        </span>
         <span className="wb-st-right">Ln {CURSOR_LINE}, Col 9</span>
         <span>UTF-8</span>
         <span>TypeScript</span>
@@ -184,7 +257,16 @@ function Icon({ name }: { name: string }) {
     ext: "M4 4h7v7H4z M13 13h7v7h-7z M4 13h7v7H4z M15 3l5 5-5 5-5-5z",
   }[name];
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round">
+    <svg
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+    >
       <path d={p} />
     </svg>
   );

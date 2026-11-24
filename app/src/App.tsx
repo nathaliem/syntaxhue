@@ -46,7 +46,9 @@ export default function App() {
 
   const pick = (id: RoleId) => {
     setSelected(id);
-    requestAnimationFrame(() => document.getElementById(`edit-${id}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+    requestAnimationFrame(() =>
+      document.getElementById(`edit-${id}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" }),
+    );
   };
 
   return (
@@ -58,19 +60,49 @@ export default function App() {
         </div>
         <label className="name">
           <span className="sr-only">Theme name</span>
-          <input value={theme.name} onChange={(e) => dispatch({ type: "name", name: e.target.value.slice(0, 60) })} spellCheck={false} />
+          <input
+            value={theme.name}
+            onChange={(e) => dispatch({ type: "name", name: e.target.value.slice(0, 60) })}
+            spellCheck={false}
+          />
         </label>
         <div className="bar-actions">
-          <button className="btn primary" onClick={() => dispatch({ type: "shuffle" })} title="Shuffle unlocked colors (Space)">
+          <button
+            className="btn primary"
+            onClick={() => dispatch({ type: "shuffle" })}
+            title="Shuffle unlocked colors (Space)"
+          >
             Shuffle <kbd>Space</kbd>
           </button>
           <div className="seg" role="group" aria-label="Theme mode">
-            <button aria-pressed={theme.mode === "dark"} onClick={() => dispatch({ type: "mode", mode: "dark" })}>Dark</button>
-            <button aria-pressed={theme.mode === "light"} onClick={() => dispatch({ type: "mode", mode: "light" })}>Light</button>
+            <button aria-pressed={theme.mode === "dark"} onClick={() => dispatch({ type: "mode", mode: "dark" })}>
+              Dark
+            </button>
+            <button aria-pressed={theme.mode === "light"} onClick={() => dispatch({ type: "mode", mode: "light" })}>
+              Light
+            </button>
           </div>
-          <button className="btn icon" onClick={() => dispatch({ type: "undo" })} disabled={!canUndo} aria-label="Undo" title="Undo (⌘Z)">↶</button>
-          <button className="btn icon" onClick={() => dispatch({ type: "redo" })} disabled={!canRedo} aria-label="Redo" title="Redo (⌘⇧Z)">↷</button>
-          <button className="btn export-btn" onClick={() => setExportOpen(true)}>Export</button>
+          <button
+            className="btn icon"
+            onClick={() => dispatch({ type: "undo" })}
+            disabled={!canUndo}
+            aria-label="Undo"
+            title="Undo (⌘Z)"
+          >
+            ↶
+          </button>
+          <button
+            className="btn icon"
+            onClick={() => dispatch({ type: "redo" })}
+            disabled={!canRedo}
+            aria-label="Redo"
+            title="Redo (⌘⇧Z)"
+          >
+            ↷
+          </button>
+          <button className="btn export-btn" onClick={() => setExportOpen(true)}>
+            Export
+          </button>
         </div>
       </header>
 
@@ -84,7 +116,9 @@ export default function App() {
           </p>
           <p className="side-foot support">
             Free and made by one person.{" "}
-            <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">Buy me a coffee ☕</a>
+            <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
+              Buy me a coffee ☕
+            </a>
           </p>
         </aside>
         <section className="stage" aria-label="Preview">
@@ -93,18 +127,26 @@ export default function App() {
               {notice.kind === "badLink" ? (
                 <>
                   <span>That link doesn't contain a theme Hueprint can read, so your last theme is shown.</span>
-                  <button className="btn sm" onClick={dismissNotice}>Dismiss</button>
+                  <button className="btn sm" onClick={dismissNotice}>
+                    Dismiss
+                  </button>
                 </>
               ) : notice.previous ? (
                 <>
                   <span>You opened a shared theme. Your own theme is still saved.</span>
-                  <button className="btn sm" onClick={restorePrevious}>Back to my theme</button>
-                  <button className="btn sm primary" onClick={dismissNotice}>Keep this one</button>
+                  <button className="btn sm" onClick={restorePrevious}>
+                    Back to my theme
+                  </button>
+                  <button className="btn sm primary" onClick={dismissNotice}>
+                    Keep this one
+                  </button>
                 </>
               ) : (
                 <>
                   <span>You opened a shared theme.</span>
-                  <button className="btn sm" onClick={dismissNotice}>Dismiss</button>
+                  <button className="btn sm" onClick={dismissNotice}>
+                    Dismiss
+                  </button>
                 </>
               )}
             </div>
