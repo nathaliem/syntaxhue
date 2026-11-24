@@ -171,22 +171,37 @@ interface TokenRule {
 
 /** Which TextMate scopes each role colors. The exported theme and the preview's tokenizer both read this. */
 export const SCOPES: { role: RoleId; scope: string[] }[] = [
-  { role: "muted", scope: ["comment", "punctuation.definition.comment"] },
+  { role: "muted", scope: ["comment", "punctuation.definition.comment", "markup.quote"] },
   { role: "keyword", scope: ["keyword", "storage", "storage.type", "storage.modifier", "keyword.control"] },
-  { role: "string", scope: ["string", "string.regexp", "punctuation.definition.string"] },
+  { role: "string", scope: ["string", "string.regexp", "punctuation.definition.string", "markup.inline.raw"] },
   { role: "function", scope: ["entity.name.function", "support.function", "meta.function-call"] },
   {
     role: "type",
-    scope: ["entity.name.type", "entity.name.class", "support.type", "support.class", "entity.other.inherited-class"],
+    scope: [
+      "entity.name.type",
+      "entity.name.class",
+      "entity.name.namespace",
+      "support.type",
+      "support.class",
+      "entity.other.inherited-class",
+    ],
   },
   { role: "variable", scope: ["variable", "variable.parameter", "variable.other.property", "meta.object-literal.key"] },
   {
     role: "constant",
-    scope: ["constant.numeric", "constant.language", "constant.character", "variable.other.constant"],
+    scope: [
+      "constant.numeric",
+      "constant.language",
+      "constant.character",
+      "constant.other",
+      "support.constant",
+      "variable.other.constant",
+      "markup.underline.link",
+    ],
   },
   { role: "operator", scope: ["keyword.operator", "punctuation", "meta.brace"] },
   { role: "type", scope: ["entity.name.tag"] },
-  { role: "function", scope: ["entity.other.attribute-name"] },
+  { role: "function", scope: ["entity.other.attribute-name", "entity.name.section", "markup.heading"] },
 ];
 
 export function tokenRules(base: ThemeState): TokenRule[] {
