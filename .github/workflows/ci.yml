@@ -32,3 +32,7 @@ jobs:
         run: npm run build
       - name: Test
         run: npm test
+      - name: Compare the .vsix with the official packager
+        run: |
+          npm install --global @vscode/vsce
+          VSCE_CHECK=1 npx vitest run ci/
