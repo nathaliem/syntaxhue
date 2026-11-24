@@ -3,6 +3,7 @@ import { contrastIssues, shuffleLabel, unlockedCount, type RoleId } from "./engi
 import { Workbench } from "./preview/Workbench";
 import { ExportDialog } from "./ui/ExportDialog";
 import { RoleRail } from "./ui/RoleRail";
+import { VibePanel } from "./ui/VibePanel";
 import { useThemeStore } from "./state";
 
 export default function App() {
@@ -84,6 +85,7 @@ export default function App() {
               Light
             </button>
           </div>
+          <VibePanel vibe={theme.vibe} dispatch={dispatch} />
           <button
             className="btn icon"
             onClick={() => dispatch({ type: "undo" })}
