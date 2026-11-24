@@ -13,6 +13,14 @@ const roleAt = async (code: string, text: string) => {
 };
 
 describe("Shiki tokenizer", () => {
+  it("colors the class name after `new` as a type, like VS Code's semantic tokens do", async () => {
+    const code = "const m = new Map();\nconst d = make(Map);";
+    expect(await roleAt(code, "Map")).toBe("type");
+    const tokenize = await loadTokenizer("typescript");
+    const last = tokenize(code)[1].find((t) => t.text === "make")!;
+    expect(last.role).toBe("function"); // an ordinary call keeps the function color
+  });
+
   it("keeps the code intact: every line round-trips", async () => {
     const tokenize = await loadTokenizer("typescript");
     const lines = tokenize(SAMPLE_TS).map((l) => l.map((t) => t.text).join(""));

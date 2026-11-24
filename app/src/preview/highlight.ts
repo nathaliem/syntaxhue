@@ -48,6 +48,24 @@ export function roleTheme() {
 
 export type Tokenize = (code: string) => Token[][];
 
+/**
+ * VS Code also runs the TypeScript language server, whose semantic tokens override the grammar: the class name in
+ * `new Map()` is a `class`, which the theme colors as a type, while the grammar calls it a function. The preview
+ * has no language server, so it applies that one rule itself (found by comparing against the real app, HP-508).
+ */
+export function semanticFixes(lines: Token[][]): Token[][] {
+  return lines.map((line) =>
+    line.map((t, i) => {
+      if (t.role !== "function" || !/^[A-Z]/.test(t.text)) return t;
+      const prev = line
+        .slice(0, i)
+        .reverse()
+        .find((p) => p.text.trim());
+      return prev?.text.trim() === "new" ? { ...t, role: "type" as const } : t;
+    }),
+  );
+}
+
 /** Plain text with the indentation split off, so a loading skeleton can draw bars that start at the code. */
 export function plainTokens(code: string): Token[][] {
   return code.split("\n").map((line) => {
@@ -80,13 +98,15 @@ export function loadTokenizer(lang: Lang): Promise<Tokenize> {
     p = (async () => {
       const [highlighter, grammar] = await Promise.all([loadCore(), GRAMMARS[lang]()]);
       await highlighter.loadLanguage(grammar.default);
-      return (code: string) =>
-        highlighter.codeToTokensBase(code, { lang, theme: THEME }).map((line) =>
+      return (code: string) => {
+        const lines = highlighter.codeToTokensBase(code, { lang, theme: THEME }).map((line) =>
           line.map((t) => {
             const role = roleOf.get((t.color ?? "").toLowerCase()) ?? null;
             return { text: t.content, role: role === FG_ROLE ? null : role };
           }),
         );
+        return lang === "typescript" ? semanticFixes(lines) : lines;
+      };
     })();
     tokenizers.set(lang, p);
     p.catch(() => tokenizers.delete(lang));
