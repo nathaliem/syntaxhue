@@ -12,6 +12,7 @@ import {
   type LicenseId,
 } from "../engine/extension";
 import type { ThemeState } from "../engine/theme";
+import { publishGuide } from "../engine/publishGuide";
 import { iconPng } from "../engine/icon";
 import { allScreenshots } from "../preview/screenshot";
 import { buildVsix, vsixFileName } from "../engine/vsix";
@@ -245,7 +246,56 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
           </button>
         )}
       </div>
+      <PublishGuide theme={theme} options={options} />
     </div>
+  );
+}
+
+function PublishGuide({ theme, options }: { theme: ThemeState; options: ExtensionOptions }) {
+  const { steps, failures } = publishGuide(theme, options);
+  const [copied, setCopied] = useState<string | null>(null);
+  const copy = async (c: string) => {
+    try {
+      await navigator.clipboard.writeText(c);
+      setCopied(c);
+    } catch {
+      setCopied(null);
+    }
+  };
+  return (
+    <details className="guide">
+      <summary>How to publish it</summary>
+      <ol>
+        {steps.map((st) => (
+          <li key={st.title}>
+            <b>{st.title}</b>
+            <p className="small">{st.body}</p>
+            {st.commands?.map((c) => (
+              <div className="cmd" key={c}>
+                <code>{c}</code>
+                <button className="btn sm" onClick={() => void copy(c)} aria-label={`Copy ${c}`}>
+                  {copied === c ? "Copied" : "Copy"}
+                </button>
+              </div>
+            ))}
+            {st.link && (
+              <a href={st.link.href} target="_blank" rel="noopener noreferrer" className="small">
+                {st.link.label} ↗
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+      <b>If something goes wrong</b>
+      <dl className="failures">
+        {failures.map((f) => (
+          <div key={f.problem}>
+            <dt>{f.problem}</dt>
+            <dd className="small">{f.fix}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
   );
 }
 

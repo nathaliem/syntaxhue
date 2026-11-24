@@ -218,4 +218,14 @@ describe("Export > Extension (.vsix) form", () => {
     expect(downloads).toHaveLength(0);
     expect(download()).toBeEnabled();
   });
+
+  it("has a publishing guide with commands filled in from the form", async () => {
+    const user = userEvent.setup();
+    await openTab(user);
+    await user.type(field("Publisher id"), "someone");
+    await user.click(screen.getByText("How to publish it"));
+    expect(screen.getByText(/vsce publish --packagePath .*\.vsix --pat <your-token>/)).toBeInTheDocument();
+    expect(screen.getByText(/ovsx create-namespace someone/)).toBeInTheDocument();
+    expect(screen.getByText("The extension id is already taken")).toBeInTheDocument();
+  });
 });

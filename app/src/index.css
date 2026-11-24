@@ -1201,3 +1201,41 @@ pre.code {
 .icon-row p {
   margin: 2px 0 0;
 }
+.guide {
+  margin-top: 16px;
+  border-top: 1px solid var(--line, #8884);
+  padding-top: 12px;
+}
+.guide summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.guide ol {
+  padding-left: 20px;
+  display: grid;
+  gap: 12px;
+}
+.guide p {
+  margin: 2px 0 6px;
+}
+.cmd {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 4px 0;
+}
+.cmd code {
+  flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #8882;
+}
+.failures dt {
+  font-weight: 600;
+  margin-top: 8px;
+}
+.failures dd {
+  margin: 0;
+}
