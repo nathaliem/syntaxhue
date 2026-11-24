@@ -154,6 +154,83 @@ describe("Library drawer", () => {
   });
 });
 
+describe("Library management", () => {
+  const saveAs = async (user: ReturnType<typeof userEvent.setup>, name: string) => {
+    await user.clear(nameInput());
+    await user.type(nameInput(), name);
+    await openLibrary(user);
+    await user.click(within(drawer()).getByRole("button", { name: /Save current|Save as new/ }));
+    await within(drawer()).findByRole("button", { name: `Open ${name}` });
+  };
+
+  it("renames a saved theme and keeps the editor in step when it is the linked one", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await saveAs(user, "Old name");
+    await user.click(within(drawer()).getByRole("button", { name: "Rename Old name" }));
+    const input = within(drawer()).getByLabelText("New name for Old name");
+    await user.clear(input);
+    await user.type(input, "New name{Enter}");
+    await within(drawer()).findByRole("button", { name: "Open New name" });
+    expect(within(drawer()).getAllByRole("listitem")).toHaveLength(1);
+    await user.keyboard("{Escape}");
+    expect(nameInput().value).toBe("New name");
+    expect(screen.getByText("In library")).toBeInTheDocument();
+  });
+
+  it("Escape cancels a rename without closing the drawer, and an empty name changes nothing", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await saveAs(user, "Keep me");
+    await user.click(within(drawer()).getByRole("button", { name: "Rename Keep me" }));
+    await user.type(within(drawer()).getByLabelText("New name for Keep me"), "xyz{Escape}");
+    expect(within(drawer()).getByRole("button", { name: "Open Keep me" })).toBeInTheDocument();
+
+    await user.click(within(drawer()).getByRole("button", { name: "Rename Keep me" }));
+    await user.clear(within(drawer()).getByLabelText("New name for Keep me"));
+    await user.keyboard("{Enter}");
+    expect(await within(drawer()).findByRole("button", { name: "Open Keep me" })).toBeInTheDocument();
+  });
+
+  it("duplicates a theme without changing which one is being edited", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await saveAs(user, "Original");
+    await user.click(within(drawer()).getByRole("button", { name: "Duplicate Original" }));
+    await within(drawer()).findByRole("button", { name: "Open Original copy" });
+    expect(within(drawer()).getAllByRole("listitem")).toHaveLength(2);
+    expect(within(drawer()).getByRole("button", { name: "Update “Original”" })).toBeInTheDocument();
+  });
+
+  it("deletes without a confirm dialog and Undo puts the theme back", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await saveAs(user, "Doomed");
+    await user.click(within(drawer()).getByRole("button", { name: "Delete Doomed" }));
+    expect(await within(drawer()).findByText(/No saved themes yet/)).toBeInTheDocument();
+    expect(within(drawer()).getByRole("status")).toHaveTextContent("Deleted “Doomed”.");
+
+    await user.click(within(drawer()).getByRole("button", { name: "Undo" }));
+    expect(await within(drawer()).findByRole("button", { name: "Open Doomed" })).toBeInTheDocument();
+    // It is the linked entry again, so Update is offered.
+    expect(within(drawer()).getByRole("button", { name: "Update “Doomed”" })).toBeInTheDocument();
+  });
+
+  it("a delete stays deleted after the app is reopened", async () => {
+    const user = userEvent.setup();
+    const first = render(<App />);
+    await saveAs(user, "Gone");
+    await user.click(within(drawer()).getByRole("button", { name: "Delete Gone" }));
+    await within(drawer()).findByText(/No saved themes yet/);
+    first.unmount();
+    cleanup();
+
+    render(<App />);
+    await openLibrary(user);
+    expect(await within(drawer()).findByText(/No saved themes yet/)).toBeInTheDocument();
+  });
+});
+
 describe("ago", () => {
   it("reads naturally", () => {
     const now = 10_000_000_000;

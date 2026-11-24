@@ -37,6 +37,14 @@ export interface Library {
    * entry, or null on failure.
    */
   save(theme: ThemeState, how?: "update" | "new"): Promise<SavedTheme | null>;
+  /** Renames a saved entry (its edited time stays, so the list doesn't jump). False when the name is empty or it failed. */
+  rename(id: string, name: string): Promise<boolean>;
+  /** Adds a copy named "<name> copy" and resolves to it; it does not become the linked entry. */
+  duplicate(id: string): Promise<SavedTheme | null>;
+  /** Deletes an entry and resolves to it, so the caller can offer Undo. */
+  remove(id: string): Promise<SavedTheme | null>;
+  /** Puts back an entry removed by `remove`, with its old id and edited time. */
+  restore(item: SavedTheme): Promise<boolean>;
   /** Marks a saved theme as the one being edited. */
   open(item: SavedTheme): void;
   /** The theme being edited is no longer a copy of a library entry (imported, or a shared link kept). */
@@ -108,6 +116,68 @@ export function useLibrary(provided?: LibraryStore): Library {
     [store, refresh, linkedId, link],
   );
 
+  /** Runs a change on one stored entry, then re-reads the list. Resolves to what `change` returned, or null on failure. */
+  const edit = useCallback(
+    async <T>(failure: string, change: (s: LibraryStore) => Promise<T>): Promise<T | null> => {
+      try {
+        const result = await change(await store());
+        await refresh();
+        return result;
+      } catch {
+        setError(failure);
+        return null;
+      }
+    },
+    [store, refresh],
+  );
+
+  const rename = useCallback(
+    async (id: string, name: string) => {
+      const clean = name.trim();
+      if (!clean) return false;
+      const done = await edit("Couldn't rename this theme.", async (s) => {
+        const item = (await s.list()).find((i) => i.id === id);
+        if (!item) return false;
+        await s.put({ ...item, theme: { ...item.theme, name: clean } });
+        return true;
+      });
+      return done === true;
+    },
+    [edit],
+  );
+
+  const duplicate = useCallback(
+    (id: string) =>
+      edit("Couldn't duplicate this theme.", async (s) => {
+        const item = (await s.list()).find((i) => i.id === id);
+        if (!item) return null;
+        const copy: SavedTheme = {
+          id: newId(),
+          theme: { ...item.theme, name: `${item.theme.name} copy` },
+          savedAt: Date.now(),
+        };
+        await s.put(copy);
+        return copy;
+      }),
+    [edit],
+  );
+
+  const remove = useCallback(
+    (id: string) =>
+      edit("Couldn't delete this theme.", async (s) => {
+        const item = (await s.list()).find((i) => i.id === id) ?? null;
+        if (item) await s.remove(id);
+        return item;
+      }),
+    [edit],
+  );
+
+  const restore = useCallback(
+    async (item: SavedTheme) =>
+      (await edit("Couldn't restore this theme.", async (s) => (await s.put(item), true))) === true,
+    [edit],
+  );
+
   const linked = (linkedId && state.items.find((i) => i.id === linkedId)) || null;
 
   return {
@@ -116,6 +186,10 @@ export function useLibrary(provided?: LibraryStore): Library {
     linked,
     refresh,
     save,
+    rename,
+    duplicate,
+    remove,
+    restore,
     open: useCallback((item: SavedTheme) => link(item.id), [link]),
     unlink: useCallback(() => link(null), [link]),
   };

@@ -34,6 +34,12 @@ export function LibraryDrawer({
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null);
+  /** The entry just deleted, kept for a few seconds so Undo can put it back. */
+  const [deleted, setDeleted] = useState<SavedTheme | null>(null);
+  /** The rename in progress, readable from handlers that fire after it ended (blur after Enter or Escape). */
+  const renamingNow = useRef<{ id: string; name: string } | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { refresh } = library;
 
   useEffect(() => {
@@ -47,8 +53,13 @@ export function LibraryDrawer({
     if (open) void refresh();
   }, [open, refresh]);
 
+  useEffect(() => () => clearTimeout(undoTimer.current), []);
+
   const close = () => {
     setSaved(null);
+    startRename(null);
+    clearTimeout(undoTimer.current);
+    setDeleted(null);
     onClose();
   };
 
@@ -58,6 +69,47 @@ export function LibraryDrawer({
   const save = async (how: "update" | "new") => {
     const item = await library.save(theme, how);
     setSaved(item ? `Saved “${theme.name}”.` : null);
+  };
+
+  const startRename = (r: { id: string; name: string } | null) => {
+    renamingNow.current = r;
+    setRenaming(r);
+  };
+
+  const commitRename = async () => {
+    const current = renamingNow.current;
+    if (!current) return; // already committed or cancelled
+    const { id, name } = current;
+    startRename(null);
+    const item = library.items.find((i) => i.id === id);
+    if (!item || !name.trim() || name.trim() === item.theme.name) return;
+    if (await library.rename(id, name)) {
+      // The editor shows the same theme: keep its name in step so it doesn't read as "Unsaved changes".
+      if (library.linked?.id === id && theme.name === item.theme.name) dispatch({ type: "name", name: name.trim() });
+      setSaved(`Renamed to “${name.trim()}”.`);
+    }
+  };
+
+  const duplicate = async (item: SavedTheme) => {
+    const copy = await library.duplicate(item.id);
+    if (copy) setSaved(`Added “${copy.theme.name}”.`);
+  };
+
+  const remove = async (item: SavedTheme) => {
+    const gone = await library.remove(item.id);
+    if (!gone) return;
+    setSaved(null);
+    setDeleted(gone);
+    clearTimeout(undoTimer.current);
+    undoTimer.current = setTimeout(() => setDeleted(null), 8000);
+  };
+
+  const undoDelete = async () => {
+    if (!deleted) return;
+    const item = deleted;
+    clearTimeout(undoTimer.current);
+    setDeleted(null);
+    if (await library.restore(item)) setSaved(`Restored “${item.theme.name}”.`);
   };
 
   const openItem = (item: SavedTheme) => {
@@ -101,6 +153,14 @@ export function LibraryDrawer({
             {saved}
           </p>
         )}
+        {deleted && (
+          <p className="small undo" role="status">
+            Deleted “{deleted.theme.name}”.{" "}
+            <button className="btn sm" onClick={() => void undoDelete()}>
+              Undo
+            </button>
+          </p>
+        )}
         {library.loaded && !library.persistent && (
           <p className="field-msg bad" role="note">
             Your browser isn't letting us store data, so themes will disappear when you close this tab. Use Share link
@@ -119,13 +179,65 @@ export function LibraryDrawer({
           <ul className="saved" aria-label="Saved themes">
             {library.items.map((item) => (
               <li key={item.id}>
-                <button onClick={() => openItem(item)} aria-label={`Open ${item.theme.name}`}>
-                  <Strip theme={item.theme} />
-                  <span className="saved-name">{item.theme.name}</span>
-                  <span className="small">
-                    {item.theme.mode} · edited {ago(item.savedAt)}
-                  </span>
-                </button>
+                {renaming?.id === item.id ? (
+                  <form
+                    className="saved-row"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      void commitRename();
+                    }}
+                  >
+                    <Strip theme={item.theme} />
+                    <input
+                      autoFocus
+                      aria-label={`New name for ${item.theme.name}`}
+                      value={renaming.name}
+                      maxLength={60}
+                      onChange={(e) => startRename({ id: item.id, name: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape") {
+                          e.preventDefault(); // cancel the rename, not the whole drawer
+                          e.stopPropagation();
+                          startRename(null);
+                        }
+                      }}
+                      onBlur={() => void commitRename()}
+                    />
+                  </form>
+                ) : (
+                  <div className="saved-row">
+                    <button className="open" onClick={() => openItem(item)} aria-label={`Open ${item.theme.name}`}>
+                      <Strip theme={item.theme} />
+                      <span className="saved-name">{item.theme.name}</span>
+                      <span className="small">
+                        {item.theme.mode} · edited {ago(item.savedAt)}
+                      </span>
+                    </button>
+                    <span className="saved-actions">
+                      <button
+                        className="btn sm"
+                        onClick={() => startRename({ id: item.id, name: item.theme.name })}
+                        aria-label={`Rename ${item.theme.name}`}
+                      >
+                        Rename
+                      </button>
+                      <button
+                        className="btn sm"
+                        onClick={() => void duplicate(item)}
+                        aria-label={`Duplicate ${item.theme.name}`}
+                      >
+                        Duplicate
+                      </button>
+                      <button
+                        className="btn sm"
+                        onClick={() => void remove(item)}
+                        aria-label={`Delete ${item.theme.name}`}
+                      >
+                        Delete
+                      </button>
+                    </span>
+                  </div>
+                )}
               </li>
             ))}
           </ul>

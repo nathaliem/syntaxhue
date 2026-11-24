@@ -1324,7 +1324,7 @@ pre.code {
   flex-direction: column;
   gap: 6px;
 }
-.saved button {
+.saved .open {
   width: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1338,8 +1338,31 @@ pre.code {
   color: inherit;
   cursor: pointer;
 }
-.saved button:hover {
+.saved .open:hover {
   border-color: var(--ink-2);
+}
+.saved-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.saved-row input {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid var(--ink-2);
+  border-radius: 8px;
+  background: var(--surface);
+  color: inherit;
+}
+.saved-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.undo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .saved-name {
   font-weight: 600;
