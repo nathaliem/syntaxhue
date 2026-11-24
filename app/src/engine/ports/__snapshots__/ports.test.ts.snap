@@ -3,7 +3,7 @@
 exports[`port alacritty > matches its snapshot 1`] = `
 [
   {
-    "content": "# Fixture Dark, made with Hueprint
+    "content": "# Fixture Dark, made with SyntaxHue
 
 [colors.primary]
 background = "#1e1408"
@@ -45,7 +45,7 @@ white = "#e5dcd4"
 exports[`port alacritty > matches its snapshot 2`] = `
 [
   {
-    "content": "# Fixture Light, made with Hueprint
+    "content": "# Fixture Light, made with SyntaxHue
 
 [colors.primary]
 background = "#f7f9eb"
@@ -796,7 +796,7 @@ exports[`port jetbrains > matches its snapshot 1`] = `
 [
   {
     "content": "<?xml version="1.0" encoding="UTF-8"?>
-<!-- Fixture Dark, made with Hueprint -->
+<!-- Fixture Dark, made with SyntaxHue -->
 <scheme name="Fixture Dark" version="142" parent_scheme="Darcula">
   <colors>
     <option name="CARET_COLOR" value="7b9dff" />
@@ -1263,7 +1263,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
 [
   {
     "content": "<?xml version="1.0" encoding="UTF-8"?>
-<!-- Fixture Light, made with Hueprint -->
+<!-- Fixture Light, made with SyntaxHue -->
 <scheme name="Fixture Light" version="142" parent_scheme="Default">
   <colors>
     <option name="CARET_COLOR" value="824fa0" />
@@ -1729,7 +1729,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
 exports[`port kitty > matches its snapshot 1`] = `
 [
   {
-    "content": "# Fixture Dark, made with Hueprint
+    "content": "# Fixture Dark, made with SyntaxHue
 foreground #e5dcd4
 background #1e1408
 selection_foreground #e5dcd4
@@ -1761,7 +1761,7 @@ color15 #e5dcd4
 exports[`port kitty > matches its snapshot 2`] = `
 [
   {
-    "content": "# Fixture Light, made with Hueprint
+    "content": "# Fixture Light, made with SyntaxHue
 foreground #292a21
 background #f7f9eb
 selection_foreground #292a21
@@ -1793,7 +1793,7 @@ color15 #f7f9eb
 exports[`port neovim > matches its snapshot 1`] = `
 [
   {
-    "content": "-- Fixture Dark, made with Hueprint
+    "content": "-- Fixture Dark, made with SyntaxHue
 -- Save as colors/fixture-dark.lua on your runtimepath, then run :colorscheme fixture-dark
 
 vim.cmd("highlight clear")
@@ -2053,7 +2053,7 @@ vim.g.terminal_color_15 = "#e5dcd4"
 exports[`port neovim > matches its snapshot 2`] = `
 [
   {
-    "content": "-- Fixture Light, made with Hueprint
+    "content": "-- Fixture Light, made with SyntaxHue
 -- Save as colors/fixture-light.lua on your runtimepath, then run :colorscheme fixture-light
 
 vim.cmd("highlight clear")
@@ -2401,7 +2401,7 @@ exports[`port sublime > matches its snapshot 1`] = `
   {
     "content": "{
   "name": "Fixture Dark",
-  "author": "Hueprint",
+  "author": "SyntaxHue",
   "variables": {
     "bg": "#1e1408",
     "fg": "#e5dcd4",
@@ -2533,7 +2533,7 @@ exports[`port sublime > matches its snapshot 2`] = `
   {
     "content": "{
   "name": "Fixture Light",
-  "author": "Hueprint",
+  "author": "SyntaxHue",
   "variables": {
     "bg": "#f7f9eb",
     "fg": "#292a21",
@@ -2774,7 +2774,7 @@ exports[`port zed > matches its snapshot 1`] = `
     "content": "{
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
   "name": "Fixture Dark",
-  "author": "Hueprint",
+  "author": "SyntaxHue",
   "themes": [
     {
       "name": "Fixture Dark",
@@ -3027,7 +3027,7 @@ exports[`port zed > matches its snapshot 2`] = `
     "content": "{
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
   "name": "Fixture Light",
-  "author": "Hueprint",
+  "author": "SyntaxHue",
   "themes": [
     {
       "name": "Fixture Light",

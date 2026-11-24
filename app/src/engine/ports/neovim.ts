@@ -260,7 +260,7 @@ function lua(input: PortInput): string {
   };
   const p = ansiPalette(input);
   const term = [...p.normal, ...p.bright].map((col, k) => `vim.g.terminal_color_${k} = "${col}"`);
-  return `-- ${input.name.replace(/[\r\n]+/g, " ")}, made with Hueprint
+  return `-- ${input.name.replace(/[\r\n]+/g, " ")}, made with SyntaxHue
 -- Save as colors/${name}.lua on your runtimepath, then run :colorscheme ${name}
 
 vim.cmd("highlight clear")

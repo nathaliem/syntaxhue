@@ -30,7 +30,7 @@ export function publishGuide(theme: ThemeState, o: ExtensionOptions) {
     },
     {
       title: "Create a Personal Access Token",
-      body: "In Azure DevOps open User settings, then Personal access tokens, and create one. Set Organization to “All accessible organizations” and choose the custom scope Marketplace → Manage. Copy it now: it is shown once. Never paste it into Hueprint or share it.",
+      body: "In Azure DevOps open User settings, then Personal access tokens, and create one. Set Organization to “All accessible organizations” and choose the custom scope Marketplace → Manage. Copy it now: it is shown once. Never paste it into SyntaxHue or share it.",
       link: { href: "https://dev.azure.com", label: "Azure DevOps" },
     },
     {

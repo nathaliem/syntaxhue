@@ -171,7 +171,7 @@ export const zed: PortTarget = {
           {
             $schema: SCHEMA,
             name: input.name,
-            author: "Hueprint",
+            author: "SyntaxHue",
             themes: [{ name: input.name, appearance: input.mode, style: style(input) }],
           },
           null,

@@ -84,7 +84,7 @@ describe("Neovim colorscheme", () => {
 
   it("keeps an unusual theme name from breaking out of the comment", () => {
     const text = src({ ...theme, name: "Evil\nvim.cmd('quit')" });
-    expect(text.split("\n")[0]).toBe("-- Evil vim.cmd('quit'), made with Hueprint");
+    expect(text.split("\n")[0]).toBe("-- Evil vim.cmd('quit'), made with SyntaxHue");
     expect(text.split("\n").filter((l) => l.startsWith("vim.cmd('quit')"))).toHaveLength(0);
   });
 });

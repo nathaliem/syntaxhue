@@ -51,7 +51,7 @@ export function CrashScreen({
     <main className="crash" role="alert">
       <div className="crash-card">
         <h1>Something went wrong</h1>
-        <p>Hueprint hit an unexpected error. Your last saved theme is still stored in this browser.</p>
+        <p>SyntaxHue hit an unexpected error. Your last saved theme is still stored in this browser.</p>
         <div className="crash-actions">
           <button className="btn primary" onClick={onReload}>
             Reload with last saved theme

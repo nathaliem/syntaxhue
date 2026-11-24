@@ -194,7 +194,7 @@ function scheme(input: PortInput): string {
   );
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- ${esc(input.name)}, made with Hueprint -->
+<!-- ${esc(input.name)}, made with SyntaxHue -->
 <scheme name="${esc(input.name)}" version="142" parent_scheme="${input.mode === "dark" ? "Darcula" : "Default"}">
   <colors>
 ${COLORS.map(([k, v]) => `    <option name="${k}" value="${col(v)}" />`).join("\n")}

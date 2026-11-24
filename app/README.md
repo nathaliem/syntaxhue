@@ -1,4 +1,4 @@
-# Hueprint (prototype M0)
+# SyntaxHue (prototype M0)
 
 Make a VS Code color theme in minutes: shuffle a readable base, lock the colors you like, tune by role, paste the snippet into `settings.json`.
 
@@ -26,8 +26,8 @@ Dragging a slider should update the preview in under 50 ms per frame, even on a 
 (hidden pages get throttled animation frames), then run in the page console:
 
 ```js
-await hueprintDrag({ role: "Keyword", slider: "Lightness", slowdown: 4 });
-await hueprintDrag({ vibe: "Saturation", slowdown: 4 });
+await syntaxhueDrag({ role: "Keyword", slider: "Lightness", slowdown: 4 });
+await syntaxhueDrag({ vibe: "Saturation", slowdown: 4 });
 ```
 
 `slowdown: 4` keeps the main thread busy to imitate Chrome's 4x CPU throttling. It prints median, 95th
@@ -39,5 +39,5 @@ role sliders about 10 ms at p95, vibe sliders that recolor everything about 27 m
 Hosted on Vercel (project `hueprint`, root directory `app`), connected to the GitHub repo:
 
 - **Pull requests and other branches** get their own preview URL; Vercel comments it on the PR.
-- **Pushes to `main`** deploy to production at https://hueprint.nathaliemaes.be (also `hueprint-silk.vercel.app`).
+- **Pushes to `main`** deploy to production at https://syntaxhue.nathaliemaes.be (also `hueprint.nathaliemaes.be` and `hueprint-silk.vercel.app`).
 - `vercel.json` sets long-lived caching for the hashed `/assets` files and basic security headers. The app keeps its state in the URL hash, so no rewrite rules are needed.

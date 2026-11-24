@@ -181,7 +181,7 @@ func Shuffle(seed int) (*Palette, error) {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Hueprint</title>
+    <title>SyntaxHue</title>
     <link rel="stylesheet" href="/theme.css" />
   </head>
   <body class="dark">
@@ -271,7 +271,7 @@ button:disabled {
     errorWord: "#594199",
     modified: [16, 17, 18],
     added: [7],
-    hover: { signature: '"foreground": string', error: "Color is below 4.5:1 contrast. hueprint" },
+    hover: { signature: '"foreground": string', error: "Color is below 4.5:1 contrast. syntaxhue" },
   },
   {
     lang: "markdown",
@@ -279,7 +279,7 @@ button:disabled {
     name: "Markdown",
     file: "README.md",
     crumb: "Features",
-    code: `# Hueprint
+    code: `# SyntaxHue
 
 Pick colors that stay **readable** on any background.
 
@@ -288,7 +288,7 @@ Pick colors that stay **readable** on any background.
 - Shuffle a whole palette in one click
 - Lock the colors you like
 - Export a \`settings.json\` snippet
-- See [contrast](https://hueprint.nathaliemaes.be) at a glance
+- See [contrast](https://syntaxhue.nathaliemaes.be) at a glance
 
 ## Run it
 
@@ -303,7 +303,7 @@ Start with \`npm run dev\`, then open the app.
     modified: [8, 9, 10],
     added: [14],
     hover: {
-      signature: "[contrast](https://hueprint.nathaliemaes.be)",
+      signature: "[contrast](https://syntaxhue.nathaliemaes.be)",
       error: "Link text should describe the destination. markdownlint",
     },
   },

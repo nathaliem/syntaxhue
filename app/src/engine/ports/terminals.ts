@@ -147,7 +147,7 @@ export const alacritty = make(
   (i) => `${file(i)}.toml`,
   (p, i) => {
     const row = (list: string[]) => NAMES.map((n, k) => `${n} = ${toml(list[k])}`).join("\n");
-    return `# ${i.name.replace(/[\r\n]+/g, " ")}, made with Hueprint
+    return `# ${i.name.replace(/[\r\n]+/g, " ")}, made with SyntaxHue
 
 [colors.primary]
 background = ${toml(p.background)}
@@ -180,7 +180,7 @@ export const kitty = make(
   (i) => `${file(i)}.conf`,
   (p, i) =>
     [
-      `# ${i.name.replace(/[\r\n]+/g, " ")}, made with Hueprint`,
+      `# ${i.name.replace(/[\r\n]+/g, " ")}, made with SyntaxHue`,
       `foreground ${p.foreground}`,
       `background ${p.background}`,
       `selection_foreground ${p.foreground}`,

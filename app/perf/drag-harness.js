@@ -2,8 +2,8 @@
  * Drag benchmark for HP-407. Paste into the browser console (or run through a browser tool) on a page
  * that shows the app, ideally the production build (`npm run build && npm run preview`).
  *
- *   await hueprintDrag({ role: "Keyword", slider: "Lightness", steps: 120, slowdown: 4 })
- *   await hueprintDrag({ vibe: "Saturation", steps: 120, slowdown: 4 })
+ *   await syntaxhueDrag({ role: "Keyword", slider: "Lightness", steps: 120, slowdown: 4 })
+ *   await syntaxhueDrag({ vibe: "Saturation", steps: 120, slowdown: 4 })
  *
  * Each step sets the slider like a pointer drag would (an `input` event), lets React render, forces
  * layout, and waits for the next paint. `slowdown` imitates Chrome's CPU throttling by keeping the
@@ -12,7 +12,7 @@
  * and style/layout, and total (until the frame is painted). Needs the Browser pane to be visible,
  * otherwise animation frames are throttled and the totals mean nothing.
  */
-window.hueprintDrag = async function hueprintDrag({ role, slider, vibe, steps = 120, slowdown = 1 } = {}) {
+window.syntaxhueDrag = async function syntaxhueDrag({ role, slider, vibe, steps = 120, slowdown = 1 } = {}) {
   const nextPaint = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
   const setValue = (input, v) => {
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set.call(input, String(v));

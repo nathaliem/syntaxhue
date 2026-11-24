@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# HP-508: open Hueprint's three fixture themes in a throwaway VS Code profile, to compare with the preview.
+# HP-508: open SyntaxHue's three fixture themes in a throwaway VS Code profile, to compare with the preview.
 # Your own VS Code settings and extensions are not touched. Run from the app/ folder: bash ci/fidelity.sh
 set -euo pipefail
 OUT="${1:-/tmp/hueprint-fidelity}"

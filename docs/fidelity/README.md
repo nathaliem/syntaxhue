@@ -1,6 +1,6 @@
 # Fidelity check (HP-508)
 
-Real VS Code (1.145.2) with the exported `.vsix` of three fixture themes, next to the Hueprint preview.
+Real VS Code (1.145.2) with the exported `.vsix` of three fixture themes, next to the SyntaxHue preview.
 Reproduce with `bash ci/fidelity.sh` in `app/`.
 
 | File | Theme | Sample |

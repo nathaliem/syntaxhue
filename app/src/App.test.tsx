@@ -8,7 +8,7 @@ import { generate, ROLES } from "./engine/theme";
 describe("app shell (smoke)", () => {
   it("renders the top bar, role rail and preview", () => {
     render(<App />);
-    expect(screen.getByText("Hueprint")).toBeInTheDocument();
+    expect(screen.getByText("SyntaxHue")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "Theme name" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^Shuffle \d+ colors?/ })).toBeEnabled();
     expect(screen.getByRole("group", { name: "Theme mode" })).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("opening a share link", () => {
   it("says so when the link can't be read", () => {
     history.replaceState(null, "", "/#t=pnot-a-theme");
     render(<App />);
-    expect(banner()).toHaveTextContent("doesn't contain a theme Hueprint can read");
+    expect(banner()).toHaveTextContent("doesn't contain a theme SyntaxHue can read");
   });
 
   it("Export > Share link gives a compact link that opens the same theme", async () => {

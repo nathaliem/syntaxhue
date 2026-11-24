@@ -67,7 +67,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
   const suggested = {
     displayName: theme.name,
     id: slugify(theme.name),
-    description: `${theme.name}: a ${theme.mode} color theme made with Hueprint.`,
+    description: `${theme.name}: a ${theme.mode} color theme made with SyntaxHue.`,
   };
   const value = {
     displayName: over.displayName ?? suggested.displayName,

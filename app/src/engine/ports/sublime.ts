@@ -35,7 +35,7 @@ function scheme(input: PortInput) {
 
   return {
     name: input.name,
-    author: "Hueprint",
+    author: "SyntaxHue",
     variables,
     globals: {
       background: ref("bg"),

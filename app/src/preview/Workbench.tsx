@@ -79,7 +79,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
           <i />
           <i />
         </span>
-        <span {...r("muted")}>shuffle.ts — hueprint</span>
+        <span {...r("muted")}>shuffle.ts — syntaxhue</span>
       </div>
 
       <div className="wb-body">
@@ -223,7 +223,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
                   ➜
                 </span>{" "}
                 <span {...r("info")} style={{ color: "var(--r-info)" }}>
-                  hueprint
+                  syntaxhue
                 </span>{" "}
                 <span {...r("fg")}>npm test</span>
               </div>

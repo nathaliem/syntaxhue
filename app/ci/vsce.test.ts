@@ -44,7 +44,7 @@ const options: ExtensionOptions = {
   version: "1.0.0",
   description: "Fixture theme used to check the package.",
   license: "MIT",
-  author: "Hueprint CI",
+  author: "SyntaxHue CI",
   year: 2026,
   repository: "https://github.com/hueprint/fixture",
 };

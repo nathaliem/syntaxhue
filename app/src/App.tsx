@@ -77,7 +77,7 @@ export default function App() {
       <header className="bar">
         <div className="brand">
           <img src="/favicon.svg" alt="" width="28" height="28" />
-          <span>Hueprint</span>
+          <span>SyntaxHue</span>
         </div>
         <label className="name">
           <span className="sr-only">Theme name</span>
@@ -158,7 +158,7 @@ export default function App() {
             <div className="notice" role="status">
               {notice.kind === "badLink" ? (
                 <>
-                  <span>That link doesn't contain a theme Hueprint can read, so your last theme is shown.</span>
+                  <span>That link doesn't contain a theme SyntaxHue can read, so your last theme is shown.</span>
                   <button className="btn sm" onClick={dismissNotice}>
                     Dismiss
                   </button>

@@ -29,7 +29,7 @@ describe.skipIf(!out)("fidelity fixtures", () => {
         version: "1.0.0",
         description: `Fidelity check ${t.id}`,
         license: "MIT" as const,
-        author: "Hueprint",
+        author: "SyntaxHue",
         year: 2026,
       };
       writeFileSync(join(dir, `${t.id}.vsix`), buildVsix(theme, options));
