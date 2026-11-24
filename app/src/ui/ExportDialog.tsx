@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
 import { ExtensionForm } from "./ExtensionForm";
+import { PortsPanel } from "./PortsPanel";
 import { shareUrl } from "../state";
 
-type Tab = "settings" | "file" | "extension" | "link";
+type Tab = "settings" | "file" | "extension" | "editors" | "terminals" | "link";
 
 export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -68,6 +69,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
               ["settings", "Paste into settings"],
               ["file", "Theme file"],
               ["extension", "Extension (.vsix)"],
+              ["editors", "Other editors"],
+              ["terminals", "Terminals"],
               ["link", "Share link"],
             ] as [Tab, string][]
           ).map(([id, label]) => (
@@ -134,6 +137,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
         )}
 
         {tab === "extension" && <ExtensionForm theme={theme} />}
+
+        {(tab === "editors" || tab === "terminals") && <PortsPanel key={tab} theme={theme} group={tab} />}
 
         {tab === "link" && (
           <div className="export-body">
