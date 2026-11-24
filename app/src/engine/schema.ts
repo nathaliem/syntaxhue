@@ -1,5 +1,5 @@
 import { isHex } from "./color";
-import { ROLE_IDS, THEME_VERSION, type FontStyle, type ThemeState } from "./theme";
+import { ROLE_IDS, THEME_VERSION, VIBE_KEYS, ZERO_VIBE, type FontStyle, type ThemeState, type Vibe } from "./theme";
 
 /**
  * Versioned persistence for `ThemeState` (saved in the browser and carried by share links).
@@ -11,8 +11,11 @@ import { ROLE_IDS, THEME_VERSION, type FontStyle, type ThemeState } from "./them
 /** Turns version N data into version N+1 data. Input is untrusted, so read it defensively. */
 export type Migration = (old: Record<string, unknown>) => Record<string, unknown>;
 
-/** Keyed by the version being migrated *from*. Empty while v1 is the only version. */
-export const MIGRATIONS: Record<number, Migration> = {};
+/** Keyed by the version being migrated *from*. */
+export const MIGRATIONS: Record<number, Migration> = {
+  // v2 added the vibe sliders. Existing themes start with all of them at 0.
+  1: (old) => ({ ...old, vibe: { ...ZERO_VIBE } }),
+};
 
 const FONT_STYLES: readonly FontStyle[] = ["italic", "bold", "underline"];
 
@@ -46,6 +49,17 @@ export function migrate(
   return data;
 }
 
+/** Vibe values are clamped to -1..1 and rounded to the slider step; anything else counts as 0. */
+export function readVibe(raw: unknown): Vibe {
+  const vibe = { ...ZERO_VIBE };
+  if (!isObject(raw)) return vibe;
+  for (const k of VIBE_KEYS) {
+    const v = raw[k];
+    if (typeof v === "number" && Number.isFinite(v)) vibe[k] = Math.round(Math.max(-1, Math.min(1, v)) * 100) / 100;
+  }
+  return vibe;
+}
+
 /** Validates current-version data and drops what it can safely drop. Null if it isn't a usable theme. */
 export function validateTheme(data: Record<string, unknown>): ThemeState | null {
   if (data.version !== THEME_VERSION) return null;
@@ -61,7 +75,7 @@ export function validateTheme(data: Record<string, unknown>): ThemeState | null 
     roles[id] = { color: r.color.toLowerCase(), locked: r.locked === true, fontStyle };
   }
   const name = typeof data.name === "string" ? data.name.slice(0, 60) : "Untitled";
-  return { version: THEME_VERSION, name, mode: data.mode, roles };
+  return { version: THEME_VERSION, name, mode: data.mode, roles, vibe: readVibe(data.vibe) };
 }
 
 /** Anything stored or received as JSON -> a current, valid `ThemeState`, or null (callers start fresh). */

@@ -117,13 +117,20 @@ export interface RoleState {
 }
 
 /** Bump when the saved shape of ThemeState changes, and add a migration in schema.ts. */
-export const THEME_VERSION = 1;
+export const THEME_VERSION = 2;
+
+/** Global "vibe" sliders, each -1..1 with 0 = no change. Applied on top of the roles, never stored in them. */
+export const VIBE_KEYS = ["contrast", "saturation", "warmth", "depth"] as const;
+export type VibeKey = (typeof VIBE_KEYS)[number];
+export type Vibe = Record<VibeKey, number>;
+export const ZERO_VIBE: Readonly<Vibe> = Object.freeze({ contrast: 0, saturation: 0, warmth: 0, depth: 0 });
 
 export interface ThemeState {
   version: typeof THEME_VERSION;
   name: string;
   mode: Mode;
   roles: Record<RoleId, RoleState>;
+  vibe: Vibe;
 }
 
 // ---------- random ----------
@@ -299,7 +306,8 @@ function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
       ? prev.name
       : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
 
-  return { version: THEME_VERSION, name, mode, roles };
+  // Vibe is the user's setting for how the theme feels, so a shuffle or mode switch keeps it.
+  return { version: THEME_VERSION, name, mode, roles, vibe: { ...(prev?.vibe ?? ZERO_VIBE) } };
 }
 
 export interface ContrastIssue {

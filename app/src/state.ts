@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { generate, unlockedCount, type FontStyle, type Mode, type RoleId, type ThemeState } from "./engine/theme";
+import {
+  generate,
+  unlockedCount,
+  ZERO_VIBE,
+  type FontStyle,
+  type Mode,
+  type RoleId,
+  type ThemeState,
+  type VibeKey,
+} from "./engine/theme";
 import { parseTheme } from "./engine/schema";
 import { decodeTheme, encodeTheme } from "./engine/share";
 
@@ -20,6 +29,8 @@ export type Action =
   | { type: "color"; role: RoleId; color: string; commit?: boolean }
   | { type: "lock"; role: RoleId }
   | { type: "lockAll"; locked: boolean }
+  | { type: "vibe"; key: VibeKey; value: number; commit?: boolean }
+  | { type: "vibeReset"; key?: VibeKey }
   | { type: "style"; role: RoleId; style: FontStyle }
   | { type: "name"; name: string }
   | { type: "load"; theme: ThemeState }
@@ -55,6 +66,18 @@ export function reducer(h: History, a: Action): History {
       // A commit that changes nothing and ends no edit is not worth an undo step.
       if (!h.pending && t.roles[a.role].color === a.color) return h;
       return push(h, updateRole(t, a.role, { color: a.color }));
+    }
+    case "vibe": {
+      const value = Math.round(Math.max(-1, Math.min(1, a.value)) * 100) / 100;
+      const next = { ...t, vibe: { ...t.vibe, [a.key]: value } };
+      if (a.commit === false) return { ...h, present: next, pending: h.pending ?? h.present }; // mid-drag
+      if (!h.pending && t.vibe[a.key] === value) return h; // nothing changed, no undo step
+      return push(h, next);
+    }
+    case "vibeReset": {
+      const vibe = a.key ? { ...t.vibe, [a.key]: 0 } : { ...ZERO_VIBE };
+      if (!h.pending && (Object.keys(vibe) as VibeKey[]).every((k) => vibe[k] === t.vibe[k])) return h;
+      return push(h, { ...t, vibe });
     }
     case "lock":
       return { ...h, present: updateRole(t, a.role, { locked: !t.roles[a.role].locked }) };

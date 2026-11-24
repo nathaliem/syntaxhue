@@ -1,5 +1,6 @@
 import { mix, onColor, shiftL, withAlpha, type Hex } from "./color";
 import type { RoleId, ThemeState } from "./theme";
+import { effectiveTheme } from "./vibe";
 
 export interface Surfaces {
   editor: Hex;
@@ -15,20 +16,27 @@ export interface Surfaces {
   onAccent: Hex;
 }
 
-/** Surface ladder derived from bg via OKLCH lightness steps. */
-export function surfaces(t: ThemeState): Surfaces {
+/**
+ * Surface ladder derived from bg via OKLCH lightness steps. The Depth vibe slider scales the steps:
+ * -1 is flat (no steps, only the border separates), 0 is the default ladder, +1 doubles the steps.
+ * Takes the stored theme; vibe is applied here (applying it twice is harmless, see `effectiveTheme`).
+ */
+export function surfaces(base: ThemeState): Surfaces {
+  const t = effectiveTheme(base);
   const bg = t.roles.bg.color;
   const d = t.mode === "dark";
   const accent = t.roles.accent.color;
+  const k = 1 + t.vibe.depth;
+  const step = (dark: number, light: number) => shiftL(bg, (d ? dark : light) * k);
   return {
     editor: bg,
-    sidebar: shiftL(bg, d ? -0.03 : -0.025),
-    activityBar: shiftL(bg, d ? -0.05 : -0.045),
-    panel: shiftL(bg, d ? -0.03 : -0.025),
-    tabInactive: shiftL(bg, d ? -0.03 : -0.025),
-    widget: shiftL(bg, d ? 0.04 : -0.015),
-    input: shiftL(bg, d ? 0.035 : -0.03),
-    border: mix(bg, t.roles.fg.color, d ? 0.12 : 0.14),
+    sidebar: step(-0.03, -0.025),
+    activityBar: step(-0.05, -0.045),
+    panel: step(-0.03, -0.025),
+    tabInactive: step(-0.03, -0.025),
+    widget: step(0.04, -0.015),
+    input: step(0.035, -0.03),
+    border: mix(bg, t.roles.fg.color, (d ? 0.12 : 0.14) * (1 + 0.5 * t.vibe.depth)),
     lineHighlight: withAlpha(t.roles.fg.color, d ? 0.05 : 0.045),
     selection: withAlpha(accent, d ? 0.3 : 0.22),
     onAccent: onColor(accent),
@@ -38,7 +46,8 @@ export function surfaces(t: ThemeState): Surfaces {
 /** Which role each workbench key comes from — powers click-to-identify. */
 export type KeySource = RoleId | "derived";
 
-export function workbenchColors(t: ThemeState): Record<string, string> {
+export function workbenchColors(base: ThemeState): Record<string, string> {
+  const t = effectiveTheme(base);
   const s = surfaces(t);
   const c = (id: RoleId) => t.roles[id].color;
   return {
@@ -179,7 +188,8 @@ const SCOPES: { role: RoleId; scope: string[] }[] = [
   { role: "function", scope: ["entity.other.attribute-name"] },
 ];
 
-export function tokenRules(t: ThemeState): TokenRule[] {
+export function tokenRules(base: ThemeState): TokenRule[] {
+  const t = effectiveTheme(base);
   return SCOPES.map(({ role, scope }) => {
     const r = t.roles[role];
     const settings: TokenRule["settings"] = { foreground: r.color };
@@ -189,8 +199,9 @@ export function tokenRules(t: ThemeState): TokenRule[] {
 }
 
 export function semanticRules(
-  t: ThemeState,
+  base: ThemeState,
 ): Record<string, string | { foreground: string; italic?: boolean; bold?: boolean; underline?: boolean }> {
+  const t = effectiveTheme(base);
   const rule = (id: RoleId) => {
     const r = t.roles[id];
     if (!r.fontStyle.length) return r.color;

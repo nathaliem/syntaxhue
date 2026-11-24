@@ -10,6 +10,9 @@ const LEGACY_COLORS =
     ",",
   );
 
+/** A binary link made before vibe existed (payload version 1), kept as a frozen fixture. */
+const V1_BINARY_LINK = "pAQEgAAAQBgAAAAAA9PD9KicvQHoggn2QXXcAl1WSEXJAV1y4PTZOlV8ASFIztjEynV8AAGqgHncpRnJvemVuIFYx";
+
 const payloadBytes = (link: string) =>
   Uint8Array.from(atob(link.slice(1).replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
 const fromBytes = (bytes: Uint8Array) =>
@@ -32,6 +35,42 @@ describe("share links", () => {
       const back = decodeTheme(encodeTheme(t))!;
       expect(back).toEqual({ ...t, roles: expectRoles(t) });
     }
+  });
+
+  it("round-trips vibe, including negative values, and leaves it out when all 0", () => {
+    const t = generate(3, "dark");
+    const plain = encodeTheme(t);
+    t.vibe = { contrast: 0.35, saturation: -0.8, warmth: 1, depth: -0.01 };
+    const link = encodeTheme(t);
+    expect(decodeTheme(link)!.vibe).toEqual(t.vibe);
+    expect(link.length - plain.length).toBeLessThanOrEqual(6); // 4 bytes
+    expect(decodeTheme(plain)!.vibe).toEqual({ contrast: 0, saturation: 0, warmth: 0, depth: 0 });
+  });
+
+  it("refuses vibe bytes that are out of range or cut off", () => {
+    const t = generate(3, "dark");
+    t.vibe = { contrast: 0.5, saturation: 0, warmth: 0, depth: 0 };
+    const bytes = payloadBytes(encodeTheme(t));
+    const bad = bytes.slice();
+    bad[57] = 127; // first vibe byte = 1.27, outside -1..1
+    expect(decodeTheme(fromBytes(bad))).toBeNull();
+    expect(decodeTheme(fromBytes(bytes.slice(0, 59)))).toBeNull(); // vibe flag set but bytes missing
+  });
+
+  it("opens a link made before vibe existed, with vibe at 0", () => {
+    const t = decodeTheme(V1_BINARY_LINK)!;
+    expect(t.name).toBe("Frozen V1");
+    expect(t.mode).toBe("light");
+    expect(t.roles.string.locked).toBe(true);
+    expect(t.roles.keyword.fontStyle).toEqual(["bold", "underline"]);
+    expect(t.roles.bg.color).toBe("#f4f0fd");
+    expect(t.vibe).toEqual({ contrast: 0, saturation: 0, warmth: 0, depth: 0 });
+  });
+
+  it("refuses a vibe flag in a version 1 payload", () => {
+    const b = payloadBytes(V1_BINARY_LINK).slice();
+    b[1] |= 2;
+    expect(decodeTheme(fromBytes(b))).toBeNull();
   });
 
   it("keeps non-ASCII names and clamps long ones", () => {
@@ -67,7 +106,7 @@ describe("share links", () => {
     };
     expect(decodeTheme(withByte(0, THEME_VERSION + 1))).toBeNull();
     expect(decodeTheme(withByte(0, 0))).toBeNull();
-    expect(decodeTheme(withByte(1, 2))).toBeNull(); // a flag this version doesn't know
+    expect(decodeTheme(withByte(1, 4))).toBeNull(); // a flag this version doesn't know
     expect(decodeTheme(fromBytes(bytes.slice(0, 20)))).toBeNull();
     expect(decodeTheme(link)).not.toBeNull();
   });

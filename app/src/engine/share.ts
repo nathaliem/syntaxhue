@@ -1,5 +1,5 @@
 import { isHex } from "./color";
-import { ROLE_IDS, THEME_VERSION, type FontStyle, type ThemeState } from "./theme";
+import { ROLE_IDS, THEME_VERSION, VIBE_KEYS, ZERO_VIBE, type FontStyle, type ThemeState } from "./theme";
 
 /**
  * Share links carry the theme in the URL hash: `#t=<link>`.
@@ -8,15 +8,18 @@ import { ROLE_IDS, THEME_VERSION, type FontStyle, type ThemeState } from "./them
  * (lz-string was measured first and made links longer: hex colors are close to random, so they don't
  * compress, while packing them as bytes saves a third.)
  *
- *   byte 0        THEME_VERSION the payload was made with (links from another version are refused)
- *   byte 1        flags: bit 0 = light mode. Bit 1 is reserved for vibe values (HP-205), which will
- *                 follow the styles as extra bytes when that bit is set. Other bits must be 0.
+ *   byte 0        THEME_VERSION the payload was made with. Version 1 payloads (made before vibe existed)
+ *                 are still read; any other version is refused.
+ *   byte 1        flags: bit 0 = light mode, bit 1 = vibe values present (version 2+). Other bits must be 0.
  *   bytes 2-3     locks: bit i set = role i (ROLE_IDS order) is locked
  *   next 8 bytes  font styles, one nibble per role: 1 italic, 2 bold, 4 underline
  *   next 45 bytes colors, 3 bytes (r, g, b) per role
+ *   4 bytes       only if the vibe flag is set: contrast, saturation, warmth, depth as signed bytes (value x 100)
  *   rest          theme name, UTF-8
  *
- * Legacy format, still readable: "1.<d|l>.<name>.<hex hex ...>.<styles>" (no locks).
+ * Themes with all vibe sliders at 0 leave the vibe out, which keeps their links short.
+ *
+ * Legacy format, still readable: "1.<d|l>.<name>.<hex hex ...>.<styles>" (no locks, no vibe).
  */
 
 const STYLE_BITS: [FontStyle, number][] = [
@@ -25,7 +28,9 @@ const STYLE_BITS: [FontStyle, number][] = [
   ["underline", 4],
 ];
 const FLAG_LIGHT = 1;
-const FLAGS_KNOWN = FLAG_LIGHT;
+const FLAG_VIBE = 2;
+const FLAGS_KNOWN = FLAG_LIGHT | FLAG_VIBE;
+const OLDEST_PAYLOAD_VERSION = 1;
 const N = ROLE_IDS.length;
 const STYLE_BYTES = Math.ceil(N / 2);
 const FIXED = 1 + 1 + 2 + STYLE_BYTES + N * 3;
@@ -37,9 +42,11 @@ if (N > 16) throw new Error("Share links store locks in 16 bits; extend the form
 
 export function encodeTheme(t: ThemeState): string {
   const name = new TextEncoder().encode(t.name.slice(0, NAME_MAX));
-  const bytes = new Uint8Array(FIXED + name.length);
+  const hasVibe = VIBE_KEYS.some((k) => t.vibe[k] !== 0);
+  const nameAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+  const bytes = new Uint8Array(nameAt + name.length);
   bytes[0] = THEME_VERSION;
-  bytes[1] = t.mode === "light" ? FLAG_LIGHT : 0;
+  bytes[1] = (t.mode === "light" ? FLAG_LIGHT : 0) | (hasVibe ? FLAG_VIBE : 0);
   let locks = 0;
   ROLE_IDS.forEach((id, i) => {
     const r = t.roles[id];
@@ -54,7 +61,8 @@ export function encodeTheme(t: ThemeState): string {
   });
   bytes[2] = locks & 255;
   bytes[3] = locks >> 8;
-  bytes.set(name, FIXED);
+  if (hasVibe) VIBE_KEYS.forEach((k, i) => (bytes[FIXED + i] = Math.round(t.vibe[k] * 100) & 255));
+  bytes.set(name, nameAt);
   return "p" + toBase64Url(bytes);
 }
 
@@ -83,11 +91,26 @@ export function decodeTheme(s: string): ThemeState | null {
 
 function decodeBinary(payload: string): ThemeState | null {
   const bytes = fromBase64Url(payload);
-  // Links from another version of the saved shape (or with unknown flags) are refused, not guessed at.
-  if (!bytes || bytes.length < FIXED || bytes[0] !== THEME_VERSION || bytes[1] & ~FLAGS_KNOWN) return null;
+  if (!bytes || bytes.length < FIXED) return null;
+  // Links from a version we don't know (or with unknown flags) are refused, not guessed at.
+  const version = bytes[0];
+  if (version < OLDEST_PAYLOAD_VERSION || version > THEME_VERSION) return null;
+  const flags = bytes[1];
+  if (flags & ~FLAGS_KNOWN || (flags & FLAG_VIBE && version < 2)) return null;
+  const hasVibe = (flags & FLAG_VIBE) !== 0;
+  const nameAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+  if (bytes.length < nameAt) return null;
+  const vibe = { ...ZERO_VIBE };
+  if (hasVibe) {
+    for (const [i, k] of VIBE_KEYS.entries()) {
+      const v = ((bytes[FIXED + i] << 24) >> 24) / 100; // signed byte
+      if (v < -1 || v > 1) return null;
+      vibe[k] = v;
+    }
+  }
   let name: string;
   try {
-    name = new TextDecoder("utf-8", { fatal: true }).decode(bytes.subarray(FIXED)).slice(0, NAME_MAX);
+    name = new TextDecoder("utf-8", { fatal: true }).decode(bytes.subarray(nameAt)).slice(0, NAME_MAX);
   } catch {
     return null;
   }
@@ -103,7 +126,7 @@ function decodeBinary(payload: string): ThemeState | null {
       fontStyle: STYLE_BITS.filter(([, bit]) => nibble & bit).map(([style]) => style),
     };
   });
-  return { version: THEME_VERSION, name, mode: bytes[1] & FLAG_LIGHT ? "light" : "dark", roles };
+  return { version: THEME_VERSION, name, mode: flags & FLAG_LIGHT ? "light" : "dark", roles, vibe };
 }
 
 /** Links made before binary links existed: "1.<mode>.<name>.<hex...>.<styles>". They carry no locks. */
@@ -134,5 +157,5 @@ function decodeLegacy(s: string): ThemeState | null {
     if (st.includes("u")) fontStyle.push("underline");
     roles[ROLE_IDS[i]] = { color, locked: false, fontStyle };
   }
-  return { version: THEME_VERSION, name, mode: m === "l" ? "light" : "dark", roles };
+  return { version: THEME_VERSION, name, mode: m === "l" ? "light" : "dark", roles, vibe: { ...ZERO_VIBE } };
 }

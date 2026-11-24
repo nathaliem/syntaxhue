@@ -16,6 +16,22 @@ describe("saved theme schema", () => {
     expect(t.roles.string.locked).toBe(true);
   });
 
+  it("migrates v1 data to v2 with every vibe slider at 0, colors untouched", () => {
+    const t = parseTheme(clone(v1Fixture))!;
+    expect(t.vibe).toEqual({ contrast: 0, saturation: 0, warmth: 0, depth: 0 });
+    expect(Object.values(t.roles).map((r) => r.color)).toEqual(Object.values(v1Fixture.roles).map((r) => r.color));
+  });
+
+  it("keeps saved vibe, clamps it to -1..1 and ignores junk", () => {
+    const raw = {
+      ...clone(v1Fixture),
+      version: THEME_VERSION,
+      vibe: { contrast: 0.456, saturation: 9, warmth: "hot", depth: -2 },
+    };
+    expect(parseTheme(raw)!.vibe).toEqual({ contrast: 0.46, saturation: 1, warmth: 0, depth: -1 });
+    expect(parseTheme({ ...raw, vibe: "nope" })!.vibe).toEqual({ contrast: 0, saturation: 0, warmth: 0, depth: 0 });
+  });
+
   it("round-trips a generated theme through JSON", () => {
     for (const seed of [1, 2, 3]) {
       const t = generate(seed, seed % 2 ? "dark" : "light");
@@ -64,7 +80,8 @@ describe("saved theme schema", () => {
   });
 
   it("validateTheme refuses data that isn't the current version", () => {
-    expect(validateTheme({ ...clone(v1Fixture), version: 2 })).toBeNull();
+    expect(validateTheme({ ...clone(v1Fixture), version: THEME_VERSION + 1 })).toBeNull();
+    expect(validateTheme({ ...clone(v1Fixture), version: 1 })).toBeNull(); // must be migrated first
   });
 });
 

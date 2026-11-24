@@ -1,5 +1,6 @@
 import { useMemo, type CSSProperties, type MouseEvent } from "react";
 import { surfaces } from "../engine/derive";
+import { effectiveTheme } from "../engine/vibe";
 import { ROLE_BY_ID, ROLE_IDS, type RoleId, type ThemeState } from "../engine/theme";
 import { SAMPLE_TS, tokenizeLine } from "./tokenize";
 
@@ -27,6 +28,7 @@ const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folde
 ];
 
 export function Workbench({ theme, selected, highlighted, onPick }: Props) {
+  const shown = effectiveTheme(theme); // roles with vibe applied; what the user sees and exports
   const s = surfaces(theme);
   const lines = useMemo(() => SAMPLE_TS.split("\n").map(tokenizeLine), []);
 
@@ -41,7 +43,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
     "--w-line": s.lineHighlight,
     "--w-sel": s.selection,
     "--w-onaccent": s.onAccent,
-    ...Object.fromEntries(ROLE_IDS.map((id) => [`--r-${id}`, theme.roles[id].color])),
+    ...Object.fromEntries(ROLE_IDS.map((id) => [`--r-${id}`, shown.roles[id].color])),
   } as CSSProperties;
 
   const styleOf = (id: RoleId | null): CSSProperties | undefined => {
