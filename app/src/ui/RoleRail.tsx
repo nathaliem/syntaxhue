@@ -1,5 +1,6 @@
 import { useEffect, useState, type Dispatch } from "react";
 import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
+import { parseCssColor } from "../engine/parseColor";
 import { ROLES, type RoleDef, type RoleId, type ThemeState } from "../engine/theme";
 import type { Action } from "../state";
 
@@ -115,7 +116,7 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
 
   const commitHex = () => {
     setTypingHex(false);
-    const hex = normalizeHex(hexText);
+    const hex = parseCssColor(hexText);
     // Short forms like #abc are only expanded once typing is done; one undo step per edit.
     if (hex) dispatch({ type: "color", role: def.id, color: hex, commit: true });
     else setHexText(role.color);
@@ -207,18 +208,29 @@ function Editor({ def, theme, dispatch }: { def: RoleDef; theme: ThemeState; dis
             value={hexText}
             spellCheck={false}
             onFocus={() => setTypingHex(true)}
+            placeholder="#rrggbb"
+            title="Hex, rgb(), hsl() or oklch()"
             onChange={(e) => {
               setHexText(e.target.value);
-              // Live preview only for complete 6-digit values.
+              // Live preview only for complete values: 6-digit hex or a closed color function.
               const v = e.target.value.trim();
-              if (/^#?[0-9a-fA-F]{6}$/.test(v))
-                dispatch({ type: "color", role: def.id, color: normalizeHex(v)!, commit: false });
+              const complete = /^#?[0-9a-fA-F]{6}$/.test(v) || /^[a-z]+\(.*\)$/i.test(v);
+              const hex = complete ? parseCssColor(v) : null;
+              if (hex) dispatch({ type: "color", role: def.id, color: hex, commit: false });
+            }}
+            onPaste={(e) => {
+              // Pasting a whole color applies it right away, as one undo step.
+              const hex = parseCssColor(e.clipboardData.getData("text"));
+              if (!hex) return;
+              e.preventDefault();
+              setHexText(hex);
+              dispatch({ type: "color", role: def.id, color: hex, commit: true });
             }}
             onBlur={commitHex}
             onKeyDown={(e) => {
               if (e.key === "Enter") e.currentTarget.blur();
             }}
-            aria-invalid={!normalizeHex(hexText)}
+            aria-invalid={!parseCssColor(hexText)}
           />
         </label>
         {eyedropper && (
