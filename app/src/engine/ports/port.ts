@@ -27,6 +27,8 @@ export interface PortUse {
   role: RoleId;
   /** The color as written in the files (the shared tests look for it there). */
   color: Hex;
+  /** How the color is spelled in the files when that is not `#rrggbb` (e.g. `rrggbb`); the shared tests search for this. */
+  written?: string;
   /** The background it is read on; leave out for colors that are not text (the shared tests skip contrast). */
   on?: Hex;
 }

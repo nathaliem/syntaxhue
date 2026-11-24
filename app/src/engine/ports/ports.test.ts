@@ -58,7 +58,7 @@ describe.each(TARGETS.map((t) => [t.id, t] as const))("port %s", (_id, target) =
 
     it("really writes the colors it says it uses", () => {
       const text = files.map((f) => f.content.toLowerCase()).join("\n");
-      for (const u of uses) expect(text, `${u.role} ${u.color}`).toContain(u.color.toLowerCase());
+      for (const u of uses) expect(text, `${u.role} ${u.color}`).toContain((u.written ?? u.color).toLowerCase());
     });
 
     it("keeps each role's contrast minimum in the target's own mapping", () => {
