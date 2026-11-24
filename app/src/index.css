@@ -1125,3 +1125,35 @@ pre.code {
   border-color: var(--ink);
   color: var(--surface);
 }
+
+/* ---------- extension export fields ---------- */
+.field-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.field {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 220px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.field.narrow {
+  flex: 0 1 120px;
+}
+.field input {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.field input[aria-invalid="true"] {
+  border-color: #b63132;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
