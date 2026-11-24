@@ -170,8 +170,8 @@ describe("copy and paste a color between roles", () => {
   it("Cmd+C works too, and Shift or Alt combinations are left alone", async () => {
     const user = userEvent.setup();
     render(<App />);
-    const hex = hexOf(/^Type/);
-    row(/^Type/).focus();
+    const hex = hexOf(/^Type\b/);
+    row(/^Type\b/).focus();
     await user.keyboard("{Meta>}c{/Meta}");
     expect(await navigator.clipboard.readText()).toBe(hex);
     await navigator.clipboard.writeText("untouched");
@@ -182,9 +182,9 @@ describe("copy and paste a color between roles", () => {
 
   it("still handles a copy event (Edit > Copy)", async () => {
     render(<App />);
-    const hex = hexOf(/^Type/);
+    const hex = hexOf(/^Type\b/);
     userEvent.setup();
-    expect(await copyFrom(row(/^Type/))).toBe(hex);
+    expect(await copyFrom(row(/^Type\b/))).toBe(hex);
     expect(footer()).toHaveTextContent(`Copied ${hex}`);
   });
 
@@ -192,7 +192,7 @@ describe("copy and paste a color between roles", () => {
     const user = userEvent.setup();
     render(<App />);
     vi.spyOn(navigator.clipboard, "writeText").mockRejectedValueOnce(new Error("denied"));
-    row(/^Type/).focus();
+    row(/^Type\b/).focus();
     await user.keyboard(copyKeys);
     expect(footer()).toHaveTextContent("Couldn't copy to the clipboard");
   });

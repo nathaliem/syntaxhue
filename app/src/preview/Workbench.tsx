@@ -2,7 +2,7 @@ import { type CSSProperties, type MouseEvent } from "react";
 import { surfaces } from "../engine/derive";
 import { effectiveTheme } from "../engine/vibe";
 import { ROLE_BY_ID, ROLE_IDS, type RoleId, type ThemeState } from "../engine/theme";
-import { SAMPLE_TS } from "./sample";
+import { type Sample } from "./samples";
 import { useTokens } from "./useTokens";
 
 interface Props {
@@ -10,17 +10,14 @@ interface Props {
   selected: RoleId | null;
   highlighted: RoleId | null;
   onPick: (role: RoleId) => void;
+  sample: Sample;
 }
-
-/** Line with the error squiggle and the line the cursor sits on. */
-const SQUIGGLE_LINE = 18;
-const CURSOR_LINE = 16;
 
 const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folder?: boolean; active?: boolean }[] = [
   { name: "src", depth: 0, folder: true },
   { name: "engine", depth: 1, folder: true },
   { name: "color.ts", depth: 2 },
-  { name: "shuffle.ts", depth: 2, active: true, role: "warning", badge: "M" },
+  { name: "", depth: 2, active: true, role: "warning", badge: "M" },
   { name: "export.ts", depth: 2, role: "success", badge: "U" },
   { name: "contrast.ts", depth: 2, role: "error", badge: "1" },
   { name: "App.tsx", depth: 1 },
@@ -28,10 +25,13 @@ const FILES: { name: string; depth: number; role?: RoleId; badge?: string; folde
   { name: "README.md", depth: 0 },
 ];
 
-export function Workbench({ theme, selected, highlighted, onPick }: Props) {
+export function Workbench({ theme, selected, highlighted, onPick, sample }: Props) {
   const shown = effectiveTheme(theme); // roles with vibe applied; what the user sees and exports
   const s = surfaces(theme);
-  const { lines, loading } = useTokens(SAMPLE_TS, "typescript");
+  const { lines, loading } = useTokens(sample.code, sample.lang);
+  const hover = useTokens(sample.hover.signature, sample.lang).lines[0] ?? [];
+  const CURSOR_LINE = sample.cursor;
+  const unquote = (text: string) => text.trim().replace(/^["']|["']$/g, "");
 
   const vars = {
     "--w-editor": s.editor,
@@ -113,7 +113,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
                 {f.folder ? "›" : ""}
               </span>
               <span className="wb-fname" style={f.role ? { color: `var(--r-${f.role})` } : undefined}>
-                {f.name}
+                {f.active ? sample.file : f.name}
               </span>
               {f.badge && (
                 <span className="wb-fbadge" style={{ color: `var(--r-${f.role})` }}>
@@ -127,7 +127,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
         <main className="wb-main">
           <div className="wb-tabs" {...r("bg")}>
             <span className="wb-tab active" {...r("accent")}>
-              shuffle.ts
+              {sample.file}
             </span>
             <span className="wb-tab" {...r("muted")}>
               color.ts
@@ -137,7 +137,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
             </span>
           </div>
           <div className="wb-crumbs" {...r("muted")}>
-            src › engine › shuffle.ts › shuffle
+            src › {sample.file} › {sample.crumb}
           </div>
 
           <div className="wb-editor" aria-busy={loading} data-loading={loading || undefined} {...r("bg")}>
@@ -155,17 +155,17 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
                   <span
                     className="wb-gutter"
                     style={
-                      n >= 16 && n <= 18
+                      sample.modified.includes(n)
                         ? { background: "var(--r-info)" }
-                        : n === 12
+                        : sample.added.includes(n)
                           ? { background: "var(--r-success)" }
                           : undefined
                     }
                   />
                   <code>
                     {tokens.map((t, j) => {
-                      const squiggle = n === SQUIGGLE_LINE && t.text === "lighten";
-                      const sel = n === CURSOR_LINE && t.text === "bg";
+                      const squiggle = n === sample.error && unquote(t.text) === sample.errorWord;
+                      const sel = n === CURSOR_LINE && unquote(t.text) === sample.select;
                       return (
                         <span
                           key={j}
@@ -182,19 +182,16 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
                 </div>
               );
             })}
-            <div className="wb-hover" {...r("bg")}>
+            <div className="wb-hover" style={{ top: `calc(${sample.error} * 1.62 * 13px + 4px)` }} {...r("bg")}>
               <div>
-                <span style={{ color: "var(--r-keyword)", ...styleOf("keyword") }}>function</span>{" "}
-                <span style={{ color: "var(--r-function)" }}>lighten</span>
-                <span style={{ color: "var(--r-operator)" }}>(</span>
-                <span style={{ color: "var(--r-variable)" }}>hex</span>
-                <span style={{ color: "var(--r-operator)" }}>:</span>{" "}
-                <span style={{ color: "var(--r-type)" }}>string</span>
-                <span style={{ color: "var(--r-operator)" }}>):</span>{" "}
-                <span style={{ color: "var(--r-type)" }}>string</span>
+                {hover.map((t, k) => (
+                  <span key={k} style={{ color: t.role ? `var(--r-${t.role})` : "var(--r-fg)", ...styleOf(t.role) }}>
+                    {t.text}
+                  </span>
+                ))}
               </div>
               <div className="wb-hover-err" {...r("error")}>
-                Cannot find name 'lighten'. ts(2304)
+                {sample.hover.error}
               </div>
             </div>
           </div>
@@ -249,7 +246,7 @@ export function Workbench({ theme, selected, highlighted, onPick }: Props) {
         </span>
         <span className="wb-st-right">Ln {CURSOR_LINE}, Col 9</span>
         <span>UTF-8</span>
-        <span>TypeScript</span>
+        <span>{sample.name}</span>
       </footer>
     </div>
   );

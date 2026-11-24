@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { contrastIssues, ROLE_BY_ID, shuffleLabel, unlockedCount, type RoleId } from "./engine/theme";
 import { FitToWidth } from "./preview/FitToWidth";
 import { Workbench } from "./preview/Workbench";
+import type { Lang } from "./preview/highlight";
+import { sampleFor } from "./preview/samples";
+import { LanguageSwitch } from "./ui/LanguageSwitch";
 import { ExportDialog } from "./ui/ExportDialog";
 import { BottomSheet } from "./ui/BottomSheet";
 import { RoleEditor, RoleRail } from "./ui/RoleRail";
@@ -12,6 +15,7 @@ import { useThemeStore } from "./state";
 export default function App() {
   const { theme, canUndo, canRedo, dispatch, notice, dismissNotice, restorePrevious } = useThemeStore();
   const [selected, setSelected] = useState<RoleId | null>(null);
+  const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const issues = contrastIssues(theme);
@@ -179,9 +183,12 @@ export default function App() {
               )}
             </div>
           )}
-          <p className="stage-hint">Click anything in the preview to edit the color behind it.</p>
+          <div className="stage-bar">
+            <p className="stage-hint">Click anything in the preview to edit the color behind it.</p>
+            <LanguageSwitch lang={lang} onChange={setLang} />
+          </div>
           <FitToWidth>
-            <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} />
+            <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} sample={sampleFor(lang)} />
           </FitToWidth>
         </section>
       </div>

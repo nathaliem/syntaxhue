@@ -3,7 +3,8 @@ import { SCOPES } from "../engine/derive";
 import { tokenRules } from "../engine/derive";
 import { generate } from "../engine/theme";
 import { loadTokenizer, plainTokens, roleTheme } from "./highlight";
-import { SAMPLE_TS } from "./sample";
+import { SAMPLES } from "./samples";
+const SAMPLE_TS = SAMPLES[0].code;
 
 const roleAt = async (code: string, text: string) => {
   const tokenize = await loadTokenizer("typescript");

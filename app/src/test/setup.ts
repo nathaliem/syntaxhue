@@ -36,3 +36,6 @@ window.matchMedia ??= ((query: string) => ({
   addEventListener: (_: string, l: () => void) => listeners.add(l),
   removeEventListener: (_: string, l: () => void) => listeners.delete(l),
 })) as unknown as typeof window.matchMedia;
+
+// jsdom has no scrollIntoView; the app scrolls an opened editor into view.
+Element.prototype.scrollIntoView ??= () => {};
