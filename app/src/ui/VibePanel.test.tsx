@@ -4,8 +4,15 @@ import { describe, expect, it } from "vitest";
 import App from "../App";
 import { formatVibe, vibeValueText } from "./vibeLabels";
 
-const keywordVar = () =>
-  (document.querySelector('[style*="--r-keyword"]') as HTMLElement).style.getPropertyValue("--r-keyword");
+// Every role color at once. The theme is random, so a single role can sit where a slider changes nothing
+// (a keyword that is already as warm as warmth pulls it); all of them together always move.
+const keywordVar = () => {
+  const el = document.querySelector('[style*="--r-keyword"]') as HTMLElement;
+  return [...el.style]
+    .filter((p) => p.startsWith("--r-"))
+    .map((p) => `${p}:${el.style.getPropertyValue(p)}`)
+    .join(";");
+};
 const sliderFor = (name: string) => screen.getByRole("slider", { name }) as HTMLInputElement;
 
 async function openVibe(user: ReturnType<typeof userEvent.setup>) {
