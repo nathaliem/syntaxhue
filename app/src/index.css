@@ -1859,3 +1859,96 @@ pre.code {
   color: var(--ink);
   font: inherit;
 }
+
+/* ---------- settings guide (after copying the snippet) ---------- */
+.guide-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.guide-step p {
+  margin: 8px 0 0;
+  font-size: var(--text-small);
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+.guide-pic {
+  height: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  font: 11px/1.4 var(--mono);
+  color: var(--ink);
+  overflow: hidden;
+}
+.gp-palette {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  white-space: nowrap;
+}
+.gp-prompt {
+  color: var(--ink-2);
+}
+.gp-code {
+  margin: 0;
+  font: inherit;
+}
+.gp-paste {
+  padding: 0 4px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--brand) 25%, transparent);
+  outline: 1px dashed var(--brand);
+}
+.gp-tab {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px 6px 0 0;
+  background: var(--surface);
+}
+.gp-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  margin-left: 4px;
+}
+.gp-saved {
+  color: var(--ink-2);
+}
+.guide-trouble {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: var(--text-small);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.guide-trouble p {
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+.guide-trouble ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.guide-trouble li {
+  margin-bottom: 4px;
+}
+@media (max-width: 767px) {
+  .guide-steps {
+    grid-template-columns: 1fr;
+  }
+}
