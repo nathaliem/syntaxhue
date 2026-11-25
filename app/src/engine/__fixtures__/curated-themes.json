@@ -3,7 +3,7 @@
     "seed": 28172101,
     "mode": "dark",
     "harmony": "analogous",
-    "name": "Amber Meadow",
+    "name": "Fern Hollow",
     "colors": {
       "bg": "#131813",
       "fg": "#d8e1d8",
@@ -26,7 +26,7 @@
     "seed": 34141654,
     "mode": "dark",
     "harmony": "analogous",
-    "name": "Amber Night",
+    "name": "Juniper Circuit",
     "colors": {
       "bg": "#1c1f0c",
       "fg": "#dddfd4",
@@ -49,7 +49,7 @@
     "seed": 28905204,
     "mode": "light",
     "harmony": "analogous",
-    "name": "Moss Tide",
+    "name": "Denim Garden",
     "colors": {
       "bg": "#edfcf5",
       "fg": "#222b27",
@@ -72,7 +72,7 @@
     "seed": 12253293,
     "mode": "light",
     "harmony": "analogous",
-    "name": "Moss Bloom",
+    "name": "Azure Morning",
     "colors": {
       "bg": "#fef8ff",
       "fg": "#2d262d",
@@ -95,7 +95,7 @@
     "seed": 35293673,
     "mode": "dark",
     "harmony": "complementary",
-    "name": "Ember Lantern",
+    "name": "Copper Midnight",
     "colors": {
       "bg": "#141606",
       "fg": "#dddfd4",
@@ -118,7 +118,7 @@
     "seed": 5864824,
     "mode": "dark",
     "harmony": "complementary",
-    "name": "Lunar Reef",
+    "name": "Meadow Lantern",
     "colors": {
       "bg": "#231b26",
       "fg": "#e2dbe5",
@@ -141,7 +141,7 @@
     "seed": 15080976,
     "mode": "light",
     "harmony": "complementary",
-    "name": "Lunar Harbor",
+    "name": "Plum Garden",
     "colors": {
       "bg": "#f9faef",
       "fg": "#292a21",
@@ -164,7 +164,7 @@
     "seed": 21888361,
     "mode": "light",
     "harmony": "complementary",
-    "name": "Cobalt Quarry",
+    "name": "Iris Atlas",
     "colors": {
       "bg": "#f5fdf3",
       "fg": "#252b24",
@@ -187,7 +187,7 @@
     "seed": 3979702,
     "mode": "dark",
     "harmony": "triadic",
-    "name": "Frost Atlas",
+    "name": "Moss Afterglow",
     "colors": {
       "bg": "#2d1915",
       "fg": "#e8dbd8",
@@ -210,7 +210,7 @@
     "seed": 21678903,
     "mode": "dark",
     "harmony": "triadic",
-    "name": "Copper Garden",
+    "name": "Magenta Midnight",
     "colors": {
       "bg": "#221e24",
       "fg": "#e2dbe5",
@@ -233,7 +233,7 @@
     "seed": 20526884,
     "mode": "light",
     "harmony": "triadic",
-    "name": "Cobalt Night",
+    "name": "Poppy Orchard",
     "colors": {
       "bg": "#effbf0",
       "fg": "#242b25",
@@ -256,7 +256,7 @@
     "seed": 34770028,
     "mode": "light",
     "harmony": "triadic",
-    "name": "Copper Orchard",
+    "name": "Violet Studio",
     "colors": {
       "bg": "#fcf2ef",
       "fg": "#302723",
@@ -279,7 +279,7 @@
     "seed": 5341179,
     "mode": "dark",
     "harmony": "split",
-    "name": "Harbor Night",
+    "name": "Amber Dusk",
     "colors": {
       "bg": "#1f100f",
       "fg": "#e8dad9",
@@ -302,7 +302,7 @@
     "seed": 1047290,
     "mode": "dark",
     "harmony": "split",
-    "name": "Cobalt Harbor",
+    "name": "Meadow Midnight",
     "colors": {
       "bg": "#1c131f",
       "fg": "#e2dbe5",
@@ -325,7 +325,7 @@
     "seed": 11415461,
     "mode": "light",
     "harmony": "split",
-    "name": "Quiet Circuit",
+    "name": "Iris Daylight",
     "colors": {
       "bg": "#eef5e8",
       "fg": "#262a23",
@@ -348,7 +348,7 @@
     "seed": 41158497,
     "mode": "light",
     "harmony": "split",
-    "name": "Frost Signal",
+    "name": "Denim Studio",
     "colors": {
       "bg": "#f3fbee",
       "fg": "#262b23",
@@ -371,7 +371,7 @@
     "seed": 3246599,
     "mode": "dark",
     "harmony": "monochrome",
-    "name": "Frost Lantern",
+    "name": "Reef Dusk",
     "colors": {
       "bg": "#16261c",
       "fg": "#d7e1da",
@@ -394,7 +394,7 @@
     "seed": 36236234,
     "mode": "dark",
     "harmony": "monochrome",
-    "name": "Frost Garden",
+    "name": "Fern Harbor",
     "colors": {
       "bg": "#0b1409",
       "fg": "#d9e1d7",
@@ -417,7 +417,7 @@
     "seed": 11520190,
     "mode": "light",
     "harmony": "monochrome",
-    "name": "Velvet Grove",
+    "name": "Heather Orchard",
     "colors": {
       "bg": "#fbf9ff",
       "fg": "#2a272f",
@@ -440,7 +440,7 @@
     "seed": 36864608,
     "mode": "light",
     "harmony": "monochrome",
-    "name": "Neon Harbor",
+    "name": "Lilac Meadow",
     "colors": {
       "bg": "#f0f4fb",
       "fg": "#252930",

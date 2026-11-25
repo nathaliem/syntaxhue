@@ -36,3 +36,21 @@ describe("name suggestions", () => {
     expect(light).not.toMatch(/\b(Night|Midnight|Nebula|Eclipse)\b/);
   });
 });
+
+describe("the name a shuffle gives", () => {
+  it("is the same for the same seed and fits the mode", () => {
+    expect(generate(5, "dark").name).toBe(generate(5, "dark").name);
+    for (let seed = 0; seed < 100; seed++) {
+      const light = generate(seed, "light").name;
+      const dark = generate(seed, "dark").name;
+      expect(light).not.toMatch(/\b(Night|Midnight|Nebula|Eclipse|Afterglow|Hollow|Lantern|Circuit)\b/);
+      expect(dark).not.toMatch(/\b(Morning|Daylight|Noon|Porcelain|Terrace|Studio)\b/);
+      expect(light.length).toBeLessThanOrEqual(60);
+    }
+  });
+
+  it("changes when the palette changes (different seeds give a variety of names)", () => {
+    const names = new Set(Array.from({ length: 60 }, (_, i) => generate(i, "dark").name));
+    expect(names.size).toBeGreaterThan(30);
+  });
+});
