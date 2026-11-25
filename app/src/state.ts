@@ -1,3 +1,4 @@
+import { trackEvent } from "./analytics";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import {
   generate,
@@ -195,11 +196,17 @@ export function useThemeStore() {
       /* storage blocked: the choice lasts until the tab closes */
     }
   }, []);
-  const [h, dispatch] = useReducer(
+  const [h, rawDispatch] = useReducer(
     (hist: History, a: Action) => reducer(hist, a, harmony),
     start.theme,
     (t): History => ({ past: [], present: t, future: [] }),
   );
+  // Counts a first shuffle and a first hand edit per visit; never looks at what the colors are.
+  const dispatch = useCallback((a: Action) => {
+    if (a.type === "shuffle") trackEvent("shuffle");
+    else if (a.type === "color" || a.type === "vibe" || a.type === "style") trackEvent("edit");
+    rawDispatch(a);
+  }, []);
   const [notice, setNotice] = useState<Notice | null>(start.notice);
   /** The shared theme that was opened; it isn't autosaved until the user edits or keeps it. */
   const [unsavedShared, setUnsavedShared] = useState<ThemeState | null>(
@@ -218,7 +225,7 @@ export function useThemeStore() {
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
-  }, []);
+  }, [dispatch]);
 
   // The newest theme that still has to be written. It is written after a short pause, and immediately when the
   // page is hidden or closed, so closing the tab right after an edit doesn't lose it.
@@ -260,7 +267,7 @@ export function useThemeStore() {
     if (notice?.kind === "shared" && notice.previous) dispatch({ type: "load", theme: notice.previous });
     setNotice(null);
     setUnsavedShared(null);
-  }, [notice]);
+  }, [notice, dispatch]);
 
   return {
     theme: h.present,

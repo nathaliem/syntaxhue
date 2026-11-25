@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trackEvent } from "../analytics";
 import { CloseIcon } from "./icons";
 import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
@@ -29,6 +30,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
   const copy = async (text: string, what: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      if (what === "link") trackEvent("share");
+      else trackEvent("export", { type: what === "snippet" ? "settings" : "file" });
       setCopied(what);
       if (what === "snippet") setGuided(true);
       setTimeout(() => setCopied(null), 1800);
@@ -43,6 +46,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
     a.href = url;
     a.download = `${slug}-color-theme.json`;
     a.click();
+    trackEvent("export", { type: "file" });
     URL.revokeObjectURL(url);
   };
 

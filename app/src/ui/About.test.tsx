@@ -10,7 +10,7 @@ describe("About and privacy", () => {
     await user.click(screen.getByRole("button", { name: "About and privacy" }));
     const dialog = screen.getByRole("dialog", { name: "About and privacy" });
     expect(dialog).toHaveTextContent(/Not affiliated with Microsoft/);
-    expect(dialog).toHaveTextContent(/never your colors or theme names/);
+    expect(dialog).toHaveTextContent(/never your colors, theme names/);
     expect(dialog).toHaveTextContent(/Do Not Track/);
     await user.click(screen.getByRole("button", { name: "Close" }));
     expect((dialog as HTMLDialogElement).open).toBe(false);

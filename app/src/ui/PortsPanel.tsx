@@ -1,3 +1,4 @@
+import { trackEvent } from "../analytics";
 import { useId, useState } from "react";
 import { runPort, TARGETS, type PortTarget } from "../engine/ports";
 import type { ThemeState } from "../engine/theme";
@@ -26,6 +27,7 @@ export function PortsPanel({ theme, group }: { theme: ThemeState; group: PortGro
   const copy = async (content: string, path: string) => {
     try {
       await navigator.clipboard.writeText(content);
+      trackEvent("export", { type: group === "terminals" ? "terminal" : "editor" });
       setStatus(`Copied ${path}`);
     } catch {
       setStatus("Couldn't copy. Select the text above instead.");
@@ -39,6 +41,7 @@ export function PortsPanel({ theme, group }: { theme: ThemeState; group: PortGro
     a.download = path.slice(path.lastIndexOf("/") + 1);
     a.click();
     URL.revokeObjectURL(url);
+    trackEvent("export", { type: group === "terminals" ? "terminal" : "editor" });
     setStatus(`Downloaded ${a.download}`);
   };
 
