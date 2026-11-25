@@ -1,5 +1,6 @@
 // Bundles the link-preview functions (server/*.ts) into api/*.js. Vercel's function builder doesn't resolve the
-// extensionless imports in src/, so each function is bundled into one file first. Generated, not committed.
+// extensionless imports in src/, so each function is bundled into one file first. The output is committed (Vercel only detects
+// functions in the repo, not ones made during the build); `npm run check` fails if it is out of date: run `npm run build:api`.
 import { rolldown } from "rolldown";
 
 for (const name of ["og", "share"]) {
