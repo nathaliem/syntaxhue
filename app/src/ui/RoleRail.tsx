@@ -123,7 +123,16 @@ function RoleRow({
   };
 
   return (
-    <div className={"role" + (open ? " open" : "")} data-role={def.id} onMouseEnter={() => onHover(def.id)}>
+    <div
+      className={"role" + (open ? " open" : "")}
+      data-role={def.id}
+      onMouseEnter={() => onHover(def.id)}
+      // Keyboard focus lights up the same preview elements as the mouse does.
+      onFocus={() => onHover(def.id)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) onHover(null);
+      }}
+    >
       <div className="role-row">
         <button
           className="role-main"
