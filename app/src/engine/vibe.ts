@@ -1,4 +1,4 @@
-import { fixContrast, hexToOklch, oklchToHexInGamut, type Hex, type Oklch } from "./color";
+import { contrast, fixContrast, hexToOklch, oklchToHexInGamut, type Hex, type Oklch } from "./color";
 import { ROLES, type RoleId, type ThemeState, type Vibe } from "./theme";
 
 /**
@@ -70,7 +70,9 @@ export function effectiveTheme(t: ThemeState): ThemeState {
   const bg = moved.bg;
   const roles = {} as ThemeState["roles"];
   for (const def of ROLES) {
-    const color = def.min > 0 ? fixContrast(moved[def.id], bg, def.min) : moved[def.id];
+    // A color the user picked below its minimum stays as picked: vibe only keeps it from getting worse.
+    const floor = Math.min(def.min, contrast(t.roles[def.id].color, t.roles.bg.color));
+    const color = def.min > 0 ? fixContrast(moved[def.id], bg, floor) : moved[def.id];
     roles[def.id] = { ...t.roles[def.id], color };
   }
   const out: ThemeState = { ...t, roles };

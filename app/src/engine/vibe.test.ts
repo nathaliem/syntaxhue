@@ -135,6 +135,20 @@ describe("vibe: contrast minimums always hold", () => {
     expect(failures.slice(0, 5)).toEqual([]);
   });
 
+  it("leaves a color the user set below its minimum alone, and never makes it worse", () => {
+    const t = generate(3, "dark");
+    const accentMin = ROLES.find((r) => r.id === "accent")!.min;
+    const bad = { ...t, roles: { ...t.roles, accent: { ...t.roles.accent, color: t.roles.bg.color } } };
+    const before = contrast(bad.roles.accent.color, bad.roles.bg.color);
+    expect(before).toBeLessThan(accentMin);
+    for (const vibe of [{ saturation: 1 }, { warmth: -1 }, { contrast: 1 }, { contrast: -1, saturation: 1 }]) {
+      const e = effectiveTheme(withVibe(bad, vibe));
+      const after = contrast(e.roles.accent.color, e.roles.bg.color);
+      expect(after).toBeLessThan(accentMin);
+      expect(after).toBeGreaterThanOrEqual(before - 1e-9);
+    }
+  });
+
   it("pushes lightness back when a slider would break a minimum", () => {
     const t = generate(10, "dark");
     const soft = effectiveTheme(withVibe(t, { contrast: -1 }));

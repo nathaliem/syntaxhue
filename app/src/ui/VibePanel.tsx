@@ -64,7 +64,9 @@ export function VibeControls({ vibe, dispatch, harmony, onHarmony, chrome, onChr
           <p className="vibe-intro">The app's own buttons and panels. The preview always shows your theme.</p>
         </div>
       )}
-      <p className="vibe-intro">Tweaks the whole theme without changing your colors. Contrast always stays readable.</p>
+      <p className="vibe-intro">
+        Tweaks the whole theme without changing your colors. Colors that pass the contrast checks keep passing.
+      </p>
       {VIBE_KEYS.map((key: VibeKey) => {
         const s = SLIDERS[key];
         const v = vibe[key];
