@@ -1809,3 +1809,42 @@ pre.code {
 .coach .btn.ghost {
   color: inherit;
 }
+
+/* ---------- shortcut sheet ---------- */
+.shortcuts {
+  width: min(420px, calc(100vw - 24px));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+}
+.shortcuts::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.shortcut-list {
+  margin: 0;
+  padding: 0 16px;
+}
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+}
+.shortcut-row dt {
+  color: var(--ink);
+}
+.shortcut-row dd {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+}
+.shortcut-note {
+  margin: 0;
+  padding: 12px 16px 16px;
+  font-size: var(--text-small);
+  color: var(--ink-2);
+}
