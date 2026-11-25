@@ -16,7 +16,7 @@ describe("app shell (smoke)", () => {
     const rail = screen.getByRole("complementary", { name: "Theme colors" });
     for (const def of ROLES)
       expect(within(rail).getByRole("button", { name: `Lock ${def.label}` })).toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Preview" })).toBeInTheDocument();
+    expect(screen.getByRole("main", { name: "Preview" })).toBeInTheDocument();
   });
 
   it("links to Buy Me A Coffee in a new tab", () => {
@@ -70,7 +70,7 @@ describe("app shell (smoke)", () => {
 });
 
 /** The banner above the preview (the rail footer is also a live region). */
-const banner = () => within(screen.getByRole("region", { name: "Preview" })).getByRole("status");
+const banner = () => within(screen.getByRole("main", { name: "Preview" })).getByRole("status");
 
 describe("opening a share link", () => {
   it("shows the shared-theme banner, applies the theme and its locks, and clears the hash", () => {

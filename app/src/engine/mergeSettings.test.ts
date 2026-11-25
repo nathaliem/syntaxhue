@@ -48,19 +48,21 @@ describe("merge mode", () => {
       "workbench.colorTheme": "Monokai",
       "workbench.colorCustomizations": {
         "statusBar.background": "#123456",
-        "[Default Dark Modern]": { "my.color": "#abcdef" },
+        "[Default Dark Modern][Dark Modern]": { "my.color": "#abcdef" },
       },
       "editor.tokenColorCustomizations": {
-        "[Default Dark Modern]": { textMateRules: [{ scope: "my.scope", settings: { foreground: "#111111" } }] },
+        "[Default Dark Modern][Dark Modern]": {
+          textMateRules: [{ scope: "my.scope", settings: { foreground: "#111111" } }],
+        },
       },
     });
     const parsed = parseJsonc(run(input).text) as Record<string, Record<string, Record<string, unknown>>>;
     expect(parsed["workbench.colorTheme"]).toBe("Default Dark Modern");
     expect(parsed["workbench.colorCustomizations"]["statusBar.background"]).toBe("#123456");
-    const scoped = parsed["workbench.colorCustomizations"]["[Default Dark Modern]"];
+    const scoped = parsed["workbench.colorCustomizations"]["[Default Dark Modern][Dark Modern]"];
     expect(scoped["my.color"]).toBe("#abcdef");
     expect(Object.keys(scoped).length).toBeGreaterThan(5);
-    const rules = parsed["editor.tokenColorCustomizations"]["[Default Dark Modern]"].textMateRules as {
+    const rules = parsed["editor.tokenColorCustomizations"]["[Default Dark Modern][Dark Modern]"].textMateRules as {
       scope: unknown;
     }[];
     expect(rules.some((r) => r.scope === "my.scope")).toBe(true);
@@ -70,9 +72,11 @@ describe("merge mode", () => {
   it("replaces a rule with the same scope instead of repeating it", () => {
     const first = run("{}").text;
     const parsed = parseJsonc(first) as Record<string, Record<string, { textMateRules: { scope: unknown }[] }>>;
-    const rules = parsed["editor.tokenColorCustomizations"]["[Default Dark Modern]"].textMateRules;
+    const rules = parsed["editor.tokenColorCustomizations"]["[Default Dark Modern][Dark Modern]"].textMateRules;
     const again = parseJsonc(run(first).text) as typeof parsed;
-    expect(again["editor.tokenColorCustomizations"]["[Default Dark Modern]"].textMateRules).toHaveLength(rules.length);
+    expect(again["editor.tokenColorCustomizations"]["[Default Dark Modern][Dark Modern]"].textMateRules).toHaveLength(
+      rules.length,
+    );
   });
 
   it("handles trailing commas and comments after the last property", () => {
@@ -83,7 +87,7 @@ describe("merge mode", () => {
 
   it("works unscoped", () => {
     const parsed = parseJsonc(run("{}", false).text) as Record<string, Record<string, unknown>>;
-    expect(parsed["workbench.colorCustomizations"]).not.toHaveProperty(["[Default Dark Modern]"]);
+    expect(parsed["workbench.colorCustomizations"]).not.toHaveProperty(["[Default Dark Modern][Dark Modern]"]);
   });
 
   it("notes duplicate keys and dropped comments", () => {
@@ -97,5 +101,45 @@ describe("merge mode", () => {
 
   it("refuses input that isn't a settings object, and changes nothing", () => {
     for (const bad of ["[1,2]", "hello", `{ "a": 1 `, `{ "a": }`]) expect(mergeSettings(bad, theme).ok).toBe(false);
+  });
+});
+
+/** VS Code's own rule for whether a "[…]" key applies to a theme (copied from its source, so we notice if it changes). */
+function scopeApplies(key: string, settingsId: string): boolean {
+  return (key.match(/\[(.+?)\]/g) ?? []).some((m) => {
+    const o = m.slice(1, -1);
+    const [e, t] = [o.charAt(0), o.charAt(o.length - 1)];
+    return (
+      o === settingsId ||
+      (settingsId.includes(o.slice(1, -1)) && e === "*" && t === "*") ||
+      (settingsId.startsWith(o.slice(0, -1)) && t === "*") ||
+      (settingsId.endsWith(o.slice(1)) && e === "*")
+    );
+  });
+}
+
+describe("works under both the old and the new name of the built-in theme", () => {
+  it("the scope applies to 'Default Dark Modern' (older VS Code) and 'Dark Modern' (newer)", () => {
+    const key = Object.keys((parseJsonc(run("{}").text) as Record<string, object>)["workbench.colorCustomizations"])[0];
+    expect(scopeApplies(key, "Default Dark Modern")).toBe(true);
+    expect(scopeApplies(key, "Dark Modern")).toBe(true);
+    expect(scopeApplies(key, "Light Modern")).toBe(false);
+    expect(scopeApplies("[Default Dark Modern]", "Dark Modern")).toBe(false); // the bug: the old key alone misses
+  });
+
+  it("moves an old single-name block into the new scope and keeps its contents", () => {
+    const input = JSON.stringify({
+      "workbench.colorCustomizations": {
+        "[Default Dark Modern]": { "editor.background": "#111111", "my.color": "#abcdef" },
+      },
+    });
+    const r = run(input);
+    const parsed = parseJsonc(r.text) as Record<string, Record<string, Record<string, string>>>;
+    const keys = Object.keys(parsed["workbench.colorCustomizations"]);
+    expect(keys).toEqual(["[Default Dark Modern][Dark Modern]"]);
+    const block = parsed["workbench.colorCustomizations"][keys[0]];
+    expect(block["my.color"]).toBe("#abcdef");
+    expect(block["editor.background"]).not.toBe("#111111"); // ours wins, as before
+    expect(r.notes.join(" ")).toMatch(/Moved your/);
   });
 });

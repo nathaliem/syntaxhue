@@ -286,7 +286,7 @@ function AppShell({ store }: { store: ThemeStore }) {
             </p>
           </aside>
         )}
-        <section className="stage" aria-label="Preview">
+        <main className="stage" aria-label="Preview">
           {notice && (
             <div className="notice" role="status">
               {notice.kind === "badLink" ? (
@@ -349,7 +349,7 @@ function AppShell({ store }: { store: ThemeStore }) {
               </p>
             </>
           )}
-        </section>
+        </main>
       </div>
 
       {mobile && (

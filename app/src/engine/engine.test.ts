@@ -68,8 +68,8 @@ describe("export", () => {
   it("scopes settings to the base theme", () => {
     const s = settingsSnippet(t) as unknown as Record<string, Record<string, unknown>>;
     expect(s["workbench.colorTheme"]).toBe("Default Dark Modern");
-    expect(Object.keys(s["workbench.colorCustomizations"])).toEqual(["[Default Dark Modern]"]);
-    expect(s["editor.tokenColorCustomizations"]["[Default Dark Modern]"]).toHaveProperty("textMateRules");
+    expect(Object.keys(s["workbench.colorCustomizations"])).toEqual(["[Default Dark Modern][Dark Modern]"]);
+    expect(s["editor.tokenColorCustomizations"]["[Default Dark Modern][Dark Modern]"]).toHaveProperty("textMateRules");
   });
 
   it("snippet text is valid JSON when wrapped in braces", () => {

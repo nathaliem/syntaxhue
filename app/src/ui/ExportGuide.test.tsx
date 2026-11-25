@@ -34,7 +34,7 @@ describe("Export > Settings: guide after copying", () => {
     const note = await screen.findByRole("note");
     expect(note).toHaveTextContent("Colors didn't change?");
     expect(note).toHaveTextContent(/workbench\.colorCustomizations/);
-    expect(note).toHaveTextContent(/Default (Dark|Light) Modern/);
+    expect(note).toHaveTextContent(/(Dark|Light) Modern/);
     expect(screen.getByText(/Preferences: Open User Settings \(JSON\)/, { selector: "b" })).toBeInTheDocument();
     expect(screen.getByText("3.", { selector: "b" })).toBeInTheDocument();
   });

@@ -59,7 +59,7 @@ describe("vibe panel", () => {
     const pop = await openVibe(user);
     await user.click(within(pop).getByText(/Tweaks the whole theme/));
     expect(screen.getByRole("dialog", { name: "Vibe" })).toBeInTheDocument();
-    await user.click(screen.getByRole("region", { name: "Preview" }));
+    await user.click(screen.getByRole("main", { name: "Preview" }));
     expect(screen.queryByRole("dialog", { name: "Vibe" })).not.toBeInTheDocument();
   });
 
