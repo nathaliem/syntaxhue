@@ -1,5 +1,6 @@
 import { mix, onColor, shiftL, withAlpha, type Hex } from "./color";
 import type { RoleId, ThemeState } from "./theme";
+import { extraWorkbenchColors } from "./derive.extra";
 import { effectiveTheme } from "./vibe";
 
 export interface Surfaces {
@@ -51,6 +52,7 @@ export function workbenchColors(base: ThemeState): Record<string, string> {
   const s = surfaces(t);
   const c = (id: RoleId) => t.roles[id].color;
   return {
+    ...extraWorkbenchColors(t, s),
     foreground: c("fg"),
     focusBorder: c("accent"),
     "widget.border": s.border,
