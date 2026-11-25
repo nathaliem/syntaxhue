@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { contrast, fixContrast, hexToOklch, oklchToHex } from "./color";
-import { contrastIssues, distinctness, generate, ROLE_IDS, ROLES, shuffleLabel, unlockedCount } from "./theme";
+import { colorDistance, contrast, fixContrast, hexToOklch, oklchToHex } from "./color";
+import {
+  contrastIssues,
+  distinctness,
+  generate,
+  ROLE_IDS,
+  ROLES,
+  shuffleLabel,
+  SYNTAX_IDS,
+  unlockedCount,
+} from "./theme";
 import { reducer, type History } from "../state";
 import { semanticRules, settingsSnippet, settingsSnippetText, themeFile, tokenRules, workbenchColors } from "./derive";
 import { decodeTheme, encodeTheme } from "./share";
@@ -154,6 +163,73 @@ describe("mode switch", () => {
     const hueDiff = Math.abs(hexToOklch(light.roles.keyword.color).h - hexToOklch(dark.roles.keyword.color).h);
     expect(Math.min(hueDiff, 360 - hueDiff)).toBeLessThan(8);
     expect(contrastIssues(light)).toEqual([]);
+  });
+});
+
+describe("mode switch with several locked colors (HP-306)", () => {
+  const lockAll = (t: ReturnType<typeof generate>) => {
+    for (const id of ROLE_IDS) t.roles[id].locked = true;
+    return t;
+  };
+  const hueGap = (a: number, b: number) => Math.min(Math.abs(a - b) % 360, 360 - (Math.abs(a - b) % 360));
+
+  it.each([
+    ["dark", "light"],
+    ["light", "dark"],
+  ] as const)("%s to %s keeps every locked hue, never adds chroma and stays readable", (from, to) => {
+    for (let seed = 1; seed <= 120; seed++) {
+      const a = lockAll(generate(seed * 17, from));
+      const b = generate(seed * 17 + 1, to, a);
+      expect(contrastIssues(b), `seed ${seed}`).toEqual([]);
+      for (const id of ROLE_IDS) {
+        expect(b.roles[id].locked).toBe(true);
+        const o = hexToOklch(a.roles[id].color);
+        const p = hexToOklch(b.roles[id].color);
+        if (o.c > 0.04 && id !== "bg") expect(hueGap(o.h, p.h), `${id} seed ${seed}`).toBeLessThan(5);
+        if (id !== "bg") expect(p.c, `${id} seed ${seed}`).toBeLessThanOrEqual(o.c + 0.01);
+      }
+    }
+  });
+
+  it("locked syntax colors stay apart after the switch (all seven locked, the worst case)", () => {
+    const apart = (from: "dark" | "light", to: "dark" | "light") => {
+      let ok = 0;
+      for (let seed = 1; seed <= 150; seed++) {
+        const b = generate(seed * 17 + 1, to, lockAll(generate(seed * 17, from)));
+        let min = Infinity;
+        for (let i = 0; i < SYNTAX_IDS.length; i++)
+          for (let j = i + 1; j < SYNTAX_IDS.length; j++)
+            min = Math.min(min, colorDistance(b.roles[SYNTAX_IDS[i]].color, b.roles[SYNTAX_IDS[j]].color));
+        if (min >= 0.06) ok++;
+      }
+      return ok / 150;
+    };
+    // Light themes have less room, so some pairs of vivid yellows and greens can't be told apart again; before this
+    // work only about half survived light to dark and a fifth dark to light.
+    expect(apart("light", "dark")).toBeGreaterThanOrEqual(0.98);
+    expect(apart("dark", "light")).toBeGreaterThanOrEqual(0.7);
+  });
+
+  it("keeps the order of locked syntax colors by how much they stand out", () => {
+    let kept = 0;
+    let total = 0;
+    for (let seed = 1; seed <= 100; seed++) {
+      const a = generate(seed * 17, "dark");
+      for (const id of ["keyword", "string", "function"] as const) a.roles[id].locked = true;
+      const b = generate(seed * 17 + 1, "light", a);
+      const l = (t: typeof a, id: "keyword" | "string" | "function") => hexToOklch(t.roles[id].color).l;
+      // lighter in dark = more prominent; darker in light = more prominent
+      const ids = ["keyword", "string", "function"] as const;
+      for (let i = 0; i < 3; i++)
+        for (let j = i + 1; j < 3; j++) {
+          const before = l(a, ids[i]) - l(a, ids[j]);
+          const after = l(b, ids[j]) - l(b, ids[i]);
+          if (Math.abs(before) < 0.02) continue;
+          total++;
+          if (Math.sign(before) === Math.sign(after)) kept++;
+        }
+    }
+    expect(kept / total).toBeGreaterThanOrEqual(0.9);
   });
 });
 
