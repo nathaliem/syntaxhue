@@ -26,7 +26,9 @@ export function AboutDialog({ open, onClose }: { open: boolean; onClose: () => v
           <h3>Your themes stay with you</h3>
           <p>
             Everything happens in your browser. Themes are never uploaded. Your current theme and your library are
-            stored in this browser only, and a share link holds the whole theme inside the link itself.
+            stored in this browser only, and a share link holds the whole theme inside the link itself. The one
+            exception is opt-in: if you tick “Show a preview image” when sharing, the link goes through our server,
+            which reads the theme in it to draw the preview image. It is not stored.
           </p>
           <h3>What is collected</h3>
           <p>
