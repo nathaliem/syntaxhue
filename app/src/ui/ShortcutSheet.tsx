@@ -20,12 +20,12 @@ export function ShortcutSheet({ open, onClose }: { open: boolean; onClose: () =>
   return (
     <Dialog open={open} onClose={onClose} titleId="shortcuts-title" className="shortcuts">
       <div className="export-in">
-        <header className="export-h">
+        <div className="export-h">
           <h2 id="shortcuts-title">Keyboard shortcuts</h2>
           <IconButton size="sm" label="Close" onClick={onClose}>
             <CloseIcon />
           </IconButton>
-        </header>
+        </div>
         <dl className="shortcut-list">
           {SHORTCUTS.map((s) => (
             <div key={s.action} className="shortcut-row">

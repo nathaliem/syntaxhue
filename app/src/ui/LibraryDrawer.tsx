@@ -99,12 +99,12 @@ export function LibraryDrawer({
   return (
     <Drawer open={open} onClose={close} titleId="library-title">
       <div className="drawer-in">
-        <header className="export-h">
+        <div className="export-h">
           <h2 id="library-title">Your themes</h2>
           <IconButton size="sm" label="Close" onClick={close}>
             <CloseIcon />
           </IconButton>
-        </header>
+        </div>
 
         {linked ? (
           <div className="save-row">

@@ -45,12 +45,12 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
   return (
     <Dialog open={open} onClose={onClose} titleId="export-title" className="export">
       <div className="export-in">
-        <header className="export-h">
+        <div className="export-h">
           <h2 id="export-title">Export “{theme.name}”</h2>
           <IconButton size="sm" label="Close" onClick={onClose}>
             <CloseIcon />
           </IconButton>
-        </header>
+        </div>
         <div className="tabs" role="tablist">
           {(
             [
