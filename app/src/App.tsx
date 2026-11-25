@@ -16,6 +16,7 @@ import { VibeControls, VibePanel } from "./ui/VibePanel";
 import { RoleEditorPopover } from "./ui/RoleEditorPopover";
 import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
+import { RedoIcon, UndoIcon } from "./ui/icons";
 import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
 
@@ -177,10 +178,10 @@ function AppShell({ store }: { store: ThemeStore }) {
             ) : (
               <>
                 <IconButton label="Undo" shortcut="⌘Z" onClick={() => dispatch({ type: "undo" })} disabled={!canUndo}>
-                  ↶
+                  <UndoIcon />
                 </IconButton>
                 <IconButton label="Redo" shortcut="⌘⇧Z" onClick={() => dispatch({ type: "redo" })} disabled={!canRedo}>
-                  ↷
+                  <RedoIcon />
                 </IconButton>
               </>
             )}

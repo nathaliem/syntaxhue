@@ -1,3 +1,4 @@
+import { MoreIcon } from "../icons";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { Popover } from "./Popover";
@@ -24,7 +25,7 @@ export function Menu({ label, items }: Props) {
       className="menu"
       renderTrigger={({ ref, props }) => (
         <IconButton ref={ref} label={label} {...props}>
-          ⋯
+          <MoreIcon />
         </IconButton>
       )}
     >

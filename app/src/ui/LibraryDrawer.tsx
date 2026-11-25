@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { CloseIcon } from "./icons";
 import { themesEqual, type SavedTheme } from "../engine/library";
 import type { ThemeState } from "../engine/theme";
 import type { Action } from "../state";
@@ -101,7 +102,7 @@ export function LibraryDrawer({
         <header className="export-h">
           <h2 id="library-title">Your themes</h2>
           <IconButton size="sm" label="Close" onClick={close}>
-            ✕
+            <CloseIcon />
           </IconButton>
         </header>
 
