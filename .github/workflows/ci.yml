@@ -30,6 +30,8 @@ jobs:
         run: npm run format:check
       - name: Type-check and build
         run: npm run build
+      - name: Performance budget
+        run: npm run budget
       - name: Test
         run: npm test
       - name: Compare the .vsix with the official packager

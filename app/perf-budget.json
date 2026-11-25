@@ -1,0 +1,9 @@
+{
+  "note": "Sizes are gzip, in KB (1 KB = 1000 bytes, like Vite's report). Checked by ci/budget.mjs after a build.",
+  "grammars": ["typescript", "python", "rust", "go", "html", "css", "json", "markdown"],
+  "budgets": {
+    "coreJs": 200,
+    "css": 15,
+    "largestGrammar": 40
+  }
+}
