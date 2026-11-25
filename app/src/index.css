@@ -2016,3 +2016,24 @@ pre.code {
 .apca-note span {
   opacity: 0.85;
 }
+
+.survey {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 13px;
+}
+.survey p {
+  margin: 0 0 8px;
+}
+.survey-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.survey .survey-more {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+}

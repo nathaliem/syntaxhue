@@ -26,7 +26,7 @@ A share link keeps the whole theme after the `#`. That part is never in the cano
 ## Events
 
 Only listed events can be sent (`EVENT_DICTIONARY` in `app/src/analytics.ts`), with only the listed property values. Never send colors, theme names, links, or anything typed by a person. When Do Not Track is on, nothing is sent, not even page views.
-Wired (HP-1004): `shuffle` and `edit` (first one per visit only, so a visit is counted once, not per click), `export` with `type` = settings, file, extension, editor or terminal (on copy or download), `share` (share link copied) and `library_save`. Page views come from `<Analytics>` itself. The tool is Vercel Web Analytics; custom events need a plan that includes them, so check the Vercel Analytics tab shows them after deploy. When you add an event, add it to the dictionary and to the "What is collected" text in `AboutDialog.tsx` in the same change.
+Wired (HP-1004): `shuffle` and `edit` (first one per visit only, so a visit is counted once, not per click), `export` with `type` = settings, file, extension, editor or terminal (on copy or download), `share` (share link copied) `library_save`, and `survey` (HP-1005: `answer` = easy, help or failed, one tap, asked once after the first copy or download in the export dialog). Page views come from `<Analytics>` itself. The tool is Vercel Web Analytics; custom events need a plan that includes them, so check the Vercel Analytics tab shows them after deploy. When you add an event, add it to the dictionary and to the "What is collected" text in `AboutDialog.tsx` in the same change.
 
 ## Monthly routine (15 minutes)
 

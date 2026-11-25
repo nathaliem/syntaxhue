@@ -16,6 +16,10 @@ export const EVENT_DICTIONARY = {
     when: "A settings snippet, theme file, extension or editor/terminal file is copied or downloaded.",
     props: { type: ["settings", "file", "extension", "editor", "terminal"] },
   },
+  survey: {
+    when: "The one-question exit survey after the first export is answered.",
+    props: { answer: ["easy", "help", "failed"] },
+  },
   share: { when: "A share link is copied.", props: {} },
   library_save: { when: "A theme is saved to the library.", props: {} },
 } as const satisfies Record<string, { when: string; once?: boolean; props: Record<string, readonly string[]> }>;
