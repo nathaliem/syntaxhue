@@ -7,6 +7,7 @@ import { ExtensionForm } from "./ExtensionForm";
 import { PortsPanel } from "./PortsPanel";
 import { SettingsGuide } from "./SettingsGuide";
 import { shareUrl } from "../state";
+import { MergePanel } from "./MergePanel";
 import { Survey } from "./Survey";
 import { Button, Dialog, IconButton, Toggle } from "./kit";
 
@@ -119,6 +120,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
               </Button>
               {copied === "failed" && <span className="small">Couldn't copy. Select the text above instead.</span>}
             </div>
+            <MergePanel theme={theme} scoped={scoped} />
           </div>
         )}
 
