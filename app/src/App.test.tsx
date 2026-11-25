@@ -87,6 +87,28 @@ describe("opening a share link", () => {
     expect(location.hash).toBe("");
   });
 
+  it("Save to library keeps the shared theme as a library entry and removes the banner", async () => {
+    const user = userEvent.setup();
+    const t = generate(12, "dark");
+    t.name = "Saved From Link";
+    history.replaceState(null, "", `/#t=${encodeTheme(t)}`);
+    render(<App />);
+    expect(banner()).toHaveTextContent("Save it to your library to keep it.");
+    await user.click(screen.getByRole("button", { name: "Save to library" }));
+    expect(await screen.findByText(/Saved “Saved From Link” to your library/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Save to library" })).toBeNull();
+    expect(screen.getByText("In library")).toBeInTheDocument();
+  });
+
+  it("with an earlier theme, offers Back to my theme next to Save", () => {
+    localStorage.setItem("hueprint:current", JSON.stringify(generate(1, "dark")));
+    history.replaceState(null, "", `/#t=${encodeTheme(generate(12, "dark"))}`);
+    render(<App />);
+    expect(banner()).toHaveTextContent("Your own theme is still saved.");
+    expect(screen.getByRole("button", { name: "Back to my theme" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Save to library" })).toBeInTheDocument();
+  });
+
   it("still opens an old-format link", () => {
     history.replaceState(
       null,
