@@ -5,6 +5,7 @@ import type { Action } from "../state";
 import { ago } from "./ago";
 import { ImportPanel } from "./ImportPanel";
 import type { Library } from "./useLibrary";
+import { Button, Drawer, IconButton, useToast } from "./kit";
 
 const STRIP = ["keyword", "string", "function", "type", "constant", "accent"] as const;
 
@@ -32,34 +33,20 @@ export function LibraryDrawer({
   dispatch: (a: Action) => void;
   library: Library;
 }) {
-  const ref = useRef<HTMLDialogElement>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null);
-  /** The entry just deleted, kept for a few seconds so Undo can put it back. */
-  const [deleted, setDeleted] = useState<SavedTheme | null>(null);
   /** The rename in progress, readable from handlers that fire after it ended (blur after Enter or Escape). */
   const renamingNow = useRef<{ id: string; name: string } | null>(null);
-  const undoTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { refresh } = library;
-
-  useEffect(() => {
-    const d = ref.current;
-    if (!d) return;
-    if (open && !d.open) d.showModal();
-    if (!open && d.open) d.close();
-  }, [open]);
+  const toast = useToast();
 
   useEffect(() => {
     if (open) void refresh();
   }, [open, refresh]);
 
-  useEffect(() => () => clearTimeout(undoTimer.current), []);
-
   const close = () => {
     setSaved(null);
     startRename(null);
-    clearTimeout(undoTimer.current);
-    setDeleted(null);
     onClose();
   };
 
@@ -99,17 +86,7 @@ export function LibraryDrawer({
     const gone = await library.remove(item.id);
     if (!gone) return;
     setSaved(null);
-    setDeleted(gone);
-    clearTimeout(undoTimer.current);
-    undoTimer.current = setTimeout(() => setDeleted(null), 8000);
-  };
-
-  const undoDelete = async () => {
-    if (!deleted) return;
-    const item = deleted;
-    clearTimeout(undoTimer.current);
-    setDeleted(null);
-    if (await library.restore(item)) setSaved(`Restored “${item.theme.name}”.`);
+    toast.show(`Deleted “${gone.theme.name}”.`, { undo: () => void library.restore(gone) });
   };
 
   const openItem = (item: SavedTheme) => {
@@ -119,46 +96,30 @@ export function LibraryDrawer({
   };
 
   return (
-    <dialog
-      ref={ref}
-      className="drawer"
-      onClose={close}
-      onClick={(e) => e.target === ref.current && close()}
-      aria-labelledby="library-title"
-    >
+    <Drawer open={open} onClose={close} titleId="library-title">
       <div className="drawer-in">
         <header className="export-h">
           <h2 id="library-title">Your themes</h2>
-          <button className="btn sm icon" onClick={close} aria-label="Close">
+          <IconButton size="sm" label="Close" onClick={close}>
             ✕
-          </button>
+          </IconButton>
         </header>
 
         {linked ? (
           <div className="save-row">
-            <button className="btn primary" onClick={() => void save("update")} disabled={unchanged}>
+            <Button variant="primary" onClick={() => void save("update")} disabled={unchanged}>
               Update “{linked.theme.name}”
-            </button>
-            <button className="btn" onClick={() => void save("new")}>
-              Save as new
-            </button>
+            </Button>
+            <Button onClick={() => void save("new")}>Save as new</Button>
           </div>
         ) : (
-          <button className="btn primary" onClick={() => void save("new")}>
+          <Button variant="primary" onClick={() => void save("new")}>
             Save current
-          </button>
+          </Button>
         )}
         {saved && (
           <p className="small" role="status">
             {saved}
-          </p>
-        )}
-        {deleted && (
-          <p className="small undo" role="status">
-            Deleted “{deleted.theme.name}”.{" "}
-            <button className="btn sm" onClick={() => void undoDelete()}>
-              Undo
-            </button>
           </p>
         )}
         {library.loaded && !library.persistent && (
@@ -214,27 +175,23 @@ export function LibraryDrawer({
                       </span>
                     </button>
                     <span className="saved-actions">
-                      <button
-                        className="btn sm"
+                      <Button
+                        size="sm"
                         onClick={() => startRename({ id: item.id, name: item.theme.name })}
                         aria-label={`Rename ${item.theme.name}`}
                       >
                         Rename
-                      </button>
-                      <button
-                        className="btn sm"
+                      </Button>
+                      <Button
+                        size="sm"
                         onClick={() => void duplicate(item)}
                         aria-label={`Duplicate ${item.theme.name}`}
                       >
                         Duplicate
-                      </button>
-                      <button
-                        className="btn sm"
-                        onClick={() => void remove(item)}
-                        aria-label={`Delete ${item.theme.name}`}
-                      >
+                      </Button>
+                      <Button size="sm" onClick={() => void remove(item)} aria-label={`Delete ${item.theme.name}`}>
                         Delete
-                      </button>
+                      </Button>
                     </span>
                   </div>
                 )}
@@ -245,6 +202,6 @@ export function LibraryDrawer({
 
         <ImportPanel theme={theme} dispatch={dispatch} />
       </div>
-    </dialog>
+    </Drawer>
   );
 }

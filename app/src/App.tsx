@@ -14,15 +14,17 @@ import { RoleEditor, RoleRail } from "./ui/RoleRail";
 import { useIsMobile } from "./ui/useIsMobile";
 import { VibePanel } from "./ui/VibePanel";
 import { useThemeStore } from "./state";
+import { Button, IconButton, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
 
-export default function App() {
-  const { theme, canUndo, canRedo, saveState, dispatch, notice, dismissNotice, restorePrevious } = useThemeStore();
+function AppShell({ store }: { store: ThemeStore }) {
+  const { theme, canUndo, canRedo, saveState, dispatch, notice, dismissNotice, restorePrevious } = store;
   const [selected, setSelected] = useState<RoleId | null>(null);
   const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const library = useLibrary();
+  const toast = useToast();
   const issues = contrastIssues(theme);
 
   // A short message from the role rail (copy, paste) that temporarily replaces the contrast summary.
@@ -63,7 +65,7 @@ export default function App() {
         e.preventDefault();
         void library
           .save(theme)
-          .then((item) => showStatus(item ? `Saved “${theme.name}” to your library.` : "Couldn't save."));
+          .then((item) => toast.show(item ? `Saved “${theme.name}” to your library.` : "Couldn't save."));
       } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
         e.preventDefault();
         dispatch({ type: e.shiftKey ? "redo" : "undo" });
@@ -71,7 +73,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch, exportOpen, libraryOpen, library, theme, showStatus]);
+  }, [dispatch, exportOpen, libraryOpen, library, theme, toast]);
 
   const mobile = useIsMobile();
   const pick = (id: RoleId) => {
@@ -89,9 +91,7 @@ export default function App() {
           <img src="/favicon.svg" alt="" width="28" height="28" />
           <span>SyntaxHue</span>
         </div>
-        <button className="btn" onClick={() => setLibraryOpen(true)}>
-          Library
-        </button>
+        <Button onClick={() => setLibraryOpen(true)}>Library</Button>
         <label className="name">
           <span className="sr-only">Theme name</span>
           <input
@@ -121,44 +121,33 @@ export default function App() {
           </span>
         )}
         <div className="bar-actions">
-          <button
-            className="btn primary"
+          <Button
+            variant="primary"
             onClick={() => dispatch({ type: "shuffle" })}
             disabled={unlocked === 0}
             title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
           >
             {shuffleLabel(unlocked)} <kbd>Space</kbd>
-          </button>
-          <div className="seg" role="group" aria-label="Theme mode">
-            <button aria-pressed={theme.mode === "dark"} onClick={() => dispatch({ type: "mode", mode: "dark" })}>
-              Dark
-            </button>
-            <button aria-pressed={theme.mode === "light"} onClick={() => dispatch({ type: "mode", mode: "light" })}>
-              Light
-            </button>
-          </div>
+          </Button>
+          <SegmentedControl
+            label="Theme mode"
+            value={theme.mode}
+            onChange={(mode) => dispatch({ type: "mode", mode })}
+            segments={[
+              { value: "dark", label: "Dark" },
+              { value: "light", label: "Light" },
+            ]}
+          />
           <VibePanel vibe={theme.vibe} dispatch={dispatch} />
-          <button
-            className="btn icon"
-            onClick={() => dispatch({ type: "undo" })}
-            disabled={!canUndo}
-            aria-label="Undo"
-            title="Undo (⌘Z)"
-          >
+          <IconButton label="Undo" shortcut="⌘Z" onClick={() => dispatch({ type: "undo" })} disabled={!canUndo}>
             ↶
-          </button>
-          <button
-            className="btn icon"
-            onClick={() => dispatch({ type: "redo" })}
-            disabled={!canRedo}
-            aria-label="Redo"
-            title="Redo (⌘⇧Z)"
-          >
+          </IconButton>
+          <IconButton label="Redo" shortcut="⌘⇧Z" onClick={() => dispatch({ type: "redo" })} disabled={!canRedo}>
             ↷
-          </button>
-          <button className="btn export-btn" onClick={() => setExportOpen(true)}>
+          </IconButton>
+          <Button className="export-btn" onClick={() => setExportOpen(true)}>
             Export
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -192,26 +181,26 @@ export default function App() {
               {notice.kind === "badLink" ? (
                 <>
                   <span>That link doesn't contain a theme SyntaxHue can read, so your last theme is shown.</span>
-                  <button className="btn sm" onClick={dismissNotice}>
+                  <Button size="sm" onClick={dismissNotice}>
                     Dismiss
-                  </button>
+                  </Button>
                 </>
               ) : notice.previous ? (
                 <>
                   <span>You opened a shared theme. Your own theme is still saved.</span>
-                  <button className="btn sm" onClick={restorePrevious}>
+                  <Button size="sm" onClick={restorePrevious}>
                     Back to my theme
-                  </button>
-                  <button className="btn sm primary" onClick={dismissNotice}>
+                  </Button>
+                  <Button variant="primary" size="sm" onClick={dismissNotice}>
                     Keep this one
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
                   <span>You opened a shared theme.</span>
-                  <button className="btn sm" onClick={dismissNotice}>
+                  <Button size="sm" onClick={dismissNotice}>
                     Dismiss
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -241,5 +230,17 @@ export default function App() {
       />
       <ExportDialog theme={theme} open={exportOpen} onClose={() => setExportOpen(false)} />
     </div>
+  );
+}
+
+type ThemeStore = ReturnType<typeof useThemeStore>;
+
+export default function App() {
+  const store = useThemeStore();
+  // The toast is drawn outside the app's own element, so it is told which chrome colors to use.
+  return (
+    <ToastProvider mode={store.theme.mode}>
+      <AppShell store={store} />
+    </ToastProvider>
   );
 }

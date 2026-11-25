@@ -1,4 +1,4 @@
-import { useId, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState } from "react";
 import {
   advice,
   fieldProblems,
@@ -16,6 +16,7 @@ import { publishGuide } from "../engine/publishGuide";
 import { iconPng } from "../engine/icon";
 import { allScreenshots } from "../preview/screenshot";
 import { buildVsix, vsixFileName } from "../engine/vsix";
+import { Button, FieldShell, TextField } from "./kit";
 
 const KEY = "hueprint.extension";
 const YEAR = new Date().getFullYear();
@@ -177,7 +178,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
           problem={problem("author")}
           hint="Defaults to the publisher id."
         />
-        <Shell label="License" hint="Written to the LICENSE file." narrow>
+        <FieldShell label="License" hint="Written to the LICENSE file." narrow>
           {(p) => (
             <select {...p} value={saved.license} onChange={(e) => update({ license: e.target.value as LicenseId })}>
               {LICENSES.map((l) => (
@@ -185,7 +186,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
               ))}
             </select>
           )}
-        </Shell>
+        </FieldShell>
         <TextField
           label="Repository (optional)"
           value={saved.repository}
@@ -240,9 +241,9 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
         </ul>
       )}
       <div className="export-actions">
-        <button className="btn primary" onClick={() => void download()} disabled={!ready || building}>
+        <Button variant="primary" onClick={() => void download()} disabled={!ready || building}>
           {building ? "Building…" : `Download ${vsixFileName(theme, options)}`}
-        </button>
+        </Button>
         {buildError && (
           <span className="small field-msg bad" role="alert">
             {buildError}
@@ -250,9 +251,9 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
         )}
         {!ready && <span className="small">Fix the highlighted fields to download.</span>}
         {(over.displayName !== null || over.id !== null || over.description !== null) && (
-          <button className="btn" onClick={() => setOver({ displayName: null, id: null, description: null })}>
+          <Button onClick={() => setOver({ displayName: null, id: null, description: null })}>
             Use suggested name, id and description
-          </button>
+          </Button>
         )}
       </div>
       <PublishGuide theme={theme} options={options} />
@@ -282,9 +283,9 @@ function PublishGuide({ theme, options }: { theme: ThemeState; options: Extensio
             {st.commands?.map((c) => (
               <div className="cmd" key={c}>
                 <code>{c}</code>
-                <button className="btn sm" onClick={() => void copy(c)} aria-label={`Copy ${c}`}>
+                <Button size="sm" onClick={() => void copy(c)} aria-label={`Copy ${c}`}>
                   {copied === c ? "Copied" : "Copy"}
-                </button>
+                </Button>
               </div>
             ))}
             {st.link && (
@@ -305,71 +306,6 @@ function PublishGuide({ theme, options }: { theme: ThemeState; options: Extensio
         ))}
       </dl>
     </details>
-  );
-}
-
-interface ControlProps {
-  id: string;
-  "aria-invalid": boolean;
-  "aria-describedby": string;
-}
-
-/** Label, control and a line of help that turns into the error message when there is one. */
-function Shell({
-  label,
-  hint,
-  problem,
-  narrow,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  problem?: string;
-  narrow?: boolean;
-  children: (props: ControlProps) => ReactNode;
-}) {
-  const id = useId();
-  return (
-    <div className={"field" + (narrow ? " narrow" : "")}>
-      <label htmlFor={id}>{label}</label>
-      {children({ id, "aria-invalid": !!problem, "aria-describedby": `${id}-msg` })}
-      <span className={"field-msg" + (problem ? " bad" : "")} id={`${id}-msg`}>
-        {problem ?? hint ?? ""}
-      </span>
-    </div>
-  );
-}
-
-function TextField({
-  label,
-  value,
-  onChange,
-  placeholder,
-  hint,
-  problem,
-  narrow,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  hint?: string;
-  problem?: string;
-  narrow?: boolean;
-}) {
-  return (
-    <Shell label={label} hint={hint} problem={problem} narrow={narrow}>
-      {(p) => (
-        <input
-          {...p}
-          value={value}
-          placeholder={placeholder}
-          spellCheck={false}
-          autoCapitalize="none"
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )}
-    </Shell>
   );
 }
 

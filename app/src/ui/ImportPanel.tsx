@@ -2,6 +2,7 @@ import { useId, useState, type DragEvent } from "react";
 import { fixAllContrast, importTheme, type ImportFile } from "../engine/importTheme";
 import { contrastIssues, type ThemeState } from "../engine/theme";
 import type { Action } from "../state";
+import { Button } from "./kit";
 
 function readText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -83,13 +84,9 @@ export function ImportPanel({ theme, dispatch }: { theme: ThemeState; dispatch: 
           spellCheck={false}
           rows={5}
         />
-        <button
-          className="btn sm"
-          disabled={!pasted.trim()}
-          onClick={() => run([{ name: "pasted theme", text: pasted }])}
-        >
+        <Button size="sm" disabled={!pasted.trim()} onClick={() => run([{ name: "pasted theme", text: pasted }])}>
           Import pasted theme
-        </button>
+        </Button>
       </details>
 
       {result && !result.ok && (
@@ -103,9 +100,9 @@ export function ImportPanel({ theme, dispatch }: { theme: ThemeState; dispatch: 
           {issues.length > 0 && (
             <p>
               {issues.length} color{issues.length > 1 ? "s are" : " is"} below the readable minimum.{" "}
-              <button className="btn sm" onClick={() => dispatch({ type: "load", theme: fixAllContrast(theme) })}>
+              <Button size="sm" onClick={() => dispatch({ type: "load", theme: fixAllContrast(theme) })}>
                 Fix contrast
-              </button>
+              </Button>
             </p>
           )}
           <ul>

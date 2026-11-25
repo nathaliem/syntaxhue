@@ -1,5 +1,6 @@
 import { settle, type Snap } from "./sheetSnap";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
+import { Button } from "./kit";
 
 interface Props {
   title: string;
@@ -59,9 +60,9 @@ export function BottomSheet({ title, onClose, children }: Props) {
           onClick={() => setSnap(snap === "full" ? "half" : "full")}
         />
         <h2 className="sheet-title">{title}</h2>
-        <button className="btn sm" onClick={onClose} onPointerDown={(e) => e.stopPropagation()}>
+        <Button size="sm" onClick={onClose} onPointerDown={(e) => e.stopPropagation()}>
           Done
-        </button>
+        </Button>
       </header>
       <div className="sheet-body">{children}</div>
     </section>

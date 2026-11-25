@@ -3,6 +3,7 @@ import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch
 import { parseCssColor } from "../engine/parseColor";
 import { ROLES, type RoleDef, type RoleId, type ThemeState } from "../engine/theme";
 import type { Action } from "../state";
+import { Badge, Button, IconButton, Slider } from "./kit";
 
 interface Props {
   theme: ThemeState;
@@ -124,13 +125,13 @@ function RoleRow({
           <span className="role-label">{def.label}</span>
           <span className="role-hex">{role.color}</span>
           {ratio !== null && (
-            <span
-              className={"ratio" + (fails ? " bad" : "")}
+            <Badge
+              tone={fails ? "warn" : "neutral"}
               title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1`}
             >
               {fails ? "⚠ " : ""}
               {ratio.toFixed(1)}
-            </span>
+            </Badge>
           )}
         </button>
         <button
@@ -192,16 +193,14 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
   ) => (
     <label className="slider">
       <span className="slider-l">{label}</span>
-      <input
-        type="range"
+      <Slider
         min={min}
         max={max}
         step={step}
         value={lch[key]}
-        style={{ background: track }}
-        onChange={(e) => setFrom({ ...lch, [key]: Number(e.target.value) }, false)}
-        onPointerUp={() => dispatch({ type: "color", role: def.id, color: oklchToHex(lch), commit: true })}
-        onKeyUp={() => dispatch({ type: "color", role: def.id, color: oklchToHex(lch), commit: true })}
+        track={track}
+        onChange={(v) => setFrom({ ...lch, [key]: v }, false)}
+        onCommit={(v) => setFrom({ ...lch, [key]: v }, true)}
       />
       <span className="slider-v">{fmt(lch[key])}</span>
     </label>
@@ -285,36 +284,36 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
           />
         </label>
         {eyedropper && (
-          <button className="btn sm" onClick={pick}>
+          <Button size="sm" onClick={pick}>
             Pick from screen
-          </button>
+          </Button>
         )}
         {def.styleable && (
           <span className="styles" role="group" aria-label="Font style">
-            <button
-              className={"btn sm icon" + (role.fontStyle.includes("italic") ? " on" : "")}
-              aria-pressed={role.fontStyle.includes("italic")}
+            <IconButton
+              size="sm"
+              label="Italic"
+              pressed={role.fontStyle.includes("italic")}
               onClick={() => dispatch({ type: "style", role: def.id, style: "italic" })}
-              title="Italic"
             >
               <i>I</i>
-            </button>
-            <button
-              className={"btn sm icon" + (role.fontStyle.includes("bold") ? " on" : "")}
-              aria-pressed={role.fontStyle.includes("bold")}
+            </IconButton>
+            <IconButton
+              size="sm"
+              label="Bold"
+              pressed={role.fontStyle.includes("bold")}
               onClick={() => dispatch({ type: "style", role: def.id, style: "bold" })}
-              title="Bold"
             >
               <b>B</b>
-            </button>
-            <button
-              className={"btn sm icon" + (role.fontStyle.includes("underline") ? " on" : "")}
-              aria-pressed={role.fontStyle.includes("underline")}
+            </IconButton>
+            <IconButton
+              size="sm"
+              label="Underline"
+              pressed={role.fontStyle.includes("underline")}
               onClick={() => dispatch({ type: "style", role: def.id, style: "underline" })}
-              title="Underline"
             >
               <u>U</u>
-            </button>
+            </IconButton>
           </span>
         )}
       </div>
@@ -323,12 +322,12 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
           <span>
             Hard to read: {ratio!.toFixed(1)}:1, needs {def.min}:1.
           </span>
-          <button
-            className="btn sm"
+          <Button
+            size="sm"
             onClick={() => dispatch({ type: "color", role: def.id, color: fixContrast(role.color, bg, def.min) })}
           >
             Fix contrast
-          </button>
+          </Button>
         </div>
       )}
     </div>
