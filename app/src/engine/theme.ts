@@ -264,6 +264,66 @@ export function generate(seed: number, mode: Mode, prev?: ThemeState, harmony: H
   return best!;
 }
 
+/** The lightness band syntax colors live in for each mode; the same "prominence" maps between the two. */
+const SYNTAX_BAND: Record<Mode, readonly [number, number]> = { dark: [0.6, 0.92], light: [0.3, 0.56] };
+const CARRIED_ROLES: ReadonlySet<RoleId> = new Set([...SYNTAX_IDS, "error"]);
+
+/**
+ * The lightness a locked color takes after a mode switch. Syntax colors keep their rank: the one that stood out
+ * most from the background before (lightest in a dark theme, darkest in a light one) still does, and the gaps between
+ * colors shrink or grow with the band, so several locked colors don't collapse onto one lightness. Other roles take
+ * the lightness their role needs in the new mode.
+ */
+function carriedLightness(id: RoleId, oldL: number, oldMode: Mode, newMode: Mode, roleL: number): number {
+  if (!CARRIED_ROLES.has(id)) return roleL;
+  const [oLo, oHi] = SYNTAX_BAND[oldMode];
+  const [nLo, nHi] = SYNTAX_BAND[newMode];
+  const prominence = oldMode === "dark" ? (oldL - oLo) / (oHi - oLo) : (oHi - oldL) / (oHi - oLo);
+  const l = newMode === "dark" ? nLo + prominence * (nHi - nLo) : nHi - prominence * (nHi - nLo);
+  return Math.min(0.97, Math.max(0.05, l));
+}
+
+/**
+ * After a mode switch, two locked colors can end up too close even though they were apart before (the new mode has less
+ * room at their hue). The shuffle loop can't help, since it ignores pairs where both are locked, so the quieter color of
+ * each close pair is moved in lightness, away from the other and within its contrast minimum.
+ */
+function separateCarried(roles: Record<RoleId, RoleState>, bg: Hex) {
+  const pairs: [RoleId, RoleId, number][] = [];
+  for (let i = 0; i < SYNTAX_IDS.length; i++) {
+    for (let j = i + 1; j < SYNTAX_IDS.length; j++) pairs.push([SYNTAX_IDS[i], SYNTAX_IDS[j], MIN_SYNTAX_DISTANCE]);
+    pairs.push([SYNTAX_IDS[i], "error", MIN_ERROR_DISTANCE]);
+  }
+  const close = () =>
+    pairs
+      .filter(([a, b]) => roles[a].locked && roles[b].locked)
+      .map(([a, b, min]) => ({ a, b, gap: colorDistance(roles[a].color, roles[b].color) / min }))
+      .filter((p) => p.gap < 1.1)
+      .sort((x, y) => x.gap - y.gap)[0];
+  for (let step = 0; step < 16; step++) {
+    const worst = close();
+    if (!worst) return;
+    const oa = hexToOklch(roles[worst.a].color);
+    const ob = hexToOklch(roles[worst.b].color);
+    // Error keeps its place; otherwise the lower-chroma color moves.
+    const [moveId, move, other] = worst.b === "error" || oa.c > ob.c ? [worst.b, ob, oa] : [worst.a, oa, ob];
+    if (moveId === "error") continue;
+    const away = move.l >= other.l ? 1 : -1;
+    const min = ROLE_BY_ID[moveId].min;
+    for (const dir of [away, -away]) {
+      const color = fixContrast(
+        oklchToHexInGamut({ ...move, l: Math.min(0.97, Math.max(0.05, move.l + dir * 0.03)) }),
+        bg,
+        min,
+      );
+      if (color !== roles[moveId].color) {
+        roles[moveId] = { ...roles[moveId], color };
+        break;
+      }
+    }
+  }
+}
+
 function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, harmony: Harmony): ThemeState {
   const r = mulberry32(seed);
   const rnd = (a: number, b: number) => a + r() * (b - a);
@@ -333,10 +393,16 @@ function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, ha
     if (kept) {
       // Mode switch: keep the locked hue and chroma, take the lightness this role needs in the new mode.
       const o = hexToOklch(kept.color);
-      color = oklchToHexInGamut({ l: hexToOklch(raw).l, c: o.c, h: o.h });
+      color = oklchToHexInGamut({
+        l: carriedLightness(def.id, o.l, prev!.mode, mode, hexToOklch(raw).l),
+        c: o.c,
+        h: o.h,
+      });
     }
     roles[def.id] = { color: def.min ? fixContrast(color, bg, def.min) : color, locked: !!kept, fontStyle };
   }
+
+  if (prev && !sameMode) separateCarried(roles, bg);
 
   const name =
     prev && ROLE_IDS.every((id) => prev.roles[id].locked)
