@@ -220,3 +220,35 @@ describe("keyboard focus on a color row", () => {
     expect(preview()).toBeNull();
   });
 });
+
+describe("screen reader names", () => {
+  it("a color row says its name, the color in words, the hex, the contrast and whether it is locked", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const row = screen.getByRole("button", { name: /^Keyword,/ });
+    const name = row.getAttribute("aria-label")!;
+    expect(name).toMatch(
+      /^Keyword, [a-z -]+, #[0-9a-f]{6}, contrast \d+\.\d to 1, (readable|below the 4\.5 to 1 minimum)$/,
+    );
+    await user.click(screen.getByRole("button", { name: "Lock Keyword" }));
+    expect(screen.getByRole("button", { name: /^Keyword,.*, locked$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Unlock Keyword" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("the background row has no contrast, and the sliders give their value in words", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    expect(screen.getByRole("button", { name: /^Background, [a-z -]+, #[0-9a-f]{6}$/ })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /^Keyword,/ }));
+    const sliders = screen.getAllByRole("slider");
+    expect(sliders[0]).toHaveAttribute(
+      "aria-valuetext",
+      expect.stringMatching(/^\d+ percent, (very )?(dark|medium|light)$/),
+    );
+    expect(sliders[1]).toHaveAttribute(
+      "aria-valuetext",
+      expect.stringMatching(/^\d\.\d\d, (grey|muted|soft|rich|vivid)$/),
+    );
+    expect(sliders[2]).toHaveAttribute("aria-valuetext", expect.stringMatching(/^\d+ degrees, [a-z-]+$/));
+  });
+});

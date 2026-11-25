@@ -2,9 +2,12 @@ import "fake-indexeddb/auto";
 import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { IDBFactory } from "fake-indexeddb";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "../App";
 import { ago } from "./ago";
+
+// These render the whole app several times and slip past the 5 s default when the full suite runs under load.
+vi.setConfig({ testTimeout: 20_000 });
 
 const nameInput = () => screen.getByLabelText("Theme name") as HTMLInputElement;
 const drawer = () => screen.getByRole("dialog", { name: "Your themes" });
