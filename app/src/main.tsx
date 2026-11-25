@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { beforeSend } from "./analytics";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
@@ -10,6 +11,6 @@ createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-    <Analytics />
+    <Analytics beforeSend={beforeSend} />
   </StrictMode>,
 );
