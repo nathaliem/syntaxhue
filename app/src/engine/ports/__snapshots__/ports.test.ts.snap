@@ -2660,6 +2660,76 @@ exports[`port sublime > matches its snapshot 2`] = `
 ]
 `;
 
+exports[`port warp > matches its snapshot 1`] = `
+[
+  {
+    "content": "# Fixture Dark, made with SyntaxHue
+name: "Fixture Dark"
+accent: '#3dc255'
+cursor: '#3dc255'
+background: '#170f1f'
+foreground: '#e0dce6'
+details: darker
+terminal_colors:
+  normal:
+    black: '#3f3847'
+    red: '#f66d67'
+    green: '#74c878'
+    yellow: '#f2af48'
+    blue: '#5fb8f2'
+    purple: '#74c240'
+    cyan: '#2fd3a6'
+    white: '#c2bdc8'
+  bright:
+    black: '#7f7689'
+    red: '#ff9088'
+    green: '#81e286'
+    yellow: '#ffca7f'
+    blue: '#86ceff'
+    purple: '#82db45'
+    cyan: '#29edba'
+    white: '#e0dce6'
+",
+    "path": "fixture-dark.yaml",
+  },
+]
+`;
+
+exports[`port warp > matches its snapshot 2`] = `
+[
+  {
+    "content": "# Fixture Light, made with SyntaxHue
+name: "Fixture Light"
+accent: '#a14f00'
+cursor: '#a14f00'
+background: '#eafaff'
+foreground: '#212b2e'
+details: lighter
+terminal_colors:
+  normal:
+    black: '#212b2e'
+    red: '#b63132'
+    green: '#1e7729'
+    yellow: '#986600'
+    blue: '#006a9d'
+    purple: '#16538f'
+    cyan: '#007a72'
+    white: '#d2e1e6'
+  bright:
+    black: '#6d858c'
+    red: '#a70018'
+    green: '#006516'
+    yellow: '#825600'
+    blue: '#005884'
+    purple: '#00427b'
+    cyan: '#006760'
+    white: '#eafaff'
+",
+    "path": "fixture-light.yaml",
+  },
+]
+`;
+
 exports[`port wezterm > matches its snapshot 1`] = `
 [
   {

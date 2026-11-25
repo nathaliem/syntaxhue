@@ -218,4 +218,31 @@ name = ${toml(i.name)}
   },
 );
 
-export const TERMINALS: PortTarget[] = [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm];
+export const warp = make(
+  {
+    id: "warp",
+    label: "Warp",
+    install:
+      "Save the file in ~/.warp/themes/ (create the folder if it is missing; on Linux it is ~/.local/share/warp-terminal/themes/, on Windows %LOCALAPPDATA%\\warp\\Warp\\data\\themes\\). Then open Settings, Appearance, Themes and pick it from the list.",
+  },
+  (i) => `${file(i)}.yaml`,
+  (p, i) => {
+    const q = (hex: string) => `'${hex}'`; // single-quoted so `#` is never read as a comment
+    const group = (l: string[]) => NAMES.map((n, k) => `    ${n}: ${q(l[k])}`).join("\n");
+    return `# ${i.name.replace(/[\r\n]+/g, " ")}, made with SyntaxHue
+name: ${JSON.stringify(i.name.replace(/[\r\n]+/g, " "))}
+accent: ${q(p.cursor)}
+cursor: ${q(p.cursor)}
+background: ${q(p.background)}
+foreground: ${q(p.foreground)}
+details: ${i.mode === "dark" ? "darker" : "lighter"}
+terminal_colors:
+  normal:
+${group(p.normal)}
+  bright:
+${group(p.bright)}
+`;
+  },
+);
+
+export const TERMINALS: PortTarget[] = [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp];

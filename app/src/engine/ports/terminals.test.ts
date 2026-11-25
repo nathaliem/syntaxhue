@@ -3,7 +3,7 @@ import { ansiPalette } from "../ansi";
 import { hexToRgb, type Hex } from "../color";
 import { generate } from "../theme";
 import { portInput } from "./port";
-import { alacritty, ghostty, iterm2, kitty, windowsTerminal, wezterm } from "./terminals";
+import { alacritty, ghostty, iterm2, kitty, warp, windowsTerminal, wezterm } from "./terminals";
 
 const theme = { ...generate(7, "dark"), name: 'Velvet "Meadow" & <Co>' };
 const input = portInput(theme);
@@ -88,8 +88,25 @@ describe("terminal formats read back to the same palette", () => {
     expect(JSON.parse(text.match(/^name = (.*)$/m)![1])).toBe(theme.name);
   });
 
+  it("Warp: yaml keys, single-quoted colors, the 16 ansi colors and darker/lighter details", () => {
+    const text = content(warp);
+    const names = ["black", "red", "green", "yellow", "blue", "purple", "cyan", "white"];
+    const group = (name: string) => {
+      const block = text.split(`  ${name}:\n`)[1].split("\n").slice(0, 8);
+      return names.map((n) => block.find((l) => l.startsWith(`    ${n}: `))!.split("'")[1]);
+    };
+    expect(group("normal")).toEqual(p.normal);
+    expect(group("bright")).toEqual(p.bright);
+    expect(text).toMatch(new RegExp(`^background: '${p.background}'$`, "m"));
+    expect(text).toMatch(new RegExp(`^foreground: '${p.foreground}'$`, "m"));
+    expect(text).toMatch(/^details: darker$/m);
+    expect(JSON.parse(text.match(/^name: (.*)$/m)![1])).toBe(theme.name);
+    const light = warp.files(portInput({ ...generate(7, "light"), name: "L" }))[0].content;
+    expect(light).toMatch(/^details: lighter$/m);
+  });
+
   it("names every file after the theme, in a form safe for any file system", () => {
-    for (const t of [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm]) {
+    for (const t of [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp]) {
       expect(path(t)).toMatch(/^velvet-meadow-co(\.[a-z]+)?$/);
     }
   });
