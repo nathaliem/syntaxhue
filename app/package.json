@@ -12,8 +12,9 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run format:check && npm run build && npm test",
-    "e2e": "playwright test"
+    "check": "npm run lint && npm run format:check && npm run build && npm run budget && npm test",
+    "e2e": "playwright test",
+    "budget": "node ci/budget.mjs"
   },
   "dependencies": {
     "@shikijs/langs": "^4.6.0",
