@@ -204,7 +204,7 @@ function AppShell({ store }: { store: ThemeStore }) {
               disabled={unlocked === 0}
               title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
             >
-              {shuffleLabel(unlocked)} <kbd>Space</kbd>
+              {shuffleLabel(unlocked)} <kbd className="shuffle-key">Space</kbd>
             </Button>
             <SegmentedControl
               label="Theme mode"

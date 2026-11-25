@@ -1,4 +1,6 @@
 import { colorDistance, contrast, fixContrast, hexToOklch, oklchToHex, oklchToHexInGamut, type Hex } from "./color";
+import { mulberry32 } from "./rng";
+import { suggestNames } from "./themeName";
 
 export type Mode = "dark" | "light";
 export type FontStyle = "italic" | "bold" | "underline";
@@ -134,16 +136,7 @@ export interface ThemeState {
 }
 
 // ---------- random ----------
-export function mulberry32(seed: number) {
-  let a = seed >>> 0;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+export { mulberry32 };
 
 const HARMONIES = {
   analogous: [0, 30, 60, -30, 90, -60],
@@ -171,43 +164,6 @@ const TUNING: Record<HarmonyName, { chroma: number; lightJitter: number }> = {
   split: { chroma: 1, lightJitter: 0.06 },
   monochrome: { chroma: 1, lightJitter: 0 },
 };
-
-const ADJ = [
-  "Quiet",
-  "Ember",
-  "Velvet",
-  "Paper",
-  "Neon",
-  "Moss",
-  "Harbor",
-  "Dusk",
-  "Frost",
-  "Copper",
-  "Lunar",
-  "Saffron",
-  "Cobalt",
-  "Juniper",
-  "Static",
-  "Amber",
-];
-const NOUN = [
-  "Harbor",
-  "Night",
-  "Garden",
-  "Signal",
-  "Orchard",
-  "Tide",
-  "Grove",
-  "Circuit",
-  "Lantern",
-  "Atlas",
-  "Bloom",
-  "Meadow",
-  "Reef",
-  "Quarry",
-  "Comet",
-  "Hollow",
-];
 
 const DEFAULT_STYLE: Partial<Record<RoleId, FontStyle[]>> = { keyword: ["italic"], muted: ["italic"] };
 
@@ -404,13 +360,15 @@ function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, ha
 
   if (prev && !sameMode) separateCarried(roles, bg);
 
+  const vibe = { ...(prev?.vibe ?? ZERO_VIBE) };
+  // A fresh theme gets a name that fits its palette (its own random stream, so the colors don't depend on it).
   const name =
     prev && ROLE_IDS.every((id) => prev.roles[id].locked)
       ? prev.name
-      : `${ADJ[Math.floor(r() * ADJ.length)]} ${NOUN[Math.floor(r() * NOUN.length)]}`;
+      : suggestNames({ version: THEME_VERSION, name: "", mode, roles, vibe }, seed, 1)[0];
 
   // Vibe is the user's setting for how the theme feels, so a shuffle or mode switch keeps it.
-  return { version: THEME_VERSION, name, mode, roles, vibe: { ...(prev?.vibe ?? ZERO_VIBE) } };
+  return { version: THEME_VERSION, name, mode, roles, vibe };
 }
 
 export interface ContrastIssue {

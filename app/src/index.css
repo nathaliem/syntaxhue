@@ -369,6 +369,21 @@ code {
   .save-state:not(.bad) {
     display: none;
   }
+  /* The key hint is the first thing to go when the top bar runs out of room, so the theme name keeps its space. */
+  .shuffle-key {
+    display: none;
+  }
+}
+/* On narrow tablets the logo stands alone; the word stays for screen readers. */
+@media (max-width: 959px) {
+  .brand span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 @media (max-width: 1199px) {
   .layout {

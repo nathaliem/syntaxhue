@@ -1,6 +1,7 @@
 import { hexToOklch } from "./color";
 import { hueName } from "./colorName";
-import { mulberry32, type ThemeState } from "./theme";
+import { mulberry32 } from "./rng";
+import type { ThemeState } from "./theme";
 
 /**
  * Theme name suggestions that fit the palette: the main accent colors pick the color words, the mode and how vivid
