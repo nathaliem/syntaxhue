@@ -18,6 +18,7 @@ import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
 import { CoachMarks } from "./ui/CoachMarks";
 import { ShortcutSheet } from "./ui/ShortcutSheet";
+import { GITHUB_URL } from "./feedback";
 import { NameSuggest } from "./ui/NameSuggest";
 import { AboutDialog } from "./ui/AboutDialog";
 import { RedoIcon, UndoIcon } from "./ui/icons";
@@ -271,6 +272,10 @@ function AppShell({ store }: { store: ThemeStore }) {
                   <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
                     Buy me a coffee ☕
                   </a>
+                  {" · "}
+                  <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                    Source on GitHub
+                  </a>
                 </p>
               </>
             )}
@@ -336,6 +341,10 @@ function AppShell({ store }: { store: ThemeStore }) {
                 Free and made by one person.{" "}
                 <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
                   Buy me a coffee ☕
+                </a>
+                {" · "}
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                  Source on GitHub
                 </a>
               </p>
             </>
