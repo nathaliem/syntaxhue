@@ -145,12 +145,20 @@ export function mulberry32(seed: number) {
   };
 }
 
-const HARMONIES: Record<string, number[]> = {
+const HARMONIES = {
   analogous: [0, 30, 60, -30, 90, -60],
   complementary: [0, 180, 30, 210, -30, 150],
   triadic: [0, 120, 240, 30, 150, 270],
   split: [0, 150, 210, 40, 180, -40],
+  // One hue with a small wobble; the colors are told apart by lightness and chroma instead.
+  monochrome: [0, 10, -10, 18, -18, 6],
 };
+
+export type HarmonyName = keyof typeof HARMONIES;
+/** "auto" lets each shuffle pick one of the four multi-hue harmonies. Monochrome is only used when asked for. */
+export type Harmony = "auto" | HarmonyName;
+export const HARMONY_NAMES = Object.keys(HARMONIES) as HarmonyName[];
+const AUTO_HARMONIES: HarmonyName[] = ["analogous", "complementary", "triadic", "split"];
 
 const ADJ = [
   "Quiet",
@@ -224,11 +232,11 @@ export function distinctness(t: ThemeState): number {
  * hue and chroma carried into the other mode. All generated colors meet their role's minimum
  * contrast against bg, and syntax colors are kept apart from each other and from the error color.
  */
-export function generate(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
+export function generate(seed: number, mode: Mode, prev?: ThemeState, harmony: Harmony = "auto"): ThemeState {
   let best: ThemeState | null = null;
   let bestScore = -1;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const t = generateOnce((seed + attempt * 0x9e3779b1) >>> 0, mode, prev);
+    const t = generateOnce((seed + attempt * 0x9e3779b1) >>> 0, mode, prev, harmony);
     const score = distinctness(t);
     if (score >= 1) return t;
     if (score > bestScore) {
@@ -239,7 +247,7 @@ export function generate(seed: number, mode: Mode, prev?: ThemeState): ThemeStat
   return best!;
 }
 
-function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
+function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, harmony: Harmony): ThemeState {
   const r = mulberry32(seed);
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const dark = mode === "dark";
@@ -247,9 +255,13 @@ function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
   const locked = (id: RoleId) => (prev?.roles[id].locked ? prev.roles[id] : null);
 
   const base = rnd(0, 360);
-  const harm = Object.values(HARMONIES)[Math.floor(r() * 4)];
+  // Always draw, so choosing a harmony never shifts the rest of the random stream.
+  const auto = AUTO_HARMONIES[Math.floor(r() * 4)];
+  const harmonyName = harmony === "auto" ? auto : harmony;
+  const harm = HARMONIES[harmonyName];
+  const mono = harmonyName === "monochrome";
   const sat = rnd(0.08, 0.17);
-  const hues = harm.map((o) => (base + o + rnd(-12, 12) + 360) % 360);
+  const hues = harm.map((o) => (base + o + rnd(-12, 12) * (mono ? 0.3 : 1) + 360) % 360);
 
   let bg: Hex;
   const bgLocked = locked("bg");
@@ -261,15 +273,22 @@ function generateOnce(seed: number, mode: Mode, prev?: ThemeState): ThemeState {
   } else bg = oklchToHex({ l: dark ? rnd(0.17, 0.25) : rnd(0.96, 0.99), c: rnd(0.008, dark ? 0.04 : 0.02), h: base });
   const syntaxL = dark ? rnd(0.74, 0.84) : rnd(0.45, 0.55);
 
+  // In one hue the five accent colors can only differ by lightness and chroma, so they take evenly spaced steps.
+  const accentL = (i: number) =>
+    mono
+      ? (dark ? syntaxL + 0.03 - i * 0.055 : syntaxL - 0.13 + i * 0.065) + rnd(-0.01, 0.01)
+      : syntaxL + rnd(-0.04, 0.04);
+  const accentC = (i: number) => (mono ? sat * [1.3, 0.7, 1.15, 0.55, 0.95][i] * rnd(0.9, 1.1) : sat * rnd(0.8, 1.2));
+
   const want: Record<Exclude<RoleId, "bg">, () => Hex> = {
     fg: () => oklchToHex({ l: dark ? 0.9 : 0.28, c: 0.015, h: base }),
     muted: () => oklchToHex({ l: dark ? 0.58 : 0.6, c: 0.03, h: base }),
     accent: () => oklchToHex({ l: dark ? 0.72 : 0.52, c: sat * 1.1, h: (hues[0] + 200) % 360 }),
-    keyword: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[1] }),
-    string: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[2] }),
-    function: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[3] }),
-    type: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[4] }),
-    constant: () => oklchToHex({ l: syntaxL + rnd(-0.04, 0.04), c: sat * rnd(0.8, 1.2), h: hues[5] }),
+    keyword: () => oklchToHex({ l: accentL(0), c: accentC(0), h: hues[1] }),
+    string: () => oklchToHex({ l: accentL(1), c: accentC(1), h: hues[2] }),
+    function: () => oklchToHex({ l: accentL(2), c: accentC(2), h: hues[3] }),
+    type: () => oklchToHex({ l: accentL(3), c: accentC(3), h: hues[4] }),
+    constant: () => oklchToHex({ l: accentL(4), c: accentC(4), h: hues[5] }),
     variable: () => oklchToHex({ l: dark ? 0.86 : 0.35, c: sat * 0.35, h: hues[0] }),
     operator: () => oklchToHex({ l: dark ? 0.78 : 0.42, c: 0.05, h: hues[1] }),
     error: () => oklchToHex({ l: dark ? 0.7 : 0.52, c: 0.17, h: 25 }),

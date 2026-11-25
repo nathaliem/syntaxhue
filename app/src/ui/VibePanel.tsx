@@ -1,5 +1,5 @@
 import { useId, type Dispatch } from "react";
-import { VIBE_KEYS, type Vibe, type VibeKey } from "../engine/theme";
+import { HARMONY_NAMES, VIBE_KEYS, type Harmony, type Vibe, type VibeKey } from "../engine/theme";
 import { formatVibe, SLIDERS, vibeValueText } from "./vibeLabels";
 import type { Action } from "../state";
 import { Button, Popover, Slider } from "./kit";
@@ -9,14 +9,39 @@ const BIG_STEP = 0.1;
 interface Props {
   vibe: Vibe;
   dispatch: Dispatch<Action>;
+  /** The generator's hue harmony, with its setter. Left out where only the sliders belong. */
+  harmony?: Harmony;
+  onHarmony?: (harmony: Harmony) => void;
 }
 
+const HARMONY_LABEL: Record<Harmony, string> = {
+  auto: "Auto (a mix)",
+  analogous: "Analogous",
+  complementary: "Complementary",
+  triadic: "Triadic",
+  split: "Split complementary",
+  monochrome: "Monochrome",
+};
+
 /** The four global sliders with their reset buttons. Shown in a popover on larger screens and in a sheet on phones. */
-export function VibeControls({ vibe, dispatch }: Props) {
+export function VibeControls({ vibe, dispatch, harmony, onHarmony }: Props) {
   const active = VIBE_KEYS.some((k) => vibe[k] !== 0);
   const base = useId();
   return (
     <>
+      {harmony && onHarmony && (
+        <div className="vibe-row harmony-row">
+          <label htmlFor={`${base}-harmony`}>Shuffle harmony</label>
+          <select id={`${base}-harmony`} value={harmony} onChange={(e) => onHarmony(e.target.value as Harmony)}>
+            {(["auto", ...HARMONY_NAMES] as Harmony[]).map((h) => (
+              <option key={h} value={h}>
+                {HARMONY_LABEL[h]}
+              </option>
+            ))}
+          </select>
+          <p className="vibe-intro">How the hues relate when you shuffle. Colors you already have stay as they are.</p>
+        </div>
+      )}
       <p className="vibe-intro">Tweaks the whole theme without changing your colors. Contrast always stays readable.</p>
       {VIBE_KEYS.map((key: VibeKey) => {
         const s = SLIDERS[key];
@@ -66,7 +91,7 @@ export function VibeControls({ vibe, dispatch }: Props) {
 }
 
 /** The Vibe button in the top bar and the popover with the four global sliders. */
-export function VibePanel({ vibe, dispatch }: Props) {
+export function VibePanel({ vibe, dispatch, harmony, onHarmony }: Props) {
   const active = VIBE_KEYS.some((k) => vibe[k] !== 0);
 
   return (
@@ -85,7 +110,7 @@ export function VibePanel({ vibe, dispatch }: Props) {
         </Button>
       )}
     >
-      <VibeControls vibe={vibe} dispatch={dispatch} />
+      <VibeControls vibe={vibe} dispatch={dispatch} harmony={harmony} onHarmony={onHarmony} />
     </Popover>
   );
 }
