@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { runPort, TARGETS, type PortTarget } from "../engine/ports";
 import type { ThemeState } from "../engine/theme";
+import { Button } from "./kit";
 
 export type PortGroup = "editors" | "terminals";
 
@@ -73,12 +74,10 @@ export function PortsPanel({ theme, group }: { theme: ThemeState; group: PortGro
             {f.content}
           </pre>
           <div className="export-actions">
-            <button className="btn primary" onClick={() => download(f.content, f.path)}>
+            <Button variant="primary" onClick={() => download(f.content, f.path)}>
               Download {f.path.slice(f.path.lastIndexOf("/") + 1)}
-            </button>
-            <button className="btn" onClick={() => void copy(f.content, f.path)}>
-              {files.length > 1 ? `Copy ${f.path}` : "Copy"}
-            </button>
+            </Button>
+            <Button onClick={() => void copy(f.content, f.path)}>{files.length > 1 ? `Copy ${f.path}` : "Copy"}</Button>
           </div>
         </section>
       ))}

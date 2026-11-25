@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { clearSavedTheme } from "../state";
+import { Button } from "./kit";
 
 interface Props {
   children: ReactNode;
@@ -53,12 +54,10 @@ export function CrashScreen({
         <h1>Something went wrong</h1>
         <p>SyntaxHue hit an unexpected error. Your last saved theme is still stored in this browser.</p>
         <div className="crash-actions">
-          <button className="btn primary" onClick={onReload}>
+          <Button variant="primary" onClick={onReload}>
             Reload with last saved theme
-          </button>
-          <button className="btn" onClick={onFresh}>
-            Start with a new theme
-          </button>
+          </Button>
+          <Button onClick={onFresh}>Start with a new theme</Button>
         </div>
         <p className="crash-hint">
           If it keeps happening after a reload, start with a new theme. This replaces the saved one.

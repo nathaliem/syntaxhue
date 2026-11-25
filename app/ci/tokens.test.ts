@@ -16,7 +16,7 @@ function tokens(selector: string): Record<string, string> {
 }
 
 const light = tokens(":root");
-const dark = { ...light, ...tokens('.app[data-mode="dark"]') };
+const dark = { ...light, ...tokens('.toast[data-mode="dark"]') };
 const hex = (set: Record<string, string>, name: string) => {
   const h = normalizeHex(set[name] ?? "");
   if (!h) throw new Error(`${name} is not a hex color: ${set[name]}`);
@@ -50,7 +50,7 @@ describe("design tokens (DESIGN.md §2)", () => {
   });
 
   it("give dark chrome its own value for every color that must differ", () => {
-    const own = tokens('.app[data-mode="dark"]');
+    const own = tokens('.toast[data-mode="dark"]');
     for (const n of [
       "paper",
       "surface",

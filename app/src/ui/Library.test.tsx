@@ -202,18 +202,34 @@ describe("Library management", () => {
     expect(within(drawer()).getByRole("button", { name: "Update “Original”" })).toBeInTheDocument();
   });
 
-  it("deletes without a confirm dialog and Undo puts the theme back", async () => {
+  it("deletes without a confirm dialog, and Undo in the toast puts the theme back", async () => {
     const user = userEvent.setup();
     render(<App />);
     await saveAs(user, "Doomed");
     await user.click(within(drawer()).getByRole("button", { name: "Delete Doomed" }));
     expect(await within(drawer()).findByText(/No saved themes yet/)).toBeInTheDocument();
-    expect(within(drawer()).getByRole("status")).toHaveTextContent("Deleted “Doomed”.");
+    const toast = screen.getByRole("status", { name: "Notification" });
+    expect(toast).toHaveTextContent("Deleted “Doomed”.");
 
-    await user.click(within(drawer()).getByRole("button", { name: "Undo" }));
+    await user.click(within(toast).getByRole("button", { name: "Undo" }));
     expect(await within(drawer()).findByRole("button", { name: "Open Doomed" })).toBeInTheDocument();
+    expect(screen.queryByRole("status", { name: "Notification" })).not.toBeInTheDocument();
     // It is the linked entry again, so Update is offered.
     expect(within(drawer()).getByRole("button", { name: "Update “Doomed”" })).toBeInTheDocument();
+  });
+
+  it("the undo toast outlives the drawer", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await saveAs(user, "Still undoable");
+    await user.click(within(drawer()).getByRole("button", { name: "Delete Still undoable" }));
+    await within(drawer()).findByText(/No saved themes yet/);
+    await user.keyboard("{Escape}");
+    await user.click(
+      within(screen.getByRole("status", { name: "Notification" })).getByRole("button", { name: "Undo" }),
+    );
+    await openLibrary(user);
+    expect(await within(drawer()).findByRole("button", { name: "Open Still undoable" })).toBeInTheDocument();
   });
 
   it("a delete stays deleted after the app is reopened", async () => {

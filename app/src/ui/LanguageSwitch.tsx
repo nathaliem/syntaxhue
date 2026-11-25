@@ -1,5 +1,6 @@
 import { loadTokenizer, type Lang } from "../preview/highlight";
 import { SAMPLES } from "../preview/samples";
+import { SegmentedControl } from "./kit";
 
 interface Props {
   lang: Lang;
@@ -10,20 +11,17 @@ interface Props {
 export function LanguageSwitch({ lang, onChange }: Props) {
   const warm = (l: Lang) => void loadTokenizer(l).catch(() => {});
   return (
-    <div className="lang-switch" role="group" aria-label="Preview language">
-      {SAMPLES.map((s) => (
-        <button
-          key={s.lang}
-          aria-pressed={s.lang === lang}
-          aria-label={s.name}
-          title={s.name}
-          onClick={() => onChange(s.lang)}
-          onPointerEnter={() => warm(s.lang)}
-          onFocus={() => warm(s.lang)}
-        >
-          {s.label}
-        </button>
-      ))}
-    </div>
+    <SegmentedControl
+      className="lang-switch"
+      label="Preview language"
+      value={lang}
+      onChange={onChange}
+      segments={SAMPLES.map((s) => ({
+        value: s.lang,
+        label: s.label,
+        ariaLabel: s.name,
+        buttonProps: { title: s.name, onPointerEnter: () => warm(s.lang), onFocus: () => warm(s.lang) },
+      }))}
+    />
   );
 }
