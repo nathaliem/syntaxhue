@@ -102,6 +102,12 @@ function AppShell({ store }: { store: ThemeStore }) {
   const tablet = breakpoint === "tablet";
   const compactBar = useMedia(COMPACT_BAR_QUERY);
   const [vibeSheet, setVibeSheet] = useState(false);
+  /** Saves the shared theme as its own library entry and keeps it as the theme being edited. */
+  const saveShared = () =>
+    void library.save(theme, "new").then((item) => {
+      toast.show(item ? `Saved “${theme.name}” to your library.` : "Couldn't save.");
+      if (item) dismissNotice();
+    });
   const pick = (id: RoleId) => {
     setSelected(id);
     if (mobile || tablet) return; // the editor isn't inline there, so there is nothing to scroll to
@@ -244,21 +250,22 @@ function AppShell({ store }: { store: ThemeStore }) {
                     Dismiss
                   </Button>
                 </>
-              ) : notice.previous ? (
-                <>
-                  <span>You opened a shared theme. Your own theme is still saved.</span>
-                  <Button size="sm" onClick={restorePrevious}>
-                    Back to my theme
-                  </Button>
-                  <Button variant="primary" size="sm" onClick={dismissNotice}>
-                    Keep this one
-                  </Button>
-                </>
               ) : (
                 <>
-                  <span>You opened a shared theme.</span>
+                  <span>
+                    You opened a shared theme.{" "}
+                    {notice.previous ? "Your own theme is still saved." : "Save it to your library to keep it."}
+                  </span>
+                  <Button variant="primary" size="sm" onClick={saveShared}>
+                    Save to library
+                  </Button>
+                  {notice.previous && (
+                    <Button size="sm" onClick={restorePrevious}>
+                      Back to my theme
+                    </Button>
+                  )}
                   <Button size="sm" onClick={dismissNotice}>
-                    Dismiss
+                    {notice.previous ? "Keep this one" : "Dismiss"}
                   </Button>
                 </>
               )}
