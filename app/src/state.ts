@@ -18,6 +18,10 @@ import { decodeTheme, encodeTheme } from "./engine/share";
 const HISTORY_LIMIT = 50;
 const STORAGE_KEY = "hueprint:current";
 const HARMONY_KEY = "hueprint:harmony";
+const CHROME_KEY = "hueprint:chrome";
+
+/** Which colors the app's own interface uses: the theme's mode ("auto") or always light or dark. */
+export type ChromePref = "auto" | Mode;
 
 export interface History {
   past: ThemeState[];
@@ -184,8 +188,27 @@ function readHarmony(): Harmony {
   }
 }
 
+function readChrome(): ChromePref {
+  try {
+    const v = localStorage.getItem(CHROME_KEY);
+    return v === "light" || v === "dark" ? v : "auto";
+  } catch {
+    return "auto";
+  }
+}
+
 export function useThemeStore() {
   const [start] = useState(boot);
+  const [chrome, setChromeState] = useState<ChromePref>(readChrome);
+  const setChrome = useCallback((next: ChromePref) => {
+    setChromeState(next);
+    try {
+      if (next === "auto") localStorage.removeItem(CHROME_KEY);
+      else localStorage.setItem(CHROME_KEY, next);
+    } catch {
+      /* storage blocked: the choice lasts until the tab closes */
+    }
+  }, []);
   const [harmony, setHarmonyState] = useState<Harmony>(readHarmony);
   const setHarmony = useCallback((next: Harmony) => {
     setHarmonyState(next);
@@ -277,6 +300,9 @@ export function useThemeStore() {
     dispatch,
     harmony,
     setHarmony,
+    chrome,
+    setChrome,
+    chromeMode: (chrome === "auto" ? h.present.mode : chrome) as Mode,
     notice,
     dismissNotice,
     restorePrevious,

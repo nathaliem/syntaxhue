@@ -1996,3 +1996,14 @@ pre.code {
 .side-foot.about-link {
   padding-top: 0;
 }
+
+/* ---------- chrome color swap ---------- */
+/* When the interface colors change, fade them instead of snapping. The preview is left out because it has its own
+   fade (`.wb *`), and icon drawings are left alone. Durations are 0 under reduced motion. */
+.app.chrome-swap :not(.wb, .wb *, svg *) {
+  transition:
+    background-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease);
+}
