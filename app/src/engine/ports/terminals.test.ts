@@ -3,7 +3,7 @@ import { ansiPalette } from "../ansi";
 import { hexToRgb, type Hex } from "../color";
 import { generate } from "../theme";
 import { portInput } from "./port";
-import { alacritty, ghostty, iterm2, kitty, warp, windowsTerminal, wezterm } from "./terminals";
+import { alacritty, ghostty, iterm2, kitty, macTerminal, warp, windowsTerminal, wezterm } from "./terminals";
 
 const theme = { ...generate(7, "dark"), name: 'Velvet "Meadow" & <Co>' };
 const input = portInput(theme);
@@ -105,8 +105,29 @@ describe("terminal formats read back to the same palette", () => {
     expect(light).toMatch(/^details: lighter$/m);
   });
 
+  it("Terminal (macOS): every color is an archived NSColor that reads back to the palette", () => {
+    const text = content(macTerminal);
+    const color = (key: string): string => {
+      const b64 = text.match(new RegExp(`<key>${key}</key>\\s*<data>([^<]+)</data>`))![1];
+      const archive = atob(b64);
+      const rgb = atob(archive.match(/<key>NSRGB<\/key><data>([^<]+)<\/data>/)![1])
+        .replace("\0", "")
+        .split(" ")
+        .map((v) => Math.round(parseFloat(v) * 255));
+      return "#" + rgb.map((v) => v.toString(16).padStart(2, "0")).join("");
+    };
+    const names = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"];
+    expect(names.map((n) => color(`ANSI${n}Color`))).toEqual(p.normal);
+    expect(names.map((n) => color(`ANSIBright${n}Color`))).toEqual(p.bright);
+    expect(color("BackgroundColor")).toBe(p.background);
+    expect(color("TextColor")).toBe(p.foreground);
+    expect(color("CursorColor")).toBe(p.cursor);
+    expect(color("SelectionColor")).toBe(p.selection);
+    expect(text).toContain("<string>Velvet &quot;Meadow&quot; &amp; &lt;Co&gt;</string>".replace(/&quot;/g, '"'));
+  });
+
   it("names every file after the theme, in a form safe for any file system", () => {
-    for (const t of [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp]) {
+    for (const t of [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp, macTerminal]) {
       expect(path(t)).toMatch(/^velvet-meadow-co(\.[a-z]+)?$/);
     }
   });

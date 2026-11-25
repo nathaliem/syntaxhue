@@ -1,5 +1,5 @@
 import { ansiPalette, type AnsiPalette } from "../ansi";
-import { hexToRgb } from "../color";
+import { hexToRgb, type Hex } from "../color";
 import { slugify } from "../extension";
 import type { RoleId } from "../theme";
 import type { PortInput, PortTarget, PortUse } from "./port";
@@ -245,4 +245,55 @@ ${group(p.bright)}
   },
 );
 
-export const TERMINALS: PortTarget[] = [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp];
+/** macOS Terminal.app keeps each color as an archived NSColor (a property list inside a `<data>` value). */
+function nsColor(hex: Hex): string {
+  const rgb = hexToRgb(hex)
+    .map((v) => +(v / 255).toFixed(6))
+    .join(" ");
+  const rgbData = btoa(rgb + "\0");
+  const uid = (n: number) => `<dict><key>CF$UID</key><integer>${n}</integer></dict>`;
+  const archive = `<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict><key>$archiver</key><string>NSKeyedArchiver</string><key>$objects</key><array><string>$null</string><dict><key>NSColorSpace</key><integer>2</integer><key>NSRGB</key><data>${rgbData}</data><key>$class</key>${uid(2)}</dict><dict><key>$classname</key><string>NSColor</string><key>$classes</key><array><string>NSColor</string><string>NSObject</string></array></dict></array><key>$top</key><dict><key>root</key>${uid(1)}</dict><key>$version</key><integer>100000</integer></dict></plist>`;
+  return btoa(archive);
+}
+
+const xml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const cap = (n: string) => n[0].toUpperCase() + n.slice(1);
+
+export const macTerminal = make(
+  {
+    id: "macos-terminal",
+    label: "Terminal (macOS)",
+    install:
+      "Save the file, then double-click it: Terminal imports it as a new profile named after the theme and opens a window with it. To make it the default, open Terminal, Settings, Profiles, select it, then Default.",
+  },
+  (i) => `${file(i)}.terminal`,
+  (p, i) => {
+    const entry = (key: string, hex: Hex) => `\t<!-- ${hex} -->\n\t<key>${key}</key>\n\t<data>${nsColor(hex)}</data>`;
+    const colors = [
+      entry("BackgroundColor", p.background),
+      entry("TextColor", p.foreground),
+      entry("TextBoldColor", p.foreground),
+      entry("CursorColor", p.cursor),
+      entry("SelectionColor", p.selection),
+      ...NAMES.map((n, k) => entry(`ANSI${cap(n === "purple" ? "magenta" : n)}Color`, p.normal[k])),
+      ...NAMES.map((n, k) => entry(`ANSIBright${cap(n === "purple" ? "magenta" : n)}Color`, p.bright[k])),
+    ];
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+\t<key>name</key>
+\t<string>${xml(i.name.replace(/[\r\n]+/g, " "))}</string>
+\t<key>type</key>
+\t<string>Window Settings</string>
+\t<key>ProfileCurrentVersion</key>
+\t<real>2.09</real>
+${colors.join("\n")}
+</dict>
+</plist>
+`;
+  },
+);
+
+export const TERMINALS: PortTarget[] = [windowsTerminal, iterm2, ghostty, alacritty, kitty, wezterm, warp, macTerminal];
