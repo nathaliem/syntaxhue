@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import {
   generate,
+  HARMONY_NAMES,
   unlockedCount,
   ZERO_VIBE,
   type FontStyle,
+  type Harmony,
   type Mode,
   type RoleId,
   type ThemeState,
@@ -14,6 +16,7 @@ import { decodeTheme, encodeTheme } from "./engine/share";
 
 const HISTORY_LIMIT = 50;
 const STORAGE_KEY = "hueprint:current";
+const HARMONY_KEY = "hueprint:harmony";
 
 export interface History {
   past: ThemeState[];
@@ -48,16 +51,17 @@ function updateRole(t: ThemeState, role: RoleId, patch: Partial<ThemeState["role
   return { ...t, roles: { ...t.roles, [role]: { ...t.roles[role], ...patch } } };
 }
 
-export function reducer(h: History, a: Action): History {
+/** `harmony` is the generator setting a shuffle or mode switch draws its hues from. */
+export function reducer(h: History, a: Action, harmony: Harmony = "auto"): History {
   const t = h.present;
   switch (a.type) {
     case "shuffle":
       // Nothing to change when every color is locked; don't add an empty undo step.
       if (unlockedCount(t) === 0) return h;
-      return push(h, generate(a.seed ?? newSeed(), t.mode, t));
+      return push(h, generate(a.seed ?? newSeed(), t.mode, t, harmony));
     case "mode":
       // Pass the current theme so locked colors carry over to the new mode.
-      return a.mode === t.mode ? h : push(h, generate(a.seed ?? newSeed(), a.mode, t));
+      return a.mode === t.mode ? h : push(h, generate(a.seed ?? newSeed(), a.mode, t, harmony));
     case "color": {
       if (a.commit === false) {
         // In-progress edit: replace the present state and remember where the edit started.
@@ -170,9 +174,32 @@ function boot(): Boot {
   return { theme: generate(newSeed(), prefersLight ? "light" : "dark"), notice };
 }
 
+function readHarmony(): Harmony {
+  try {
+    const v = localStorage.getItem(HARMONY_KEY);
+    return v && (HARMONY_NAMES as string[]).includes(v) ? (v as Harmony) : "auto";
+  } catch {
+    return "auto";
+  }
+}
+
 export function useThemeStore() {
   const [start] = useState(boot);
-  const [h, dispatch] = useReducer(reducer, start.theme, (t): History => ({ past: [], present: t, future: [] }));
+  const [harmony, setHarmonyState] = useState<Harmony>(readHarmony);
+  const setHarmony = useCallback((next: Harmony) => {
+    setHarmonyState(next);
+    try {
+      if (next === "auto") localStorage.removeItem(HARMONY_KEY);
+      else localStorage.setItem(HARMONY_KEY, next);
+    } catch {
+      /* storage blocked: the choice lasts until the tab closes */
+    }
+  }, []);
+  const [h, dispatch] = useReducer(
+    (hist: History, a: Action) => reducer(hist, a, harmony),
+    start.theme,
+    (t): History => ({ past: [], present: t, future: [] }),
+  );
   const [notice, setNotice] = useState<Notice | null>(start.notice);
   /** The shared theme that was opened; it isn't autosaved until the user edits or keeps it. */
   const [unsavedShared, setUnsavedShared] = useState<ThemeState | null>(
@@ -241,6 +268,8 @@ export function useThemeStore() {
     canRedo: h.future.length > 0,
     saveState,
     dispatch,
+    harmony,
+    setHarmony,
     notice,
     dismissNotice,
     restorePrevious,

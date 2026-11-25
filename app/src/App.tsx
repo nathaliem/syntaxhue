@@ -23,7 +23,8 @@ import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
 
 function AppShell({ store }: { store: ThemeStore }) {
-  const { theme, canUndo, canRedo, saveState, dispatch, notice, dismissNotice, restorePrevious } = store;
+  const { theme, canUndo, canRedo, saveState, dispatch, harmony, setHarmony, notice, dismissNotice, restorePrevious } =
+    store;
   const [selected, setSelected] = useState<RoleId | null>(null);
   const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
@@ -179,7 +180,7 @@ function AppShell({ store }: { store: ThemeStore }) {
                 { value: "light", label: "Light" },
               ]}
             />
-            <VibePanel vibe={theme.vibe} dispatch={dispatch} />
+            <VibePanel vibe={theme.vibe} dispatch={dispatch} harmony={harmony} onHarmony={setHarmony} />
             {compactBar ? (
               <Menu
                 label="More actions"
@@ -319,7 +320,7 @@ function AppShell({ store }: { store: ThemeStore }) {
       )}
       {mobile && vibeSheet && !selected && (
         <BottomSheet title="Vibe" onClose={() => setVibeSheet(false)}>
-          <VibeControls vibe={theme.vibe} dispatch={dispatch} />
+          <VibeControls vibe={theme.vibe} dispatch={dispatch} harmony={harmony} onHarmony={setHarmony} />
         </BottomSheet>
       )}
 
