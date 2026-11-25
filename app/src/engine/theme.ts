@@ -197,7 +197,7 @@ export const SYNTAX_IDS = ["keyword", "string", "function", "type", "variable", 
 export const MIN_SYNTAX_DISTANCE = 0.06;
 /** Syntax colors closer than this to the error color make normal code look like an error. */
 export const MIN_ERROR_DISTANCE = 0.08;
-const MAX_ATTEMPTS = 40;
+const MAX_ATTEMPTS = 120;
 
 /**
  * How well a theme separates its syntax colors: 1 or more means it meets both minimums.
