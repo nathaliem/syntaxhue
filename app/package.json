@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "build:api": "node scripts/build-api.mjs",
     "check:api": "node scripts/build-api.mjs && git diff --exit-code --stat -- api",
-    "lint": "oxlint --deny-warnings",
+    "lint": "oxlint --deny-warnings --ignore-pattern api/og.js --ignore-pattern api/share.js",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "prettier --write .",
