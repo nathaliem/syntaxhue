@@ -2037,3 +2037,28 @@ pre.code {
   margin: 8px 0 0;
   color: var(--ink-2);
 }
+
+.merge {
+  margin-top: 16px;
+  font-size: 13px;
+}
+.merge summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.merge-in {
+  width: 100%;
+  min-height: 120px;
+  box-sizing: border-box;
+  font:
+    12px/1.5 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--line, currentColor);
+  border-radius: 8px;
+  padding: 8px;
+  resize: vertical;
+}
