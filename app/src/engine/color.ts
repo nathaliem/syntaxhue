@@ -58,15 +58,30 @@ function oklchToLinearRgb({ l, c, h }: Oklch): [number, number, number] {
   ];
 }
 
-/** OKLCH -> hex, lowering chroma (not clipping channels) so the hue stays put when out of gamut. */
-export function oklchToHexInGamut(o: Oklch): Hex {
-  let c = o.c;
-  while (c > 0 && oklchToLinearRgb({ ...o, c }).some((v) => v < -1e-4 || v > 1 + 1e-4)) c -= 0.002;
-  return oklchToHex({ ...o, c: Math.max(0, c) });
+const IN_GAMUT = 1e-4;
+const inGamut = (o: Oklch) => oklchToLinearRgb(o).every((v) => v >= -IN_GAMUT && v <= 1 + IN_GAMUT);
+
+/**
+ * OKLCH -> hex. A color outside sRGB keeps its lightness and hue and has its chroma lowered to the most the gamut
+ * allows (found by bisection), instead of having channels clipped, which would shift the hue.
+ */
+export function oklchToHex(o: Oklch): Hex {
+  if (o.c <= 0 || inGamut(o)) return oklchToHexClipped(o);
+  let lo = 0;
+  let hi = o.c;
+  for (let i = 0; i < 18; i++) {
+    const mid = (lo + hi) / 2;
+    if (inGamut({ ...o, c: mid })) lo = mid;
+    else hi = mid;
+  }
+  return oklchToHexClipped({ ...o, c: lo });
 }
 
-/** OKLCH -> hex. Out-of-gamut values are clipped per channel. */
-export function oklchToHex({ l, c, h }: Oklch): Hex {
+/** Same as `oklchToHex`; the older name, kept so callers read the same. */
+export const oklchToHexInGamut = oklchToHex;
+
+/** OKLCH -> hex with out-of-gamut channels clipped. Only for values already known to be inside sRGB. */
+function oklchToHexClipped({ l, c, h }: Oklch): Hex {
   const hr = (h * Math.PI) / 180;
   const a = c * Math.cos(hr);
   const b = c * Math.sin(hr);
