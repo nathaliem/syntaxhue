@@ -65,7 +65,8 @@ export function VibeControls({ vibe, dispatch, harmony, onHarmony, chrome, onChr
         </div>
       )}
       <p className="vibe-intro">
-        Tweaks the whole theme without changing your colors. Colors that pass the contrast checks keep passing.
+        Tweaks the whole theme without changing your colors. Colors that pass the contrast checks keep passing. Locked
+        colors are never changed.
       </p>
       {VIBE_KEYS.map((key: VibeKey) => {
         const s = SLIDERS[key];

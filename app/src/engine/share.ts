@@ -15,6 +15,7 @@ import { ROLE_IDS, THEME_VERSION, VIBE_KEYS, ZERO_VIBE, type FontStyle, type The
  *   next 8 bytes  font styles, one nibble per role: 1 italic, 2 bold, 4 underline
  *   next 45 bytes colors, 3 bytes (r, g, b) per role
  *   4 bytes       only if the vibe flag is set: contrast, saturation, warmth, depth as signed bytes (value x 100)
+ *   2 bytes       only if the picked flag is set (bit 2): bit i set = role i was set by hand, so vibe leaves it alone
  *   rest          theme name, UTF-8
  *
  * Themes with all vibe sliders at 0 leave the vibe out, which keeps their links short.
@@ -29,7 +30,8 @@ const STYLE_BITS: [FontStyle, number][] = [
 ];
 const FLAG_LIGHT = 1;
 const FLAG_VIBE = 2;
-const FLAGS_KNOWN = FLAG_LIGHT | FLAG_VIBE;
+const FLAG_PICKED = 4;
+const FLAGS_KNOWN = FLAG_LIGHT | FLAG_VIBE | FLAG_PICKED;
 const OLDEST_PAYLOAD_VERSION = 1;
 const N = ROLE_IDS.length;
 const STYLE_BYTES = Math.ceil(N / 2);
@@ -43,14 +45,19 @@ if (N > 16) throw new Error("Share links store locks in 16 bits; extend the form
 export function encodeTheme(t: ThemeState): string {
   const name = new TextEncoder().encode(t.name.slice(0, NAME_MAX));
   const hasVibe = VIBE_KEYS.some((k) => t.vibe[k] !== 0);
-  const nameAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+  const hasPicked = ROLE_IDS.some((id) => t.roles[id].picked);
+  const vibeAt = FIXED;
+  const pickedAt = vibeAt + (hasVibe ? VIBE_KEYS.length : 0);
+  const nameAt = pickedAt + (hasPicked ? 2 : 0);
   const bytes = new Uint8Array(nameAt + name.length);
   bytes[0] = THEME_VERSION;
-  bytes[1] = (t.mode === "light" ? FLAG_LIGHT : 0) | (hasVibe ? FLAG_VIBE : 0);
+  bytes[1] = (t.mode === "light" ? FLAG_LIGHT : 0) | (hasVibe ? FLAG_VIBE : 0) | (hasPicked ? FLAG_PICKED : 0);
   let locks = 0;
+  let picks = 0;
   ROLE_IDS.forEach((id, i) => {
     const r = t.roles[id];
     if (r.locked) locks |= 1 << i;
+    if (r.picked) picks |= 1 << i;
     const nibble = STYLE_BITS.reduce((acc, [style, bit]) => acc | (r.fontStyle.includes(style) ? bit : 0), 0);
     bytes[4 + (i >> 1)] |= i % 2 === 0 ? nibble : nibble << 4;
     const rgb = parseInt(r.color.slice(1), 16);
@@ -61,7 +68,11 @@ export function encodeTheme(t: ThemeState): string {
   });
   bytes[2] = locks & 255;
   bytes[3] = locks >> 8;
-  if (hasVibe) VIBE_KEYS.forEach((k, i) => (bytes[FIXED + i] = Math.round(t.vibe[k] * 100) & 255));
+  if (hasVibe) VIBE_KEYS.forEach((k, i) => (bytes[vibeAt + i] = Math.round(t.vibe[k] * 100) & 255));
+  if (hasPicked) {
+    bytes[pickedAt] = picks & 255;
+    bytes[pickedAt + 1] = picks >> 8;
+  }
   bytes.set(name, nameAt);
   return "p" + toBase64Url(bytes);
 }
@@ -98,8 +109,11 @@ function decodeBinary(payload: string): ThemeState | null {
   const flags = bytes[1];
   if (flags & ~FLAGS_KNOWN || (flags & FLAG_VIBE && version < 2)) return null;
   const hasVibe = (flags & FLAG_VIBE) !== 0;
-  const nameAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+  const hasPicked = (flags & FLAG_PICKED) !== 0;
+  const pickedAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+  const nameAt = pickedAt + (hasPicked ? 2 : 0);
   if (bytes.length < nameAt) return null;
+  const picks = hasPicked ? bytes[pickedAt] | (bytes[pickedAt + 1] << 8) : 0;
   const vibe = { ...ZERO_VIBE };
   if (hasVibe) {
     for (const [i, k] of VIBE_KEYS.entries()) {
@@ -123,6 +137,7 @@ function decodeBinary(payload: string): ThemeState | null {
     roles[id] = {
       color: "#" + rgb.toString(16).padStart(6, "0"),
       locked: (locks & (1 << i)) !== 0,
+      ...((picks & (1 << i)) !== 0 ? { picked: true } : {}),
       fontStyle: STYLE_BITS.filter(([, bit]) => nibble & bit).map(([style]) => style),
     };
   });

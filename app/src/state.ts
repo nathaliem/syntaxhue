@@ -52,6 +52,17 @@ function push(h: History, next: ThemeState): History {
   return { past: [...h.past, before].slice(-HISTORY_LIMIT), present: next, future: [] };
 }
 
+/** Moving a vibe slider hands every color back to vibe, so hand-picked colors follow it again (locked ones never do). */
+function clearPicked(t: ThemeState): ThemeState {
+  if (!Object.values(t.roles).some((r) => r.picked)) return t;
+  const roles = { ...t.roles };
+  for (const k of Object.keys(roles) as RoleId[]) {
+    const { picked: _picked, ...rest } = roles[k];
+    roles[k] = rest;
+  }
+  return { ...t, roles };
+}
+
 function updateRole(t: ThemeState, role: RoleId, patch: Partial<ThemeState["roles"][RoleId]>): ThemeState {
   return { ...t, roles: { ...t.roles, [role]: { ...t.roles[role], ...patch } } };
 }
@@ -70,15 +81,19 @@ export function reducer(h: History, a: Action, harmony: Harmony = "auto"): Histo
     case "color": {
       if (a.commit === false) {
         // In-progress edit: replace the present state and remember where the edit started.
-        return { ...h, present: updateRole(t, a.role, { color: a.color }), pending: h.pending ?? h.present };
+        return {
+          ...h,
+          present: updateRole(t, a.role, { color: a.color, picked: true }),
+          pending: h.pending ?? h.present,
+        };
       }
       // A commit that changes nothing and ends no edit is not worth an undo step.
       if (!h.pending && t.roles[a.role].color === a.color) return h;
-      return push(h, updateRole(t, a.role, { color: a.color }));
+      return push(h, updateRole(t, a.role, { color: a.color, picked: true }));
     }
     case "vibe": {
       const value = Math.round(Math.max(-1, Math.min(1, a.value)) * 100) / 100;
-      const next = { ...t, vibe: { ...t.vibe, [a.key]: value } };
+      const next = clearPicked({ ...t, vibe: { ...t.vibe, [a.key]: value } });
       if (a.commit === false) return { ...h, present: next, pending: h.pending ?? h.present }; // mid-drag
       if (!h.pending && t.vibe[a.key] === value) return h; // nothing changed, no undo step
       return push(h, next);
@@ -86,7 +101,7 @@ export function reducer(h: History, a: Action, harmony: Harmony = "auto"): Histo
     case "vibeReset": {
       const vibe = a.key ? { ...t.vibe, [a.key]: 0 } : { ...ZERO_VIBE };
       if (!h.pending && (Object.keys(vibe) as VibeKey[]).every((k) => vibe[k] === t.vibe[k])) return h;
-      return push(h, { ...t, vibe });
+      return push(h, clearPicked({ ...t, vibe }));
     }
     case "lock":
       return { ...h, present: updateRole(t, a.role, { locked: !t.roles[a.role].locked }) };

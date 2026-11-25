@@ -72,7 +72,12 @@ export function validateTheme(data: Record<string, unknown>): ThemeState | null 
     const fontStyle = Array.isArray(r.fontStyle)
       ? FONT_STYLES.filter((s) => (r.fontStyle as unknown[]).includes(s))
       : [];
-    roles[id] = { color: r.color.toLowerCase(), locked: r.locked === true, fontStyle };
+    roles[id] = {
+      color: r.color.toLowerCase(),
+      locked: r.locked === true,
+      ...(r.picked === true ? { picked: true } : {}),
+      fontStyle,
+    };
   }
   const name = typeof data.name === "string" ? data.name.slice(0, 60) : "Untitled";
   return { version: THEME_VERSION, name, mode: data.mode, roles, vibe: readVibe(data.vibe) };

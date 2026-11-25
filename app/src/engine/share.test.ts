@@ -37,6 +37,18 @@ describe("share links", () => {
     }
   });
 
+  it("round-trips which colors were set by hand, and adds nothing when none were", () => {
+    const t = generate(2, "dark");
+    const plain = encodeTheme(t);
+    t.roles.accent.picked = true;
+    t.roles.string.picked = true;
+    t.vibe = { contrast: 0.2, saturation: 0, warmth: 0, depth: 0 };
+    const back = decodeTheme(encodeTheme(t))!;
+    expect(ROLE_IDS.filter((id) => back.roles[id].picked)).toEqual(["accent", "string"]);
+    expect(back.vibe).toEqual(t.vibe);
+    expect(decodeTheme(plain)!.roles.accent.picked).toBeUndefined();
+  });
+
   it("round-trips vibe, including negative values, and leaves it out when all 0", () => {
     const t = generate(3, "dark");
     const plain = encodeTheme(t);
@@ -106,7 +118,7 @@ describe("share links", () => {
     };
     expect(decodeTheme(withByte(0, THEME_VERSION + 1))).toBeNull();
     expect(decodeTheme(withByte(0, 0))).toBeNull();
-    expect(decodeTheme(withByte(1, 4))).toBeNull(); // a flag this version doesn't know
+    expect(decodeTheme(withByte(1, 8))).toBeNull(); // a flag this version doesn't know
     expect(decodeTheme(fromBytes(bytes.slice(0, 20)))).toBeNull();
     expect(decodeTheme(link)).not.toBeNull();
   });
