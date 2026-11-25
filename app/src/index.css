@@ -1952,3 +1952,47 @@ pre.code {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- about and privacy ---------- */
+.about {
+  width: min(520px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+}
+.about::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.about-body {
+  padding: 0 16px 16px;
+  font-size: var(--text-small);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.about-body h3 {
+  margin: 14px 0 2px;
+  font-size: var(--text-small);
+  color: var(--ink);
+}
+.about-body p {
+  margin: 0;
+}
+.link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.link-btn:hover {
+  color: var(--ink);
+}
+.side-foot.about-link {
+  padding-top: 0;
+}

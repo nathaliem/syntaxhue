@@ -18,6 +18,7 @@ import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
 import { CoachMarks } from "./ui/CoachMarks";
 import { ShortcutSheet } from "./ui/ShortcutSheet";
+import { AboutDialog } from "./ui/AboutDialog";
 import { RedoIcon, UndoIcon } from "./ui/icons";
 import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
@@ -31,6 +32,7 @@ function AppShell({ store }: { store: ThemeStore }) {
   const [exportOpen, setExportOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const library = useLibrary();
   const toast = useToast();
   const issues = contrastIssues(theme);
@@ -69,7 +71,7 @@ function AppShell({ store }: { store: ThemeStore }) {
       const el = document.activeElement as HTMLElement | null;
       const isSlider = el instanceof HTMLInputElement && el.type === "range";
       const typing = el && !isSlider && (/INPUT|TEXTAREA|SELECT/.test(el.tagName) || el.isContentEditable);
-      if (exportOpen || libraryOpen || shortcutsOpen || typing) return;
+      if (exportOpen || libraryOpen || shortcutsOpen || aboutOpen || typing) return;
       if (isSlider && e.code === "Space") return;
       if (e.code === "Space" && !(el && el.tagName === "BUTTON")) {
         e.preventDefault();
@@ -95,7 +97,7 @@ function AppShell({ store }: { store: ThemeStore }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch, exportOpen, libraryOpen, shortcutsOpen, selected, library, theme, toast]);
+  }, [dispatch, exportOpen, libraryOpen, shortcutsOpen, aboutOpen, selected, library, theme, toast]);
 
   const breakpoint = useBreakpoint();
   const mobile = breakpoint === "mobile";
@@ -158,6 +160,7 @@ function AppShell({ store }: { store: ThemeStore }) {
             items={[
               { label: "Library", onSelect: () => setLibraryOpen(true) },
               { label: "Vibe", onSelect: () => setVibeSheet(true) },
+              { label: "About and privacy", onSelect: () => setAboutOpen(true) },
               { label: "Undo", shortcut: "⌘Z", onSelect: () => dispatch({ type: "undo" }), disabled: !canUndo },
               { label: "Redo", shortcut: "⌘⇧Z", onSelect: () => dispatch({ type: "redo" }), disabled: !canRedo },
               {
@@ -193,6 +196,7 @@ function AppShell({ store }: { store: ThemeStore }) {
                 items={[
                   { label: "Undo", shortcut: "⌘Z", onSelect: () => dispatch({ type: "undo" }), disabled: !canUndo },
                   { label: "Redo", shortcut: "⌘⇧Z", onSelect: () => dispatch({ type: "redo" }), disabled: !canRedo },
+                  { label: "About and privacy", onSelect: () => setAboutOpen(true) },
                 ]}
               />
             ) : (
@@ -238,6 +242,11 @@ function AppShell({ store }: { store: ThemeStore }) {
                 </p>
               </>
             )}
+            <p className="side-foot about-link">
+              <button type="button" className="link-btn" onClick={() => setAboutOpen(true)}>
+                About and privacy
+              </button>
+            </p>
           </aside>
         )}
         <section className="stage" aria-label="Preview">
@@ -332,6 +341,7 @@ function AppShell({ store }: { store: ThemeStore }) {
       )}
 
       <ShortcutSheet open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
       <CoachMarks />
 
       <LibraryDrawer

@@ -4,11 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SyntaxHue: make a VS Code color theme in minutes</title>
     <meta
       name="description"
-      content="Make a VS Code color theme in minutes: shuffle, tune, paste into settings.json."
+      content="Free VS Code theme generator. Shuffle colors, tune what you like, check contrast, then paste into settings.json or export an extension. Runs in your browser."
     />
-    <title>SyntaxHue</title>
+    <link rel="canonical" href="https://syntaxhue.dev/" />
+    <meta name="theme-color" content="#171a26" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SyntaxHue" />
+    <meta property="og:title" content="SyntaxHue: make a VS Code color theme in minutes" />
+    <meta
+      property="og:description"
+      content="Shuffle colors, tune what you like, check contrast, then paste into settings.json or export an extension. Free, in your browser."
+    />
+    <meta property="og:url" content="https://syntaxhue.dev/" />
+    <meta property="og:image" content="https://syntaxhue.dev/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SyntaxHue: a row of syntax colors for a VS Code theme" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SyntaxHue: make a VS Code color theme in minutes" />
+    <meta
+      name="twitter:description"
+      content="Shuffle colors, tune what you like, check contrast, then paste into settings.json or export an extension."
+    />
+    <meta name="twitter:image" content="https://syntaxhue.dev/og.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SyntaxHue",
+        "url": "https://syntaxhue.dev/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (web browser)",
+        "description": "A free web app that generates color themes for Visual Studio Code. Not affiliated with Microsoft.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,6 +51,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main style="max-width: 40rem; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif">
+        <h1>SyntaxHue</h1>
+        <p>
+          SyntaxHue is a free web app that makes color themes for Visual Studio Code. Shuffle colors, tune what you
+          like, check contrast, then paste the result into settings.json or export it as an extension.
+        </p>
+        <p>It needs JavaScript to run. Everything happens in your browser; nothing is uploaded.</p>
+        <p>Not affiliated with Microsoft. Visual Studio Code is a trademark of Microsoft Corporation.</p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
