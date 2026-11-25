@@ -11,27 +11,12 @@ interface Props {
   dispatch: Dispatch<Action>;
 }
 
-/** The Vibe button in the top bar and the popover with the four global sliders. */
-export function VibePanel({ vibe, dispatch }: Props) {
+/** The four global sliders with their reset buttons. Shown in a popover on larger screens and in a sheet on phones. */
+export function VibeControls({ vibe, dispatch }: Props) {
   const active = VIBE_KEYS.some((k) => vibe[k] !== 0);
   const base = useId();
-
   return (
-    <Popover
-      label="Vibe"
-      className="vibe-pop"
-      renderTrigger={({ ref, open, props }) => (
-        <Button
-          ref={ref}
-          className={open ? "on" : undefined}
-          title="Vibe: contrast, saturation, warmth, depth"
-          {...props}
-        >
-          Vibe
-          {active && <span className="vibe-dot" role="img" aria-label="adjusted" />}
-        </Button>
-      )}
-    >
+    <>
       <p className="vibe-intro">Tweaks the whole theme without changing your colors. Contrast always stays readable.</p>
       {VIBE_KEYS.map((key: VibeKey) => {
         const s = SLIDERS[key];
@@ -76,6 +61,31 @@ export function VibePanel({ vibe, dispatch }: Props) {
           Reset all
         </Button>
       </div>
+    </>
+  );
+}
+
+/** The Vibe button in the top bar and the popover with the four global sliders. */
+export function VibePanel({ vibe, dispatch }: Props) {
+  const active = VIBE_KEYS.some((k) => vibe[k] !== 0);
+
+  return (
+    <Popover
+      label="Vibe"
+      className="vibe-pop"
+      renderTrigger={({ ref, open, props }) => (
+        <Button
+          ref={ref}
+          className={open ? "on" : undefined}
+          title="Vibe: contrast, saturation, warmth, depth"
+          {...props}
+        >
+          Vibe
+          {active && <span className="vibe-dot" role="img" aria-label="adjusted" />}
+        </Button>
+      )}
+    >
+      <VibeControls vibe={vibe} dispatch={dispatch} />
     </Popover>
   );
 }

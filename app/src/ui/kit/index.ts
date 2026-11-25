@@ -3,6 +3,7 @@ export { Button, type ButtonProps } from "./Button";
 export { Dialog, Drawer } from "./Dialog";
 export { IconButton } from "./IconButton";
 export { SegmentedControl, type Segment } from "./SegmentedControl";
+export { Menu, type MenuItem } from "./Menu";
 export { Popover, type PopoverTrigger } from "./Popover";
 export { Slider } from "./Slider";
 export { FieldShell, TextField } from "./TextField";

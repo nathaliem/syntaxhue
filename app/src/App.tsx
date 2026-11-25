@@ -11,10 +11,13 @@ import { useLibrary } from "./ui/useLibrary";
 import { themesEqual } from "./engine/library";
 import { BottomSheet } from "./ui/BottomSheet";
 import { RoleEditor, RoleRail } from "./ui/RoleRail";
-import { useIsMobile } from "./ui/useIsMobile";
-import { VibePanel } from "./ui/VibePanel";
+import { COMPACT_BAR_QUERY, useBreakpoint, useMedia } from "./ui/useIsMobile";
+import { VibeControls, VibePanel } from "./ui/VibePanel";
+import { RoleEditorPopover } from "./ui/RoleEditorPopover";
+import { SwatchStrip } from "./ui/SwatchStrip";
+import { ThumbBar } from "./ui/ThumbBar";
 import { useThemeStore } from "./state";
-import { Button, IconButton, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
+import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
 
 function AppShell({ store }: { store: ThemeStore }) {
   const { theme, canUndo, canRedo, saveState, dispatch, notice, dismissNotice, restorePrevious } = store;
@@ -37,6 +40,11 @@ function AppShell({ store }: { store: ThemeStore }) {
   }, []);
   useEffect(() => () => clearTimeout(statusTimer.current), []);
   const unlocked = unlockedCount(theme);
+  const contrastLine =
+    status ??
+    (issues.length === 0
+      ? "All colors pass contrast checks."
+      : `${issues.length} color${issues.length > 1 ? "s" : ""} below the readable minimum.`);
 
   // A button clicked with the mouse shouldn't keep focus, or Space would press it again
   // (e.g. unlock the color you just locked) instead of shuffling. Keyboard focus is untouched.
@@ -75,10 +83,14 @@ function AppShell({ store }: { store: ThemeStore }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [dispatch, exportOpen, libraryOpen, library, theme, toast]);
 
-  const mobile = useIsMobile();
+  const breakpoint = useBreakpoint();
+  const mobile = breakpoint === "mobile";
+  const tablet = breakpoint === "tablet";
+  const compactBar = useMedia(COMPACT_BAR_QUERY);
+  const [vibeSheet, setVibeSheet] = useState(false);
   const pick = (id: RoleId) => {
     setSelected(id);
-    if (mobile) return;
+    if (mobile || tablet) return; // the editor isn't inline there, so there is nothing to scroll to
     requestAnimationFrame(() =>
       document.getElementById(`edit-${id}`)?.scrollIntoView({ block: "nearest", behavior: "smooth" }),
     );
@@ -91,7 +103,7 @@ function AppShell({ store }: { store: ThemeStore }) {
           <img src="/favicon.svg" alt="" width="28" height="28" />
           <span>SyntaxHue</span>
         </div>
-        <Button onClick={() => setLibraryOpen(true)}>Library</Button>
+        {!mobile && <Button onClick={() => setLibraryOpen(true)}>Library</Button>}
         <label className="name">
           <span className="sr-only">Theme name</span>
           <input
@@ -120,61 +132,93 @@ function AppShell({ store }: { store: ThemeStore }) {
             {themesEqual(library.linked.theme, theme) ? "In library" : "Unsaved changes"}
           </span>
         )}
-        <div className="bar-actions">
-          <Button
-            variant="primary"
-            onClick={() => dispatch({ type: "shuffle" })}
-            disabled={unlocked === 0}
-            title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
-          >
-            {shuffleLabel(unlocked)} <kbd>Space</kbd>
-          </Button>
-          <SegmentedControl
-            label="Theme mode"
-            value={theme.mode}
-            onChange={(mode) => dispatch({ type: "mode", mode })}
-            segments={[
-              { value: "dark", label: "Dark" },
-              { value: "light", label: "Light" },
+        {mobile ? (
+          <Menu
+            label="More actions"
+            items={[
+              { label: "Library", onSelect: () => setLibraryOpen(true) },
+              { label: "Vibe", onSelect: () => setVibeSheet(true) },
+              { label: "Undo", shortcut: "⌘Z", onSelect: () => dispatch({ type: "undo" }), disabled: !canUndo },
+              { label: "Redo", shortcut: "⌘⇧Z", onSelect: () => dispatch({ type: "redo" }), disabled: !canRedo },
+              {
+                label: theme.mode === "dark" ? "Switch to light mode" : "Switch to dark mode",
+                onSelect: () => dispatch({ type: "mode", mode: theme.mode === "dark" ? "light" : "dark" }),
+              },
             ]}
           />
-          <VibePanel vibe={theme.vibe} dispatch={dispatch} />
-          <IconButton label="Undo" shortcut="⌘Z" onClick={() => dispatch({ type: "undo" })} disabled={!canUndo}>
-            ↶
-          </IconButton>
-          <IconButton label="Redo" shortcut="⌘⇧Z" onClick={() => dispatch({ type: "redo" })} disabled={!canRedo}>
-            ↷
-          </IconButton>
-          <Button className="export-btn" onClick={() => setExportOpen(true)}>
-            Export
-          </Button>
-        </div>
+        ) : (
+          <div className="bar-actions">
+            <Button
+              variant="primary"
+              onClick={() => dispatch({ type: "shuffle" })}
+              disabled={unlocked === 0}
+              title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
+            >
+              {shuffleLabel(unlocked)} <kbd>Space</kbd>
+            </Button>
+            <SegmentedControl
+              label="Theme mode"
+              value={theme.mode}
+              onChange={(mode) => dispatch({ type: "mode", mode })}
+              segments={[
+                { value: "dark", label: "Dark" },
+                { value: "light", label: "Light" },
+              ]}
+            />
+            <VibePanel vibe={theme.vibe} dispatch={dispatch} />
+            {compactBar ? (
+              <Menu
+                label="More actions"
+                items={[
+                  { label: "Undo", shortcut: "⌘Z", onSelect: () => dispatch({ type: "undo" }), disabled: !canUndo },
+                  { label: "Redo", shortcut: "⌘⇧Z", onSelect: () => dispatch({ type: "redo" }), disabled: !canRedo },
+                ]}
+              />
+            ) : (
+              <>
+                <IconButton label="Undo" shortcut="⌘Z" onClick={() => dispatch({ type: "undo" })} disabled={!canUndo}>
+                  ↶
+                </IconButton>
+                <IconButton label="Redo" shortcut="⌘⇧Z" onClick={() => dispatch({ type: "redo" })} disabled={!canRedo}>
+                  ↷
+                </IconButton>
+              </>
+            )}
+            <Button className="export-btn" onClick={() => setExportOpen(true)}>
+              Export
+            </Button>
+          </div>
+        )}
       </header>
 
       <div className={"layout" + (mobile && selected ? " sheet-open" : "")}>
-        <aside className="side" aria-label="Theme colors">
-          <RoleRail
-            theme={theme}
-            selected={selected}
-            onSelect={setSelected}
-            onHover={setHovered}
-            dispatch={dispatch}
-            onStatus={showStatus}
-            inlineEditor={!mobile}
-          />
-          <p className="side-foot" role="status">
-            {status ??
-              (issues.length === 0
-                ? "All colors pass contrast checks."
-                : `${issues.length} color${issues.length > 1 ? "s" : ""} below the readable minimum.`)}
-          </p>
-          <p className="side-foot support">
-            Free and made by one person.{" "}
-            <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
-              Buy me a coffee ☕
-            </a>
-          </p>
-        </aside>
+        {!mobile && (
+          <aside className="side" aria-label="Theme colors">
+            <RoleRail
+              theme={theme}
+              selected={selected}
+              onSelect={setSelected}
+              onHover={setHovered}
+              dispatch={dispatch}
+              onStatus={showStatus}
+              inlineEditor={!tablet}
+              compact={tablet}
+            />
+            {!tablet && (
+              <>
+                <p className="side-foot" role="status">
+                  {contrastLine}
+                </p>
+                <p className="side-foot support">
+                  Free and made by one person.{" "}
+                  <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
+                    Buy me a coffee ☕
+                  </a>
+                </p>
+              </>
+            )}
+          </aside>
+        )}
         <section className="stage" aria-label="Preview">
           {notice && (
             <div className="notice" role="status">
@@ -212,12 +256,48 @@ function AppShell({ store }: { store: ThemeStore }) {
           <FitToWidth>
             <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} sample={sampleFor(lang)} />
           </FitToWidth>
+          {(tablet || mobile) && (
+            <>
+              <p className="side-foot" role="status">
+                {contrastLine}
+              </p>
+              <p className="side-foot support">
+                Free and made by one person.{" "}
+                <a href="https://buymeacoffee.com/nathaliemaes" target="_blank" rel="noopener noreferrer">
+                  Buy me a coffee ☕
+                </a>
+              </p>
+            </>
+          )}
         </section>
       </div>
 
+      {mobile && (
+        <>
+          <SwatchStrip theme={theme} selected={selected} onSelect={setSelected} dispatch={dispatch} />
+          <ThumbBar
+            unlocked={unlocked}
+            onShuffle={() => dispatch({ type: "shuffle" })}
+            onExport={() => setExportOpen(true)}
+          />
+        </>
+      )}
+
+      {tablet && selected && (
+        <RoleEditorPopover roleId={selected} theme={theme} dispatch={dispatch} onClose={() => setSelected(null)} />
+      )}
+
       {mobile && selected && (
         <BottomSheet title={ROLE_BY_ID[selected].label} onClose={() => setSelected(null)}>
+          <Button className="sheet-lock" onClick={() => dispatch({ type: "lock", role: selected })}>
+            {theme.roles[selected].locked ? "Unlock" : "Lock"}
+          </Button>
           <RoleEditor key={selected} def={ROLE_BY_ID[selected]} theme={theme} dispatch={dispatch} />
+        </BottomSheet>
+      )}
+      {mobile && vibeSheet && !selected && (
+        <BottomSheet title="Vibe" onClose={() => setVibeSheet(false)}>
+          <VibeControls vibe={theme.vibe} dispatch={dispatch} />
         </BottomSheet>
       )}
 
