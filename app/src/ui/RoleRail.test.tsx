@@ -203,3 +203,20 @@ describe("copy and paste a color between roles", () => {
     expect(row(/^String/)).toHaveAttribute("title", expect.stringContaining("Ctrl/⌘+V"));
   });
 });
+
+describe("keyboard focus on a color row", () => {
+  it("highlights its elements in the preview, like hovering, and clears when focus leaves the row", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const preview = () => document.querySelector(".wb")!.getAttribute("data-hl");
+    expect(preview()).toBeNull();
+    act(() => screen.getByRole("button", { name: /^Keyword/ }).focus());
+    expect(preview()).toBe("keyword");
+    await user.tab(); // the row's lock button: still the same row
+    expect(preview()).toBe("keyword");
+    await user.tab(); // next row
+    expect(preview()).toBe("string");
+    act(() => screen.getByRole("button", { name: /^Shuffle/ }).focus());
+    expect(preview()).toBeNull();
+  });
+});
