@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trackEvent } from "../analytics";
 import { CloseIcon } from "./icons";
-import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
+import { BASE_THEME_LABEL, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
 import { ExtensionForm } from "./ExtensionForm";
 import { PortsPanel } from "./PortsPanel";
@@ -93,7 +93,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
         {tab === "settings" && (
           <div className="export-body">
             {guided ? (
-              <SettingsGuide baseTheme={BASE_THEME[theme.mode]} />
+              <SettingsGuide baseTheme={BASE_THEME_LABEL[theme.mode]} />
             ) : (
               <ol className="steps">
                 <li>
@@ -109,7 +109,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
               </ol>
             )}
             <Toggle checked={scoped} onChange={setScoped}>
-              Only apply on top of “{BASE_THEME[theme.mode]}” (recommended, keeps your other themes untouched)
+              Only apply on top of “{BASE_THEME_LABEL[theme.mode]}” (recommended, keeps your other themes untouched)
             </Toggle>
             <pre className="code" tabIndex={0}>
               {snippet}

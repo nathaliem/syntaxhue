@@ -1,5 +1,9 @@
 # SyntaxHue
 
+[![CI](https://github.com/nathaliem/syntaxhue/actions/workflows/ci.yml/badge.svg)](https://github.com/nathaliem/syntaxhue/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Live at syntaxhue.dev](https://img.shields.io/badge/live-syntaxhue.dev-brightgreen.svg)](https://syntaxhue.dev)
+
 Make a VS Code color theme in minutes. Shuffle a readable palette, lock the colors you like, tune them by role, and
 see the result in a preview that uses the same TextMate grammars as VS Code. Every text color is kept above its
 contrast minimum, so the theme stays readable.

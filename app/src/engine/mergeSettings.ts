@@ -1,4 +1,4 @@
-import { settingsSnippet } from "./derive";
+import { BASE_SCOPE, LEGACY_SCOPES, settingsSnippet } from "./derive";
 import { parseJsonc } from "./importTheme";
 import type { ThemeState } from "./theme";
 
@@ -127,6 +127,23 @@ function render(v: unknown, unit: string): string {
     .join("\n" + unit);
 }
 
+/** Moves blocks scoped to just "[Default Dark Modern]" or just "[Dark Modern]" under the scope that matches both. */
+function foldLegacyScopes(existing: unknown, mode: ThemeState["mode"], notes: string[]): unknown {
+  if (!isObject(existing)) return existing;
+  const legacy = LEGACY_SCOPES[mode].filter((k) => isObject(existing[k]));
+  if (!legacy.length) return existing;
+  const out: Record<string, unknown> = {};
+  const target = BASE_SCOPE[mode];
+  let combined: Record<string, unknown> = isObject(existing[target]) ? { ...(existing[target] as object) } : {};
+  for (const k of legacy) combined = merge(existing[k], combined) as Record<string, unknown>;
+  for (const [k, v] of Object.entries(existing)) if (!LEGACY_SCOPES[mode].includes(k) && k !== target) out[k] = v;
+  out[target] = combined;
+  notes.push(
+    `Moved your ${legacy.join(" and ")} block to ${target}: newer VS Code versions call the theme “${mode === "dark" ? "Dark Modern" : "Light Modern"}”, so the old name alone no longer applies.`,
+  );
+  return out;
+}
+
 const hasComment = (s: string) => {
   let i = 0;
   while (i < s.length) {
@@ -169,7 +186,8 @@ export function mergeSettings(input: string, theme: ThemeState, scoped = true): 
     } catch {
       return { ok: false, error: `Couldn't read the value of “${key}”, so nothing was changed.` };
     }
-    const merged = merge(existing, value);
+    const folded = scoped ? foldLegacyScopes(existing, theme.mode, notes) : existing;
+    const merged = merge(folded, value);
     if (hasComment(old)) notes.push(`Comments inside “${key}” were dropped; the rest of the file keeps its comments.`);
     edits.push({ start: last.valStart, end: last.valEnd, text: render(merged, unit) });
   }

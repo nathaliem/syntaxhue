@@ -252,14 +252,34 @@ export function semanticRules(
   };
 }
 
+/**
+ * The built-in theme each export sits on. The `workbench.colorTheme` value is the old "Default …" name, which every
+ * VS Code version accepts (new ones translate it). VS Code renamed these themes' ids to "Dark Modern" and "Light
+ * Modern", and a "[Default Dark Modern]" block no longer applies to them, so blocks are scoped to both names at once.
+ */
 export const BASE_THEME: Record<ThemeState["mode"], string> = {
   dark: "Default Dark Modern",
   light: "Default Light Modern",
 };
 
-/** The object to merge into user settings.json. `scoped` wraps each block in "[Base Theme]". */
+/** The names the built-in theme goes by in VS Code today (what the Color Theme picker shows). */
+export const BASE_THEME_LABEL: Record<ThemeState["mode"], string> = { dark: "Dark Modern", light: "Light Modern" };
+
+/** Scope key that matches the base theme under its old and its new name. */
+export const BASE_SCOPE: Record<ThemeState["mode"], string> = {
+  dark: "[Default Dark Modern][Dark Modern]",
+  light: "[Default Light Modern][Light Modern]",
+};
+
+/** Single-name scopes from earlier exports (and hand-written ones); merge mode folds these into `BASE_SCOPE`. */
+export const LEGACY_SCOPES: Record<ThemeState["mode"], string[]> = {
+  dark: ["[Default Dark Modern]", "[Dark Modern]"],
+  light: ["[Default Light Modern]", "[Light Modern]"],
+};
+
+/** The object to merge into user settings.json. `scoped` wraps each block in the base theme's scope. */
 export function settingsSnippet(t: ThemeState, scoped = true) {
-  const scope = `[${BASE_THEME[t.mode]}]`;
+  const scope = BASE_SCOPE[t.mode];
   const wrap = <T>(v: T) => (scoped ? { [scope]: v } : v);
   return {
     "workbench.colorTheme": BASE_THEME[t.mode],
