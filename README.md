@@ -19,9 +19,11 @@ Live at <https://syntaxhue.dev>. Everything runs in your browser; nothing is upl
 - **Checks contrast** (WCAG) as you edit, with a one-click lightness-only fix.
 - **Previews** real code in several languages. Click anything to edit the color behind it.
 - **Imports** an existing VS Code theme as a starting point, and keeps a **library** of saved themes in the browser.
-- **Exports** a `settings.json` snippet, a `*-color-theme.json`, a ready-to-publish `.vsix`, and ports for Zed, Sublime
-  Text, Neovim, JetBrains and common terminals.
-- **Shares** a theme as a link (the theme is in the URL hash).
+- **Exports** a `settings.json` snippet, a `*-color-theme.json`, a ready-to-publish `.vsix`, and ports for other
+  editors (Zed, Sublime Text, Neovim, JetBrains IDEs, plus a plain palette JSON) and terminals (Windows Terminal,
+  iTerm2, Ghostty, Alacritty, Kitty, WezTerm, Warp, macOS Terminal).
+- **Shares** a theme as a link (the theme is in the URL hash). An opt-in link adds a preview image of the theme for
+  chat apps and social posts; it sends the theme to the server to draw it.
 
 ## Getting started
 

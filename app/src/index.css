@@ -1378,8 +1378,9 @@ pre.code {
   cursor: not-allowed;
 }
 .field-grid {
-  display: flex;
-  flex-wrap: wrap;
+  /* Even columns: three across on a wide dialog, fewer as it narrows. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 12px 16px;
 }
 .field select {

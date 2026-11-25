@@ -17,7 +17,9 @@ export function AboutDialog({ open, onClose }: { open: boolean; onClose: () => v
           <h3>What it is</h3>
           <p>
             SyntaxHue makes color themes for VS Code. Shuffle, tune what you like, then paste the result into your
-            settings or export it as an extension. It is free and made by one person. The code is on{" "}
+            settings or export it as an extension. The same colors also export for Zed, Sublime Text, Neovim, JetBrains
+            IDEs and terminals (Windows Terminal, iTerm2, Ghostty, Alacritty, Kitty, WezTerm, Warp and macOS Terminal).
+            It is free and made by one person. The code is on{" "}
             <a href={GITHUB_URL} target="_blank" rel="noreferrer">
               GitHub
             </a>
