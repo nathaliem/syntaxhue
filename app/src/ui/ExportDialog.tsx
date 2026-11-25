@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CloseIcon } from "./icons";
 import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
 import { ExtensionForm } from "./ExtensionForm";
@@ -47,7 +48,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
         <header className="export-h">
           <h2 id="export-title">Export “{theme.name}”</h2>
           <IconButton size="sm" label="Close" onClick={onClose}>
-            ✕
+            <CloseIcon />
           </IconButton>
         </header>
         <div className="tabs" role="tablist">

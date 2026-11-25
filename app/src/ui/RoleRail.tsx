@@ -1,4 +1,5 @@
 import { useEffect, useState, type ClipboardEvent, type Dispatch, type KeyboardEvent } from "react";
+import { LockIcon, UnlockIcon, WarningIcon } from "./icons";
 import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
 import { parseCssColor } from "../engine/parseColor";
 import { ROLES, type RoleDef, type RoleId, type ThemeState } from "../engine/theme";
@@ -51,6 +52,7 @@ export function RoleRail({
               theme={theme}
               open={selected === def.id}
               inlineEditor={inlineEditor}
+              compact={compact}
               onToggle={() => onSelect(selected === def.id ? null : def.id)}
               onHover={onHover}
               dispatch={dispatch}
@@ -68,6 +70,7 @@ function RoleRow({
   theme,
   open,
   inlineEditor,
+  compact,
   onToggle,
   onHover,
   dispatch,
@@ -77,6 +80,7 @@ function RoleRow({
   theme: ThemeState;
   open: boolean;
   inlineEditor: boolean;
+  compact: boolean;
   onToggle: () => void;
   onHover: (id: RoleId | null) => void;
   dispatch: Dispatch<Action>;
@@ -126,13 +130,19 @@ function RoleRow({
           aria-expanded={open}
           aria-controls={open ? `edit-${def.id}` : undefined}
           aria-keyshortcuts="Control+C Meta+C Control+V Meta+V"
-          title="Click to edit. Copy this color with Ctrl/⌘+C, paste one with Ctrl/⌘+V."
+          title={
+            compact
+              ? `${def.label} ${role.color}${ratio !== null ? ` · contrast ${ratio.toFixed(1)}:1${fails ? ", below the readable minimum" : ""}` : ""}`
+              : "Click to edit. Copy this color with Ctrl/⌘+C, paste one with Ctrl/⌘+V."
+          }
           onClick={onToggle}
           onKeyDown={onKeyDown}
           onCopy={onCopy}
           onPaste={onPaste}
         >
-          <span className="swatch" style={{ background: role.color }} />
+          <span className="swatch" style={{ background: role.color }}>
+            {compact && fails && <WarningIcon size={14} className="swatch-warn" />}
+          </span>
           <span className="role-label">{def.label}</span>
           <span className="role-hex">{role.color}</span>
           {ratio !== null && (
@@ -140,7 +150,7 @@ function RoleRow({
               tone={fails ? "warn" : "neutral"}
               title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1`}
             >
-              {fails ? "⚠ " : ""}
+              {fails && <WarningIcon size={12} />}
               {ratio.toFixed(1)}
             </Badge>
           )}
@@ -152,7 +162,7 @@ function RoleRow({
           title={role.locked ? "Locked: shuffle keeps this color" : "Lock to keep this color when shuffling"}
           onClick={() => dispatch({ type: "lock", role: def.id })}
         >
-          <LockIcon locked={role.locked} />
+          {role.locked ? <LockIcon size={16} /> : <UnlockIcon size={16} />}
         </button>
       </div>
       {open && inlineEditor && <RoleEditor def={def} theme={theme} dispatch={dispatch} />}
@@ -342,23 +352,5 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
         </div>
       )}
     </div>
-  );
-}
-
-function LockIcon({ locked }: { locked: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      width="16"
-      height="16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      aria-hidden="true"
-    >
-      <rect x="4" y="9" width="12" height="8" rx="2" fill={locked ? "currentColor" : "none"} />
-      <path d={locked ? "M7 9V6a3 3 0 0 1 6 0v3" : "M7 9V6a3 3 0 0 1 5.8-1"} />
-    </svg>
   );
 }

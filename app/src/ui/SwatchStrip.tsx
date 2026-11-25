@@ -1,4 +1,5 @@
 import { useRef, type Dispatch } from "react";
+import { LockIcon } from "./icons";
 import { ROLES, type RoleId, type ThemeState } from "../engine/theme";
 import type { Action } from "../state";
 
@@ -50,12 +51,7 @@ export function SwatchStrip({ theme, selected, onSelect, dispatch }: Props) {
                 onSelect(def.id);
               }}
             >
-              {role.locked && (
-                <svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true">
-                  <rect x="4" y="9" width="12" height="8" rx="2" fill="currentColor" />
-                  <path d="M7 9V6a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" strokeWidth="2" />
-                </svg>
-              )}
+              {role.locked && <LockIcon size={14} />}
             </button>
           </li>
         );

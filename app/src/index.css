@@ -1747,3 +1747,22 @@ pre.code {
 .sheet-lock {
   margin: 0 16px 8px;
 }
+
+.swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.swatch-warn {
+  color: var(--warn);
+  background: var(--surface);
+  border-radius: 50%;
+  padding: 1px;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+}
+.role-pop-title {
+  margin: 0 0 8px;
+  font: 650 15px var(--display);
+}

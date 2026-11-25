@@ -64,6 +64,7 @@ export function RoleEditorPopover({ roleId, theme, dispatch, onClose }: Props) {
       aria-label={`Edit ${def.label}`}
       style={pos ? { top: pos.top, left: pos.left } : { visibility: "hidden" }}
     >
+      <h2 className="role-pop-title">{def.label}</h2>
       <RoleEditor def={def} theme={theme} dispatch={dispatch} />
     </div>
   );
