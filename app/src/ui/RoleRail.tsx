@@ -15,14 +15,25 @@ interface Props {
   onStatus: (message: string) => void;
   /** False on phones: the editor then lives in a bottom sheet instead of under the row. */
   inlineEditor?: boolean;
+  /** Tablets: only the swatch and the lock show, the rest stays available to screen readers. */
+  compact?: boolean;
 }
 
 const GROUPS: RoleDef["group"][] = ["Base", "Syntax", "Status"];
 
-export function RoleRail({ theme, selected, onSelect, onHover, dispatch, onStatus, inlineEditor = true }: Props) {
+export function RoleRail({
+  theme,
+  selected,
+  onSelect,
+  onHover,
+  dispatch,
+  onStatus,
+  inlineEditor = true,
+  compact = false,
+}: Props) {
   const allLocked = ROLES.every((r) => theme.roles[r.id].locked);
   return (
-    <div className="rail" onMouseLeave={() => onHover(null)}>
+    <div className={"rail" + (compact ? " rail-compact" : "")} onMouseLeave={() => onHover(null)}>
       {GROUPS.map((g) => (
         <section key={g} className="rail-group" aria-labelledby={`grp-${g}`}>
           <div className="rail-group-h">
@@ -108,7 +119,7 @@ function RoleRow({
   };
 
   return (
-    <div className={"role" + (open ? " open" : "")} onMouseEnter={() => onHover(def.id)}>
+    <div className={"role" + (open ? " open" : "")} data-role={def.id} onMouseEnter={() => onHover(def.id)}>
       <div className="role-row">
         <button
           className="role-main"

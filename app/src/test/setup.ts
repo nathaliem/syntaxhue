@@ -20,17 +20,30 @@ HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
   this.open = false;
 };
 
-// jsdom has no matchMedia. Tests are "desktop" unless they call setMobile(true).
-let mobile = false;
+// jsdom has no matchMedia. Tests run at a desktop width unless they change it. Only width queries are understood
+// ("(min-width: 768px) and (max-width: 1199px)"); anything else (prefers-color-scheme) does not match.
+const DESKTOP = 1440;
+let width = DESKTOP;
 const listeners = new Set<() => void>();
-export function setMobile(value: boolean) {
-  mobile = value;
+export function setViewportWidth(value: number) {
+  width = value;
   listeners.forEach((l) => l());
 }
-beforeEach(() => setMobile(false));
+export function setMobile(value: boolean) {
+  setViewportWidth(value ? 390 : DESKTOP);
+}
+beforeEach(() => setViewportWidth(DESKTOP));
+function matchesWidth(query: string): boolean {
+  const parts = query.split(/\s+and\s+/);
+  return parts.every((p) => {
+    const m = p.trim().match(/^\((min|max)-width:\s*(\d+)px\)$/);
+    if (!m) return false;
+    return m[1] === "min" ? width >= Number(m[2]) : width <= Number(m[2]);
+  });
+}
 window.matchMedia ??= ((query: string) => ({
   get matches() {
-    return query.includes("max-width: 767px") ? mobile : false;
+    return matchesWidth(query);
   },
   media: query,
   addEventListener: (_: string, l: () => void) => listeners.add(l),

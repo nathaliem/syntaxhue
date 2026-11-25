@@ -47,7 +47,7 @@ describe("mobile editor", () => {
     await user.clear(input);
     await user.type(input, "#102030");
     await user.tab();
-    expect(screen.getByRole("button", { name: /^Keyword/ }).querySelector(".role-hex")).toHaveTextContent("#102030");
+    expect(screen.getByRole("button", { name: /^Keyword/ })).toHaveAccessibleName(/#102030/i);
     await user.click(screen.getByRole("button", { name: "Done" }));
     expect(sheet()).toBeNull();
     await user.click(screen.getByRole("button", { name: /^String/ }));

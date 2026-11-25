@@ -20,7 +20,8 @@ interface Props {
   renderTrigger: (t: PopoverTrigger) => ReactNode;
   /** Extra class for the panel, for its width and padding. */
   className?: string;
-  children: ReactNode;
+  /** The panel content; a function gets `close` so an item inside can dismiss the panel. */
+  children: ReactNode | ((close: () => void) => ReactNode);
 }
 
 /**
@@ -66,7 +67,7 @@ export function Popover({ label, renderTrigger, className, children }: Props) {
       })}
       {open && (
         <div className={cx("pop", className)} id={panelId} role="dialog" aria-label={label}>
-          {children}
+          {typeof children === "function" ? children(() => setOpen(false)) : children}
         </div>
       )}
     </div>
