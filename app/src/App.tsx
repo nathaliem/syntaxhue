@@ -18,6 +18,7 @@ import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
 import { CoachMarks } from "./ui/CoachMarks";
 import { ShortcutSheet } from "./ui/ShortcutSheet";
+import { NameSuggest } from "./ui/NameSuggest";
 import { AboutDialog } from "./ui/AboutDialog";
 import { RedoIcon, UndoIcon } from "./ui/icons";
 import { useThemeStore } from "./state";
@@ -157,6 +158,7 @@ function AppShell({ store }: { store: ThemeStore }) {
             spellCheck={false}
           />
         </label>
+        <NameSuggest theme={theme} onPick={(name) => dispatch({ type: "name", name })} />
         <span
           className={"save-state" + (saveState === "failed" ? " bad" : "")}
           role="status"
