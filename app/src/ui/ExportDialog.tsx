@@ -7,6 +7,7 @@ import { ExtensionForm } from "./ExtensionForm";
 import { PortsPanel } from "./PortsPanel";
 import { SettingsGuide } from "./SettingsGuide";
 import { shareUrl } from "../state";
+import { Survey } from "./Survey";
 import { Button, Dialog, IconButton, Toggle } from "./kit";
 
 type Tab = "settings" | "file" | "extension" | "editors" | "terminals" | "link";
@@ -17,6 +18,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
   const [copied, setCopied] = useState<string | null>(null);
   /** After the first copy the how-to turns into the picture guide. */
   const [guided, setGuided] = useState(false);
+  /** Something was copied or downloaded in this dialog, so the one-question survey may appear. */
+  const [exported, setExported] = useState(false);
 
   const snippet = settingsSnippetText(theme, scoped);
   const fileJson = JSON.stringify(themeFile(theme), null, 2);
@@ -31,7 +34,10 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
     try {
       await navigator.clipboard.writeText(text);
       if (what === "link") trackEvent("share");
-      else trackEvent("export", { type: what === "snippet" ? "settings" : "file" });
+      else {
+        trackEvent("export", { type: what === "snippet" ? "settings" : "file" });
+        setExported(true);
+      }
       setCopied(what);
       if (what === "snippet") setGuided(true);
       setTimeout(() => setCopied(null), 1800);
@@ -47,6 +53,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
     a.download = `${slug}-color-theme.json`;
     a.click();
     trackEvent("export", { type: "file" });
+    setExported(true);
     URL.revokeObjectURL(url);
   };
 
@@ -156,6 +163,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
             </div>
           </div>
         )}
+        {exported && <Survey />}
       </div>
     </Dialog>
   );
