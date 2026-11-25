@@ -1,7 +1,7 @@
 import { chromaWord, hueName, lightnessWord, roleSpeech } from "../engine/colorName";
 import { useEffect, useState, type ClipboardEvent, type Dispatch, type KeyboardEvent } from "react";
 import { LockIcon, UnlockIcon, WarningIcon } from "./icons";
-import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
+import { apca, contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
 import { parseCssColor } from "../engine/parseColor";
 import { ROLES, type RoleDef, type RoleId, type ThemeState } from "../engine/theme";
 import type { Action } from "../state";
@@ -91,6 +91,7 @@ function RoleRow({
   const bg = theme.roles.bg.color;
   const ratio = def.min ? contrast(role.color, bg) : null;
   const fails = ratio !== null && ratio < def.min;
+  const lc = def.min ? apca(role.color, bg) : null;
 
   // Ctrl/⌘+C on a focused row copies its color; Ctrl/⌘+V pastes any CSS color from the clipboard onto it.
   // Copy listens for the key itself, because browsers differ on whether a copy event fires when nothing is
@@ -137,13 +138,13 @@ function RoleRow({
       <div className="role-row">
         <button
           className="role-main"
-          aria-label={roleSpeech(def.label, role.color, role.locked, ratio, def.min)}
+          aria-label={roleSpeech(def.label, role.color, role.locked, ratio, def.min, lc ?? undefined)}
           aria-expanded={open}
           aria-controls={open ? `edit-${def.id}` : undefined}
           aria-keyshortcuts="Control+C Meta+C Control+V Meta+V"
           title={
             compact
-              ? `${def.label} ${role.color}${ratio !== null ? ` · contrast ${ratio.toFixed(1)}:1${fails ? ", below the readable minimum" : ""}` : ""}`
+              ? `${def.label} ${role.color}${ratio !== null ? ` · contrast ${ratio.toFixed(1)}:1${fails ? ", below the readable minimum" : ""}${lc !== null ? ` · APCA Lc ${Math.round(lc)}` : ""}` : ""}`
               : "Click to edit. Copy this color with Ctrl/⌘+C, paste one with Ctrl/⌘+V."
           }
           onClick={onToggle}
@@ -159,7 +160,7 @@ function RoleRow({
           {ratio !== null && (
             <Badge
               tone={fails ? "warn" : "neutral"}
-              title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1`}
+              title={`Contrast ${ratio.toFixed(2)}:1 against background, needs ${def.min}:1${lc !== null ? `. APCA Lc ${Math.round(lc)} (advisory)` : ""}`}
             >
               {fails && <WarningIcon size={12} />}
               {ratio.toFixed(1)}
@@ -213,6 +214,7 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
 
   const ratio = def.min ? contrast(role.color, bg) : null;
   const fails = ratio !== null && ratio < def.min;
+  const lc = ratio !== null ? apca(role.color, bg) : null;
 
   const slider = (
     key: keyof Oklch,
@@ -356,6 +358,11 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
           </span>
         )}
       </div>
+      {lc !== null && (
+        <p className="apca-note">
+          APCA Lc {Math.round(lc)} <span>(advisory; the pass mark above is WCAG)</span>
+        </p>
+      )}
       {fails && (
         <div className="warn" role="status">
           <span>

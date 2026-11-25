@@ -297,3 +297,13 @@ describe("history", () => {
     expect(after).toBe(locked);
   });
 });
+
+describe("APCA Lc (advisory)", () => {
+  it("matches the published reference values", async () => {
+    const { apca } = await import("./color");
+    expect(apca("#000000", "#ffffff")).toBeCloseTo(106.04, 1);
+    expect(apca("#ffffff", "#000000")).toBeCloseTo(107.88, 1);
+    expect(apca("#888888", "#ffffff")).toBeCloseTo(63.06, 0);
+    expect(apca("#777777", "#777777")).toBe(0);
+  });
+});

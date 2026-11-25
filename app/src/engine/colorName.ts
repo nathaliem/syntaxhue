@@ -52,10 +52,18 @@ export function describeColor(hex: Hex): string {
 }
 
 /** What a screen reader says for a color row: name, color in words, hex, contrast and lock state. */
-export function roleSpeech(label: string, hex: Hex, locked: boolean, ratio: number | null, min: number): string {
+export function roleSpeech(
+  label: string,
+  hex: Hex,
+  locked: boolean,
+  ratio: number | null,
+  min: number,
+  lc?: number,
+): string {
   const parts = [label, describeColor(hex), hex];
   if (ratio !== null) {
     parts.push(`contrast ${ratio.toFixed(1)} to 1, ${ratio < min ? `below the ${min} to 1 minimum` : "readable"}`);
+    if (lc !== undefined) parts.push(`A P C A ${Math.round(lc)}`);
   }
   if (locked) parts.push("locked");
   return parts.join(", ");
