@@ -24,8 +24,21 @@ import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
 
 function AppShell({ store }: { store: ThemeStore }) {
-  const { theme, canUndo, canRedo, saveState, dispatch, harmony, setHarmony, notice, dismissNotice, restorePrevious } =
-    store;
+  const {
+    theme,
+    canUndo,
+    canRedo,
+    saveState,
+    dispatch,
+    harmony,
+    setHarmony,
+    chrome,
+    setChrome,
+    chromeMode,
+    notice,
+    dismissNotice,
+    restorePrevious,
+  } = store;
   const [selected, setSelected] = useState<RoleId | null>(null);
   const [lang, setLang] = useState<Lang>("typescript");
   const [hovered, setHovered] = useState<RoleId | null>(null);
@@ -33,6 +46,16 @@ function AppShell({ store }: { store: ThemeStore }) {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  // For a moment after the interface colors change, every part of the interface (not the preview) fades to its new color.
+  const [swapping, setSwapping] = useState(false);
+  const lastChrome = useRef(chromeMode);
+  useEffect(() => {
+    if (lastChrome.current === chromeMode) return;
+    lastChrome.current = chromeMode;
+    setSwapping(true);
+    const t = setTimeout(() => setSwapping(false), 400);
+    return () => clearTimeout(t);
+  }, [chromeMode]);
   const library = useLibrary();
   const toast = useToast();
   const issues = contrastIssues(theme);
@@ -119,7 +142,7 @@ function AppShell({ store }: { store: ThemeStore }) {
   };
 
   return (
-    <div className="app" data-mode={theme.mode}>
+    <div className={"app" + (swapping ? " chrome-swap" : "")} data-mode={chromeMode}>
       <header className="bar">
         <div className="brand">
           <img src="/favicon.svg" alt="" width="28" height="28" />
@@ -189,7 +212,14 @@ function AppShell({ store }: { store: ThemeStore }) {
                 { value: "light", label: "Light" },
               ]}
             />
-            <VibePanel vibe={theme.vibe} dispatch={dispatch} harmony={harmony} onHarmony={setHarmony} />
+            <VibePanel
+              vibe={theme.vibe}
+              dispatch={dispatch}
+              harmony={harmony}
+              onHarmony={setHarmony}
+              chrome={chrome}
+              onChrome={setChrome}
+            />
             {compactBar ? (
               <Menu
                 label="More actions"
@@ -336,7 +366,14 @@ function AppShell({ store }: { store: ThemeStore }) {
       )}
       {mobile && vibeSheet && !selected && (
         <BottomSheet title="Vibe" onClose={() => setVibeSheet(false)}>
-          <VibeControls vibe={theme.vibe} dispatch={dispatch} harmony={harmony} onHarmony={setHarmony} />
+          <VibeControls
+            vibe={theme.vibe}
+            dispatch={dispatch}
+            harmony={harmony}
+            onHarmony={setHarmony}
+            chrome={chrome}
+            onChrome={setChrome}
+          />
         </BottomSheet>
       )}
 
@@ -362,7 +399,7 @@ export default function App() {
   const store = useThemeStore();
   // The toast is drawn outside the app's own element, so it is told which chrome colors to use.
   return (
-    <ToastProvider mode={store.theme.mode}>
+    <ToastProvider mode={store.chromeMode}>
       <AppShell store={store} />
     </ToastProvider>
   );
