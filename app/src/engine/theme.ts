@@ -47,7 +47,7 @@ export const ROLES: RoleDef[] = [
     id: "accent",
     label: "Accent",
     group: "Base",
-    min: 3,
+    min: 0, // a taste choice: it may sit close to the background, so it is never flagged or adjusted for contrast
     hint: "Focus borders, active tab, status bar, buttons, badges.",
   },
   {

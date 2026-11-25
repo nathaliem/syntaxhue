@@ -150,7 +150,7 @@ Object.fromEntries([
 		id: "accent",
 		label: "Accent",
 		group: "Base",
-		min: 3,
+		min: 0,
 		hint: "Focus borders, active tab, status bar, buttons, badges."
 	},
 	{

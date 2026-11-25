@@ -252,6 +252,14 @@ describe("share names", () => {
 describe("history", () => {
   const start = (): History => ({ past: [], present: generate(1, "dark"), future: [] });
 
+  it("an accent equal to the background is never flagged, while other roles still are", () => {
+    const t = generate(5, "dark");
+    const same = { ...t, roles: { ...t.roles, accent: { ...t.roles.accent, color: t.roles.bg.color } } };
+    expect(contrastIssues(same).map((i) => i.role)).not.toContain("accent");
+    const dull = { ...same, roles: { ...same.roles, string: { ...same.roles.string, color: t.roles.bg.color } } };
+    expect(contrastIssues(dull).map((i) => i.role)).toEqual(["string"]);
+  });
+
   it("editing a color marks it as set by hand; a shuffle gives the unlocked ones fresh colors", () => {
     let h: History = { past: [], present: generate(5, "dark"), future: [] };
     expect(h.present.roles.keyword.picked).toBeUndefined();
