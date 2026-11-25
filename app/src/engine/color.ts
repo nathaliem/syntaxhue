@@ -120,6 +120,28 @@ export function contrast(a: Hex, b: Hex): number {
   return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 }
 
+/** APCA's own exponent for near-black text, not the square root of two. */
+const APCA_BLACK_CLAMP = 1.4 + 0.014;
+
+/**
+ * APCA Lc (0.0.98G-4g), the perceptual contrast of `text` on `bg`. Advisory only: the pass/fail checks stay WCAG.
+ * Signed in the original (negative for light text on a dark background); this returns the magnitude, 0..~108.
+ */
+export function apca(text: Hex, bg: Hex): number {
+  const y = (hex: Hex) => {
+    const [r, g, b] = hexToRgb(hex).map((v) => Math.pow(v / 255, 2.4));
+    const lum = 0.2126729 * r + 0.7151522 * g + 0.072175 * b;
+    return lum < 0.022 ? lum + Math.pow(0.022 - lum, APCA_BLACK_CLAMP) : lum; // soft clamp near black
+  };
+  const yt = y(text);
+  const yb = y(bg);
+  if (Math.abs(yb - yt) < 0.0005) return 0;
+  const sapc =
+    yb > yt ? (Math.pow(yb, 0.56) - Math.pow(yt, 0.57)) * 1.14 : (Math.pow(yb, 0.65) - Math.pow(yt, 0.62)) * 1.14;
+  const lc = Math.abs(sapc) < 0.1 ? 0 : Math.abs(sapc) - 0.027;
+  return lc * 100;
+}
+
 /**
  * Nudge only the lightness of `color` (away from `bg`) until it reaches `min` contrast.
  * Hue and chroma are kept. Returns the original color if it already passes.
