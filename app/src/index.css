@@ -1350,6 +1350,8 @@ pre.code {
 }
 .field {
   display: grid;
+  /* The row stretches to the tallest field; the hint row soaks that up so inputs keep their size and line up. */
+  grid-template-rows: auto auto 1fr;
   gap: 4px;
   flex: 1 1 220px;
   font-size: var(--text-small);
@@ -1359,6 +1361,8 @@ pre.code {
   flex: 0 1 120px;
 }
 .field input {
+  box-sizing: border-box;
+  min-height: 38px;
   font: inherit;
   padding: 8px 10px;
   border: 1px solid var(--line);
@@ -1379,6 +1383,8 @@ pre.code {
   gap: 12px 16px;
 }
 .field select {
+  box-sizing: border-box;
+  min-height: 38px;
   font: inherit;
   padding: 8px 10px;
   border: 1px solid var(--line);
