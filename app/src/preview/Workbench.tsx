@@ -68,7 +68,8 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
       style={vars}
       data-hl={highlighted ?? selected ?? undefined}
       onClick={handleClick}
-      aria-label="Preview of VS Code with your theme. Click any part to edit the color behind it."
+      role="img"
+      aria-label={`Preview of VS Code in the ${theme.mode} theme “${theme.name}”, showing ${sample.file}. Every color in it can be edited from the color list.`}
     >
       {(highlighted ?? selected) && (
         <style>{`.wb [data-role="${highlighted ?? selected}"]{outline:2px dashed var(--hl-ring);outline-offset:-2px;border-radius:3px}`}</style>
@@ -83,7 +84,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
       </div>
 
       <div className="wb-body">
-        <nav className="wb-activity" {...r("bg")} aria-hidden="true">
+        <div className="wb-activity" {...r("bg")} aria-hidden="true">
           {["files", "search", "git", "run", "ext"].map((n, i) => (
             <span key={n} className={"wb-ai" + (i === 0 ? " on" : "")} {...(i === 0 ? r("accent") : r("muted"))}>
               <Icon name={n} />
@@ -94,9 +95,9 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
               )}
             </span>
           ))}
-        </nav>
+        </div>
 
-        <aside className="wb-side" {...r("bg")}>
+        <div className="wb-side" {...r("bg")}>
           <div className="wb-side-h" {...r("muted")}>
             Explorer
           </div>
@@ -120,9 +121,9 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
               )}
             </div>
           ))}
-        </aside>
+        </div>
 
-        <main className="wb-main">
+        <div className="wb-main">
           <div className="wb-tabs" {...r("bg")}>
             <span className="wb-tab active" {...r("accent")}>
               {sample.file}
@@ -244,10 +245,10 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
 
-      <footer className="wb-status" {...r("accent")}>
+      <div className="wb-status" {...r("accent")}>
         <span>⎇ main</span>
         <span>
           <span className="wb-st-err">✕ 1</span> ⚠ 0
@@ -255,7 +256,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
         <span className="wb-st-right">Ln {CURSOR_LINE}, Col 9</span>
         <span>UTF-8</span>
         <span>{sample.name}</span>
-      </footer>
+      </div>
     </div>
   );
 }

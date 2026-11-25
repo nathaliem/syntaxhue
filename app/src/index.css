@@ -131,10 +131,9 @@ input {
 }
 kbd {
   font: 600 11px var(--mono);
-  border: 1px solid currentColor;
+  border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
   border-radius: 4px;
   padding: 0 5px;
-  opacity: 0.75;
 }
 code {
   font-family: var(--mono);
