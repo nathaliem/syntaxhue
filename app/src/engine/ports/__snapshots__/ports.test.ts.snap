@@ -6,36 +6,36 @@ exports[`port alacritty > matches its snapshot 1`] = `
     "content": "# Fixture Dark, made with SyntaxHue
 
 [colors.primary]
-background = "#23191c"
-foreground = "#e7dadd"
+background = "#170f1f"
+foreground = "#e0dce6"
 
 [colors.cursor]
-text = "#23191c"
-cursor = "#00b9ce"
+text = "#170f1f"
+cursor = "#3dc255"
 
 [colors.selection]
-text = "#e7dadd"
-background = "#194951"
+text = "#e0dce6"
+background = "#22452f"
 
 [colors.normal]
-black = "#4a4043"
+black = "#3f3847"
 red = "#f66d67"
 green = "#74c878"
 yellow = "#f2af48"
 blue = "#5fb8f2"
-purple = "#ff967c"
-cyan = "#e87dd7"
-white = "#cabdc0"
+purple = "#74c240"
+cyan = "#2fd3a6"
+white = "#c2bdc8"
 
 [colors.bright]
-black = "#8b7378"
+black = "#7f7689"
 red = "#ff9088"
 green = "#81e286"
 yellow = "#ffca7f"
 blue = "#86ceff"
-purple = "#ffbaa8"
-cyan = "#ff94ed"
-white = "#e7dadd"
+purple = "#82db45"
+cyan = "#29edba"
+white = "#e0dce6"
 ",
     "path": "fixture-dark.toml",
   },
@@ -48,36 +48,36 @@ exports[`port alacritty > matches its snapshot 2`] = `
     "content": "# Fixture Light, made with SyntaxHue
 
 [colors.primary]
-background = "#f2f3ed"
-foreground = "#292a21"
+background = "#eafaff"
+foreground = "#212b2e"
 
 [colors.cursor]
-text = "#f2f3ed"
-cursor = "#7952a9"
+text = "#eafaff"
+cursor = "#a14f00"
 
 [colors.selection]
-text = "#292a21"
-background = "#d7d0de"
+text = "#212b2e"
+background = "#dad4c7"
 
 [colors.normal]
-black = "#292a21"
+black = "#212b2e"
 red = "#b63132"
 green = "#1e7729"
-yellow = "#966500"
+yellow = "#986600"
 blue = "#006a9d"
-purple = "#5a66aa"
-cyan = "#007955"
-white = "#dadbd5"
+purple = "#16538f"
+cyan = "#007a72"
+white = "#d2e1e6"
 
 [colors.bright]
-black = "#80826e"
+black = "#6d858c"
 red = "#a70018"
 green = "#006516"
-yellow = "#805500"
+yellow = "#825600"
 blue = "#005884"
-purple = "#48539e"
-cyan = "#006547"
-white = "#f2f3ed"
+purple = "#00427b"
+cyan = "#006760"
+white = "#eafaff"
 ",
     "path": "fixture-light.toml",
   },
@@ -87,28 +87,28 @@ white = "#f2f3ed"
 exports[`port ghostty > matches its snapshot 1`] = `
 [
   {
-    "content": "palette = 0=#4a4043
+    "content": "palette = 0=#3f3847
 palette = 1=#f66d67
 palette = 2=#74c878
 palette = 3=#f2af48
 palette = 4=#5fb8f2
-palette = 5=#ff967c
-palette = 6=#e87dd7
-palette = 7=#cabdc0
-palette = 8=#8b7378
+palette = 5=#74c240
+palette = 6=#2fd3a6
+palette = 7=#c2bdc8
+palette = 8=#7f7689
 palette = 9=#ff9088
 palette = 10=#81e286
 palette = 11=#ffca7f
 palette = 12=#86ceff
-palette = 13=#ffbaa8
-palette = 14=#ff94ed
-palette = 15=#e7dadd
-background = #23191c
-foreground = #e7dadd
-cursor-color = #00b9ce
-cursor-text = #23191c
-selection-background = #194951
-selection-foreground = #e7dadd
+palette = 13=#82db45
+palette = 14=#29edba
+palette = 15=#e0dce6
+background = #170f1f
+foreground = #e0dce6
+cursor-color = #3dc255
+cursor-text = #170f1f
+selection-background = #22452f
+selection-foreground = #e0dce6
 ",
     "path": "fixture-dark",
   },
@@ -118,28 +118,28 @@ selection-foreground = #e7dadd
 exports[`port ghostty > matches its snapshot 2`] = `
 [
   {
-    "content": "palette = 0=#292a21
+    "content": "palette = 0=#212b2e
 palette = 1=#b63132
 palette = 2=#1e7729
-palette = 3=#966500
+palette = 3=#986600
 palette = 4=#006a9d
-palette = 5=#5a66aa
-palette = 6=#007955
-palette = 7=#dadbd5
-palette = 8=#80826e
+palette = 5=#16538f
+palette = 6=#007a72
+palette = 7=#d2e1e6
+palette = 8=#6d858c
 palette = 9=#a70018
 palette = 10=#006516
-palette = 11=#805500
+palette = 11=#825600
 palette = 12=#005884
-palette = 13=#48539e
-palette = 14=#006547
-palette = 15=#f2f3ed
-background = #f2f3ed
-foreground = #292a21
-cursor-color = #7952a9
-cursor-text = #f2f3ed
-selection-background = #d7d0de
-selection-foreground = #292a21
+palette = 13=#00427b
+palette = 14=#006760
+palette = 15=#eafaff
+background = #eafaff
+foreground = #212b2e
+cursor-color = #a14f00
+cursor-text = #eafaff
+selection-background = #dad4c7
+selection-foreground = #212b2e
 ",
     "path": "fixture-light",
   },
@@ -153,19 +153,19 @@ exports[`port iterm2 > matches its snapshot 1`] = `
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- #4a4043 -->
+	<!-- #3f3847 -->
 	<key>Ansi 0 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.262745</real>
+		<real>0.278431</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.250980</real>
+		<real>0.219608</real>
 		<key>Red Component</key>
-		<real>0.290196</real>
+		<real>0.247059</real>
 	</dict>
 	<!-- #f66d67 -->
 	<key>Ansi 1 Color</key>
@@ -223,61 +223,61 @@ exports[`port iterm2 > matches its snapshot 1`] = `
 		<key>Red Component</key>
 		<real>0.372549</real>
 	</dict>
-	<!-- #ff967c -->
+	<!-- #74c240 -->
 	<key>Ansi 5 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.486275</real>
+		<real>0.250980</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.588235</real>
+		<real>0.760784</real>
 		<key>Red Component</key>
-		<real>1.000000</real>
+		<real>0.454902</real>
 	</dict>
-	<!-- #e87dd7 -->
+	<!-- #2fd3a6 -->
 	<key>Ansi 6 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.843137</real>
+		<real>0.650980</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.490196</real>
+		<real>0.827451</real>
 		<key>Red Component</key>
-		<real>0.909804</real>
+		<real>0.184314</real>
 	</dict>
-	<!-- #cabdc0 -->
+	<!-- #c2bdc8 -->
 	<key>Ansi 7 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.752941</real>
+		<real>0.784314</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
 		<real>0.741176</real>
 		<key>Red Component</key>
-		<real>0.792157</real>
+		<real>0.760784</real>
 	</dict>
-	<!-- #8b7378 -->
+	<!-- #7f7689 -->
 	<key>Ansi 8 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.470588</real>
+		<real>0.537255</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.450980</real>
+		<real>0.462745</real>
 		<key>Red Component</key>
-		<real>0.545098</real>
+		<real>0.498039</real>
 	</dict>
 	<!-- #ff9088 -->
 	<key>Ansi 9 Color</key>
@@ -335,131 +335,131 @@ exports[`port iterm2 > matches its snapshot 1`] = `
 		<key>Red Component</key>
 		<real>0.525490</real>
 	</dict>
-	<!-- #ffbaa8 -->
+	<!-- #82db45 -->
 	<key>Ansi 13 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.658824</real>
+		<real>0.270588</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.729412</real>
+		<real>0.858824</real>
 		<key>Red Component</key>
-		<real>1.000000</real>
+		<real>0.509804</real>
 	</dict>
-	<!-- #ff94ed -->
+	<!-- #29edba -->
 	<key>Ansi 14 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.929412</real>
+		<real>0.729412</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.580392</real>
+		<real>0.929412</real>
 		<key>Red Component</key>
-		<real>1.000000</real>
+		<real>0.160784</real>
 	</dict>
-	<!-- #e7dadd -->
+	<!-- #e0dce6 -->
 	<key>Ansi 15 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.866667</real>
+		<real>0.901961</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.854902</real>
+		<real>0.862745</real>
 		<key>Red Component</key>
-		<real>0.905882</real>
+		<real>0.878431</real>
 	</dict>
-	<!-- #23191c -->
+	<!-- #170f1f -->
 	<key>Background Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.109804</real>
+		<real>0.121569</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.098039</real>
+		<real>0.058824</real>
 		<key>Red Component</key>
-		<real>0.137255</real>
+		<real>0.090196</real>
 	</dict>
-	<!-- #e7dadd -->
+	<!-- #e0dce6 -->
 	<key>Foreground Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.866667</real>
+		<real>0.901961</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.854902</real>
+		<real>0.862745</real>
 		<key>Red Component</key>
-		<real>0.905882</real>
+		<real>0.878431</real>
 	</dict>
-	<!-- #00b9ce -->
+	<!-- #3dc255 -->
 	<key>Cursor Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.807843</real>
+		<real>0.333333</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.725490</real>
+		<real>0.760784</real>
 		<key>Red Component</key>
-		<real>0.000000</real>
+		<real>0.239216</real>
 	</dict>
-	<!-- #23191c -->
+	<!-- #170f1f -->
 	<key>Cursor Text Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.109804</real>
+		<real>0.121569</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.098039</real>
+		<real>0.058824</real>
 		<key>Red Component</key>
-		<real>0.137255</real>
+		<real>0.090196</real>
 	</dict>
-	<!-- #194951 -->
+	<!-- #22452f -->
 	<key>Selection Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.317647</real>
+		<real>0.184314</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.286275</real>
+		<real>0.270588</real>
 		<key>Red Component</key>
-		<real>0.098039</real>
+		<real>0.133333</real>
 	</dict>
-	<!-- #e7dadd -->
+	<!-- #e0dce6 -->
 	<key>Selected Text Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.866667</real>
+		<real>0.901961</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.854902</real>
+		<real>0.862745</real>
 		<key>Red Component</key>
-		<real>0.905882</real>
+		<real>0.878431</real>
 	</dict>
 </dict>
 </plist>
@@ -476,19 +476,19 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- #292a21 -->
+	<!-- #212b2e -->
 	<key>Ansi 0 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.129412</real>
+		<real>0.180392</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.164706</real>
+		<real>0.168627</real>
 		<key>Red Component</key>
-		<real>0.160784</real>
+		<real>0.129412</real>
 	</dict>
 	<!-- #b63132 -->
 	<key>Ansi 1 Color</key>
@@ -518,7 +518,7 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.117647</real>
 	</dict>
-	<!-- #966500 -->
+	<!-- #986600 -->
 	<key>Ansi 3 Color</key>
 	<dict>
 		<key>Alpha Component</key>
@@ -528,9 +528,9 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.396078</real>
+		<real>0.400000</real>
 		<key>Red Component</key>
-		<real>0.588235</real>
+		<real>0.596078</real>
 	</dict>
 	<!-- #006a9d -->
 	<key>Ansi 4 Color</key>
@@ -546,61 +546,61 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #5a66aa -->
+	<!-- #16538f -->
 	<key>Ansi 5 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.666667</real>
+		<real>0.560784</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.400000</real>
+		<real>0.325490</real>
 		<key>Red Component</key>
-		<real>0.352941</real>
+		<real>0.086275</real>
 	</dict>
-	<!-- #007955 -->
+	<!-- #007a72 -->
 	<key>Ansi 6 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.333333</real>
+		<real>0.447059</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.474510</real>
+		<real>0.478431</real>
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #dadbd5 -->
+	<!-- #d2e1e6 -->
 	<key>Ansi 7 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.835294</real>
+		<real>0.901961</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.858824</real>
+		<real>0.882353</real>
 		<key>Red Component</key>
-		<real>0.854902</real>
+		<real>0.823529</real>
 	</dict>
-	<!-- #80826e -->
+	<!-- #6d858c -->
 	<key>Ansi 8 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.431373</real>
+		<real>0.549020</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.509804</real>
+		<real>0.521569</real>
 		<key>Red Component</key>
-		<real>0.501961</real>
+		<real>0.427451</real>
 	</dict>
 	<!-- #a70018 -->
 	<key>Ansi 9 Color</key>
@@ -630,7 +630,7 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #805500 -->
+	<!-- #825600 -->
 	<key>Ansi 11 Color</key>
 	<dict>
 		<key>Alpha Component</key>
@@ -640,9 +640,9 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.333333</real>
+		<real>0.337255</real>
 		<key>Red Component</key>
-		<real>0.501961</real>
+		<real>0.509804</real>
 	</dict>
 	<!-- #005884 -->
 	<key>Ansi 12 Color</key>
@@ -658,131 +658,131 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #48539e -->
+	<!-- #00427b -->
 	<key>Ansi 13 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.619608</real>
+		<real>0.482353</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.325490</real>
+		<real>0.258824</real>
 		<key>Red Component</key>
-		<real>0.282353</real>
+		<real>0.000000</real>
 	</dict>
-	<!-- #006547 -->
+	<!-- #006760 -->
 	<key>Ansi 14 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.278431</real>
+		<real>0.376471</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.396078</real>
+		<real>0.403922</real>
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #f2f3ed -->
+	<!-- #eafaff -->
 	<key>Ansi 15 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.929412</real>
+		<real>1.000000</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.952941</real>
+		<real>0.980392</real>
 		<key>Red Component</key>
-		<real>0.949020</real>
+		<real>0.917647</real>
 	</dict>
-	<!-- #f2f3ed -->
+	<!-- #eafaff -->
 	<key>Background Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.929412</real>
+		<real>1.000000</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.952941</real>
+		<real>0.980392</real>
 		<key>Red Component</key>
-		<real>0.949020</real>
+		<real>0.917647</real>
 	</dict>
-	<!-- #292a21 -->
+	<!-- #212b2e -->
 	<key>Foreground Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.129412</real>
+		<real>0.180392</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.164706</real>
+		<real>0.168627</real>
 		<key>Red Component</key>
-		<real>0.160784</real>
+		<real>0.129412</real>
 	</dict>
-	<!-- #7952a9 -->
+	<!-- #a14f00 -->
 	<key>Cursor Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.662745</real>
+		<real>0.000000</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.321569</real>
+		<real>0.309804</real>
 		<key>Red Component</key>
-		<real>0.474510</real>
+		<real>0.631373</real>
 	</dict>
-	<!-- #f2f3ed -->
+	<!-- #eafaff -->
 	<key>Cursor Text Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.929412</real>
+		<real>1.000000</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.952941</real>
+		<real>0.980392</real>
 		<key>Red Component</key>
-		<real>0.949020</real>
+		<real>0.917647</real>
 	</dict>
-	<!-- #d7d0de -->
+	<!-- #dad4c7 -->
 	<key>Selection Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.870588</real>
+		<real>0.780392</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.815686</real>
+		<real>0.831373</real>
 		<key>Red Component</key>
-		<real>0.843137</real>
+		<real>0.854902</real>
 	</dict>
-	<!-- #292a21 -->
+	<!-- #212b2e -->
 	<key>Selected Text Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.129412</real>
+		<real>0.180392</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.164706</real>
+		<real>0.168627</real>
 		<key>Red Component</key>
-		<real>0.160784</real>
+		<real>0.129412</real>
 	</dict>
 </dict>
 </plist>
@@ -799,55 +799,55 @@ exports[`port jetbrains > matches its snapshot 1`] = `
 <!-- Fixture Dark, made with SyntaxHue -->
 <scheme name="Fixture Dark" version="142" parent_scheme="Darcula">
   <colors>
-    <option name="CARET_COLOR" value="00b9ce" />
-    <option name="CARET_ROW_COLOR" value="2d2326" />
-    <option name="CONSOLE_BACKGROUND_KEY" value="23191c" />
-    <option name="DOCUMENTATION_COLOR" value="2d2225" />
-    <option name="GUTTER_BACKGROUND" value="23191c" />
-    <option name="LINE_NUMBERS_COLOR" value="8b7378" />
-    <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="e7dadd" />
-    <option name="INDENT_GUIDE" value="33282b" />
-    <option name="SELECTED_INDENT_GUIDE" value="4e4346" />
-    <option name="WHITESPACES" value="4d3d41" />
-    <option name="RIGHT_MARGIN_COLOR" value="33282b" />
-    <option name="SELECTION_BACKGROUND" value="194951" />
-    <option name="SELECTION_FOREGROUND" value="e7dadd" />
-    <option name="METHOD_SEPARATORS_COLOR" value="3b3033" />
-    <option name="TEARLINE_COLOR" value="3b3033" />
+    <option name="CARET_COLOR" value="3dc255" />
+    <option name="CARET_ROW_COLOR" value="211929" />
+    <option name="CONSOLE_BACKGROUND_KEY" value="170f1f" />
+    <option name="DOCUMENTATION_COLOR" value="201829" />
+    <option name="GUTTER_BACKGROUND" value="170f1f" />
+    <option name="LINE_NUMBERS_COLOR" value="7f7689" />
+    <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="e0dce6" />
+    <option name="INDENT_GUIDE" value="271f2f" />
+    <option name="SELECTED_INDENT_GUIDE" value="433c4b" />
+    <option name="WHITESPACES" value="413849" />
+    <option name="RIGHT_MARGIN_COLOR" value="271f2f" />
+    <option name="SELECTION_BACKGROUND" value="22452f" />
+    <option name="SELECTION_FOREGROUND" value="e0dce6" />
+    <option name="METHOD_SEPARATORS_COLOR" value="2f2837" />
+    <option name="TEARLINE_COLOR" value="2f2837" />
     <option name="ADDED_LINES_COLOR" value="74c878" />
     <option name="MODIFIED_LINES_COLOR" value="5fb8f2" />
     <option name="DELETED_LINES_COLOR" value="f66d67" />
     <option name="FILESTATUS_ADDED" value="74c878" />
     <option name="FILESTATUS_MODIFIED" value="f2af48" />
     <option name="FILESTATUS_DELETED" value="f66d67" />
-    <option name="FILESTATUS_UNKNOWN" value="8b7378" />
+    <option name="FILESTATUS_UNKNOWN" value="7f7689" />
   </colors>
   <attributes>
     <option name="TEXT">
       <value>
-        <option name="FOREGROUND" value="e7dadd" />
-        <option name="BACKGROUND" value="23191c" />
+        <option name="FOREGROUND" value="e0dce6" />
+        <option name="BACKGROUND" value="170f1f" />
       </value>
     </option>
     <option name="DEFAULT_IDENTIFIER">
       <value>
-        <option name="FOREGROUND" value="e7dadd" />
+        <option name="FOREGROUND" value="e0dce6" />
       </value>
     </option>
     <option name="DEFAULT_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="ff967c" />
+        <option name="FOREGROUND" value="74c240" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="ed8e21" />
+        <option name="FOREGROUND" value="ffa4d5" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
       </value>
     </option>
     <option name="DEFAULT_INVALID_STRING_ESCAPE">
@@ -859,186 +859,186 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="DEFAULT_NUMBER">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
       </value>
     </option>
     <option name="DEFAULT_CONSTANT">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
       </value>
     </option>
     <option name="DEFAULT_PREDEFINED_SYMBOL">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
       </value>
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG_VALUE">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_MARKUP">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_DECLARATION">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_CALL">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_METADATA">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_ATTRIBUTE">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_LABEL">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="d2a300" />
+        <option name="FOREGROUND" value="a99bfe" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="d2a300" />
+        <option name="FOREGROUND" value="a99bfe" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="d2a300" />
+        <option name="FOREGROUND" value="a99bfe" />
       </value>
     </option>
     <option name="DEFAULT_TAG">
       <value>
-        <option name="FOREGROUND" value="d2a300" />
+        <option name="FOREGROUND" value="a99bfe" />
       </value>
     </option>
     <option name="DEFAULT_ENTITY">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
       </value>
     </option>
     <option name="DEFAULT_INSTANCE_FIELD">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_FIELD">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_PARAMETER">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_LOCAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_REASSIGNED_LOCAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_GLOBAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="f5c2c9" />
+        <option name="FOREGROUND" value="dbc7f1" />
       </value>
     </option>
     <option name="DEFAULT_OPERATION_SIGN">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_BRACES">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_BRACKETS">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_PARENTHS">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_COMMA">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_DOT">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="DEFAULT_SEMICOLON">
       <value>
-        <option name="FOREGROUND" value="d5ada2" />
+        <option name="FOREGROUND" value="aabf9f" />
       </value>
     </option>
     <option name="HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
-        <option name="EFFECT_COLOR" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
+        <option name="EFFECT_COLOR" value="c9ab00" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="FOLLOWED_HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="c489ff" />
-        <option name="EFFECT_COLOR" value="c489ff" />
+        <option name="FOREGROUND" value="c9ab00" />
+        <option name="EFFECT_COLOR" value="c9ab00" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
@@ -1072,36 +1072,36 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="TEXT_SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="6b4e2b" />
+        <option name="BACKGROUND" value="64472d" />
         <option name="ERROR_STRIPE_COLOR" value="f2af48" />
       </value>
     </option>
     <option name="SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="6b4e2b" />
+        <option name="BACKGROUND" value="64472d" />
         <option name="ERROR_STRIPE_COLOR" value="f2af48" />
       </value>
     </option>
     <option name="WRITE_SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="6b4e2b" />
+        <option name="BACKGROUND" value="64472d" />
         <option name="ERROR_STRIPE_COLOR" value="f2af48" />
       </value>
     </option>
     <option name="IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="1d363c" />
+        <option name="BACKGROUND" value="1e2f29" />
       </value>
     </option>
     <option name="WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="194951" />
+        <option name="BACKGROUND" value="22452f" />
       </value>
     </option>
     <option name="MATCHED_BRACE_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="00b9ce" />
-        <option name="BACKGROUND" value="1d363c" />
+        <option name="FOREGROUND" value="3dc255" />
+        <option name="BACKGROUND" value="1e2f29" />
       </value>
     </option>
     <option name="UNMATCHED_BRACE_ATTRIBUTES">
@@ -1116,32 +1116,32 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="INLINE_PARAMETER_HINT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
-        <option name="BACKGROUND" value="2d2225" />
+        <option name="FOREGROUND" value="7f7689" />
+        <option name="BACKGROUND" value="201829" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DIFF_INSERTED">
       <value>
-        <option name="BACKGROUND" value="2f332a" />
+        <option name="BACKGROUND" value="252b2c" />
         <option name="ERROR_STRIPE_COLOR" value="74c878" />
       </value>
     </option>
     <option name="DIFF_MODIFIED">
       <value>
-        <option name="BACKGROUND" value="2c313c" />
+        <option name="BACKGROUND" value="22283f" />
         <option name="ERROR_STRIPE_COLOR" value="5fb8f2" />
       </value>
     </option>
     <option name="DIFF_DELETED">
       <value>
-        <option name="BACKGROUND" value="432627" />
+        <option name="BACKGROUND" value="381d2a" />
         <option name="ERROR_STRIPE_COLOR" value="f66d67" />
       </value>
     </option>
     <option name="DIFF_CONFLICT">
       <value>
-        <option name="BACKGROUND" value="423023" />
+        <option name="BACKGROUND" value="382725" />
         <option name="ERROR_STRIPE_COLOR" value="f2af48" />
       </value>
     </option>
@@ -1152,12 +1152,12 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="CONSOLE_NORMAL_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="e7dadd" />
+        <option name="FOREGROUND" value="e0dce6" />
       </value>
     </option>
     <option name="CONSOLE_SYSTEM_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -1173,7 +1173,7 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="CONSOLE_BLACK_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="4a4043" />
+        <option name="FOREGROUND" value="3f3847" />
       </value>
     </option>
     <option name="CONSOLE_RED_OUTPUT">
@@ -1198,22 +1198,22 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="ff967c" />
+        <option name="FOREGROUND" value="74c240" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="e87dd7" />
+        <option name="FOREGROUND" value="2fd3a6" />
       </value>
     </option>
     <option name="CONSOLE_GRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="cabdc0" />
+        <option name="FOREGROUND" value="c2bdc8" />
       </value>
     </option>
     <option name="CONSOLE_DARKGRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="8b7378" />
+        <option name="FOREGROUND" value="7f7689" />
       </value>
     </option>
     <option name="CONSOLE_RED_BRIGHT_OUTPUT">
@@ -1238,17 +1238,17 @@ exports[`port jetbrains > matches its snapshot 1`] = `
     </option>
     <option name="CONSOLE_MAGENTA_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="ffbaa8" />
+        <option name="FOREGROUND" value="82db45" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="ff94ed" />
+        <option name="FOREGROUND" value="29edba" />
       </value>
     </option>
     <option name="CONSOLE_WHITE_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="e7dadd" />
+        <option name="FOREGROUND" value="e0dce6" />
       </value>
     </option>
   </attributes>
@@ -1266,55 +1266,55 @@ exports[`port jetbrains > matches its snapshot 2`] = `
 <!-- Fixture Light, made with SyntaxHue -->
 <scheme name="Fixture Light" version="142" parent_scheme="Default">
   <colors>
-    <option name="CARET_COLOR" value="7952a9" />
-    <option name="CARET_ROW_COLOR" value="e9eae4" />
-    <option name="CONSOLE_BACKGROUND_KEY" value="f2f3ed" />
-    <option name="DOCUMENTATION_COLOR" value="edeee8" />
-    <option name="GUTTER_BACKGROUND" value="f2f3ed" />
-    <option name="LINE_NUMBERS_COLOR" value="80826e" />
-    <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="292a21" />
-    <option name="INDENT_GUIDE" value="e2e3dd" />
-    <option name="SELECTED_INDENT_GUIDE" value="c6c7c0" />
-    <option name="WHITESPACES" value="c4c6ba" />
-    <option name="RIGHT_MARGIN_COLOR" value="e2e3dd" />
-    <option name="SELECTION_BACKGROUND" value="d7d0de" />
-    <option name="SELECTION_FOREGROUND" value="292a21" />
-    <option name="METHOD_SEPARATORS_COLOR" value="d6d7d0" />
-    <option name="TEARLINE_COLOR" value="d6d7d0" />
+    <option name="CARET_COLOR" value="a14f00" />
+    <option name="CARET_ROW_COLOR" value="e1f1f6" />
+    <option name="CONSOLE_BACKGROUND_KEY" value="eafaff" />
+    <option name="DOCUMENTATION_COLOR" value="e5f5fa" />
+    <option name="GUTTER_BACKGROUND" value="eafaff" />
+    <option name="LINE_NUMBERS_COLOR" value="6d858c" />
+    <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="212b2e" />
+    <option name="INDENT_GUIDE" value="dae9ee" />
+    <option name="SELECTED_INDENT_GUIDE" value="beccd1" />
+    <option name="WHITESPACES" value="b8cbd1" />
+    <option name="RIGHT_MARGIN_COLOR" value="dae9ee" />
+    <option name="SELECTION_BACKGROUND" value="dad4c7" />
+    <option name="SELECTION_FOREGROUND" value="212b2e" />
+    <option name="METHOD_SEPARATORS_COLOR" value="cedde2" />
+    <option name="TEARLINE_COLOR" value="cedde2" />
     <option name="ADDED_LINES_COLOR" value="1e7729" />
     <option name="MODIFIED_LINES_COLOR" value="006a9d" />
     <option name="DELETED_LINES_COLOR" value="b63132" />
     <option name="FILESTATUS_ADDED" value="1e7729" />
-    <option name="FILESTATUS_MODIFIED" value="966500" />
+    <option name="FILESTATUS_MODIFIED" value="986600" />
     <option name="FILESTATUS_DELETED" value="b63132" />
-    <option name="FILESTATUS_UNKNOWN" value="80826e" />
+    <option name="FILESTATUS_UNKNOWN" value="6d858c" />
   </colors>
   <attributes>
     <option name="TEXT">
       <value>
-        <option name="FOREGROUND" value="292a21" />
-        <option name="BACKGROUND" value="f2f3ed" />
+        <option name="FOREGROUND" value="212b2e" />
+        <option name="BACKGROUND" value="eafaff" />
       </value>
     </option>
     <option name="DEFAULT_IDENTIFIER">
       <value>
-        <option name="FOREGROUND" value="292a21" />
+        <option name="FOREGROUND" value="212b2e" />
       </value>
     </option>
     <option name="DEFAULT_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="5a66aa" />
+        <option name="FOREGROUND" value="006090" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="834486" />
+        <option name="FOREGROUND" value="5a6abf" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
       <value>
-        <option name="FOREGROUND" value="986000" />
+        <option name="FOREGROUND" value="288140" />
       </value>
     </option>
     <option name="DEFAULT_INVALID_STRING_ESCAPE">
@@ -1326,186 +1326,186 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="DEFAULT_NUMBER">
       <value>
-        <option name="FOREGROUND" value="986000" />
+        <option name="FOREGROUND" value="288140" />
       </value>
     </option>
     <option name="DEFAULT_CONSTANT">
       <value>
-        <option name="FOREGROUND" value="986000" />
+        <option name="FOREGROUND" value="288140" />
       </value>
     </option>
     <option name="DEFAULT_PREDEFINED_SYMBOL">
       <value>
-        <option name="FOREGROUND" value="986000" />
+        <option name="FOREGROUND" value="288140" />
       </value>
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT_TAG_VALUE">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_MARKUP">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_DECLARATION">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_CALL">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_METADATA">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_ATTRIBUTE">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_LABEL">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="6248a4" />
+        <option name="FOREGROUND" value="855acb" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="6248a4" />
+        <option name="FOREGROUND" value="855acb" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="6248a4" />
+        <option name="FOREGROUND" value="855acb" />
       </value>
     </option>
     <option name="DEFAULT_TAG">
       <value>
-        <option name="FOREGROUND" value="6248a4" />
+        <option name="FOREGROUND" value="855acb" />
       </value>
     </option>
     <option name="DEFAULT_ENTITY">
       <value>
-        <option name="FOREGROUND" value="986000" />
+        <option name="FOREGROUND" value="288140" />
       </value>
     </option>
     <option name="DEFAULT_INSTANCE_FIELD">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_FIELD">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_PARAMETER">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_LOCAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_REASSIGNED_LOCAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_GLOBAL_VARIABLE">
       <value>
-        <option name="FOREGROUND" value="3f3c20" />
+        <option name="FOREGROUND" value="0f424b" />
       </value>
     </option>
     <option name="DEFAULT_OPERATION_SIGN">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_BRACES">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_BRACKETS">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_PARENTHS">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_COMMA">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_DOT">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="DEFAULT_SEMICOLON">
       <value>
-        <option name="FOREGROUND" value="454b69" />
+        <option name="FOREGROUND" value="335166" />
       </value>
     </option>
     <option name="HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="986000" />
-        <option name="EFFECT_COLOR" value="986000" />
+        <option name="FOREGROUND" value="288140" />
+        <option name="EFFECT_COLOR" value="288140" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="FOLLOWED_HYPERLINK_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="986000" />
-        <option name="EFFECT_COLOR" value="986000" />
+        <option name="FOREGROUND" value="288140" />
+        <option name="EFFECT_COLOR" value="288140" />
         <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
@@ -1518,16 +1518,16 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="WARNING_ATTRIBUTES">
       <value>
-        <option name="EFFECT_COLOR" value="966500" />
+        <option name="EFFECT_COLOR" value="986600" />
         <option name="EFFECT_TYPE" value="2" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="WEAK_WARNING_ATTRIBUTES">
       <value>
-        <option name="EFFECT_COLOR" value="966500" />
+        <option name="EFFECT_COLOR" value="986600" />
         <option name="EFFECT_TYPE" value="2" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="INFO_ATTRIBUTES">
@@ -1539,36 +1539,36 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="TEXT_SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="d2c19a" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="BACKGROUND" value="cdc6a6" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="d2c19a" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="BACKGROUND" value="cdc6a6" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="WRITE_SEARCH_RESULT_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="d2c19a" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="BACKGROUND" value="cdc6a6" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="dcd6e1" />
+        <option name="BACKGROUND" value="dddbd1" />
       </value>
     </option>
     <option name="WRITE_IDENTIFIER_UNDER_CARET_ATTRIBUTES">
       <value>
-        <option name="BACKGROUND" value="cec3d9" />
+        <option name="BACKGROUND" value="d4c7b3" />
       </value>
     </option>
     <option name="MATCHED_BRACE_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="7952a9" />
-        <option name="BACKGROUND" value="dcd6e1" />
+        <option name="FOREGROUND" value="a14f00" />
+        <option name="BACKGROUND" value="dddbd1" />
       </value>
     </option>
     <option name="UNMATCHED_BRACE_ATTRIBUTES">
@@ -1578,38 +1578,38 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="TODO_DEFAULT_ATTRIBUTES">
       <value>
-        <option name="FOREGROUND" value="966500" />
+        <option name="FOREGROUND" value="986600" />
       </value>
     </option>
     <option name="INLINE_PARAMETER_HINT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
-        <option name="BACKGROUND" value="edeee8" />
+        <option name="FOREGROUND" value="6d858c" />
+        <option name="BACKGROUND" value="e5f5fa" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DIFF_INSERTED">
       <value>
-        <option name="BACKGROUND" value="d2e0d0" />
+        <option name="BACKGROUND" value="cbe6df" />
         <option name="ERROR_STRIPE_COLOR" value="1e7729" />
       </value>
     </option>
     <option name="DIFF_MODIFIED">
       <value>
-        <option name="BACKGROUND" value="cedee1" />
+        <option name="BACKGROUND" value="c7e4f0" />
         <option name="ERROR_STRIPE_COLOR" value="006a9d" />
       </value>
     </option>
     <option name="DIFF_DELETED">
       <value>
-        <option name="BACKGROUND" value="e9d6d1" />
+        <option name="BACKGROUND" value="e2dce0" />
         <option name="ERROR_STRIPE_COLOR" value="b63132" />
       </value>
     </option>
     <option name="DIFF_CONFLICT">
       <value>
-        <option name="BACKGROUND" value="e4dec9" />
-        <option name="ERROR_STRIPE_COLOR" value="966500" />
+        <option name="BACKGROUND" value="dee4d9" />
+        <option name="ERROR_STRIPE_COLOR" value="986600" />
       </value>
     </option>
     <option name="CONSOLE_ERROR_OUTPUT">
@@ -1619,12 +1619,12 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_NORMAL_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="292a21" />
+        <option name="FOREGROUND" value="212b2e" />
       </value>
     </option>
     <option name="CONSOLE_SYSTEM_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
@@ -1640,7 +1640,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_BLACK_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="292a21" />
+        <option name="FOREGROUND" value="212b2e" />
       </value>
     </option>
     <option name="CONSOLE_RED_OUTPUT">
@@ -1655,7 +1655,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_YELLOW_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="966500" />
+        <option name="FOREGROUND" value="986600" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_OUTPUT">
@@ -1665,22 +1665,22 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="5a66aa" />
+        <option name="FOREGROUND" value="16538f" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="007955" />
+        <option name="FOREGROUND" value="007a72" />
       </value>
     </option>
     <option name="CONSOLE_GRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="dadbd5" />
+        <option name="FOREGROUND" value="d2e1e6" />
       </value>
     </option>
     <option name="CONSOLE_DARKGRAY_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="80826e" />
+        <option name="FOREGROUND" value="6d858c" />
       </value>
     </option>
     <option name="CONSOLE_RED_BRIGHT_OUTPUT">
@@ -1695,7 +1695,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_YELLOW_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="805500" />
+        <option name="FOREGROUND" value="825600" />
       </value>
     </option>
     <option name="CONSOLE_BLUE_BRIGHT_OUTPUT">
@@ -1705,17 +1705,17 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_MAGENTA_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="48539e" />
+        <option name="FOREGROUND" value="00427b" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="006547" />
+        <option name="FOREGROUND" value="006760" />
       </value>
     </option>
     <option name="CONSOLE_WHITE_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="f2f3ed" />
+        <option name="FOREGROUND" value="eafaff" />
       </value>
     </option>
   </attributes>
@@ -1730,28 +1730,28 @@ exports[`port kitty > matches its snapshot 1`] = `
 [
   {
     "content": "# Fixture Dark, made with SyntaxHue
-foreground #e7dadd
-background #23191c
-selection_foreground #e7dadd
-selection_background #194951
-cursor #00b9ce
-cursor_text_color #23191c
-color0 #4a4043
+foreground #e0dce6
+background #170f1f
+selection_foreground #e0dce6
+selection_background #22452f
+cursor #3dc255
+cursor_text_color #170f1f
+color0 #3f3847
 color1 #f66d67
 color2 #74c878
 color3 #f2af48
 color4 #5fb8f2
-color5 #ff967c
-color6 #e87dd7
-color7 #cabdc0
-color8 #8b7378
+color5 #74c240
+color6 #2fd3a6
+color7 #c2bdc8
+color8 #7f7689
 color9 #ff9088
 color10 #81e286
 color11 #ffca7f
 color12 #86ceff
-color13 #ffbaa8
-color14 #ff94ed
-color15 #e7dadd
+color13 #82db45
+color14 #29edba
+color15 #e0dce6
 ",
     "path": "fixture-dark.conf",
   },
@@ -1762,28 +1762,28 @@ exports[`port kitty > matches its snapshot 2`] = `
 [
   {
     "content": "# Fixture Light, made with SyntaxHue
-foreground #292a21
-background #f2f3ed
-selection_foreground #292a21
-selection_background #d7d0de
-cursor #7952a9
-cursor_text_color #f2f3ed
-color0 #292a21
+foreground #212b2e
+background #eafaff
+selection_foreground #212b2e
+selection_background #dad4c7
+cursor #a14f00
+cursor_text_color #eafaff
+color0 #212b2e
 color1 #b63132
 color2 #1e7729
-color3 #966500
+color3 #986600
 color4 #006a9d
-color5 #5a66aa
-color6 #007955
-color7 #dadbd5
-color8 #80826e
+color5 #16538f
+color6 #007a72
+color7 #d2e1e6
+color8 #6d858c
 color9 #a70018
 color10 #006516
-color11 #805500
+color11 #825600
 color12 #005884
-color13 #48539e
-color14 #006547
-color15 #f2f3ed
+color13 #00427b
+color14 #006760
+color15 #eafaff
 ",
     "path": "fixture-light.conf",
   },
@@ -1805,37 +1805,37 @@ vim.o.background = "dark"
 vim.g.colors_name = "fixture-dark"
 
 local c = {
-  bg = "#23191c",
-  fg = "#e7dadd",
-  accent = "#00b9ce",
-  muted = "#8b7378",
-  keyword = "#ff967c",
-  string = "#ed8e21",
-  function = "#e87dd7",
-  type = "#d2a300",
-  variable = "#f5c2c9",
-  constant = "#c489ff",
-  operator = "#d5ada2",
+  bg = "#170f1f",
+  fg = "#e0dce6",
+  accent = "#3dc255",
+  muted = "#7f7689",
+  keyword = "#74c240",
+  string = "#ffa4d5",
+  function = "#2fd3a6",
+  type = "#a99bfe",
+  variable = "#dbc7f1",
+  constant = "#c9ab00",
+  operator = "#aabf9f",
   error = "#f66d67",
   warning = "#f2af48",
   info = "#5fb8f2",
   success = "#74c878",
-  widget = "#2d2225",
-  sidebar = "#1c1215",
-  activity = "#170e11",
-  border = "#3b3033",
-  cursorline = "#2d2326",
-  selection = "#194951",
-  accentTint = "#1c3940",
-  findmatch = "#6b4e2b",
-  errTint = "#432627",
-  warnTint = "#423023",
-  infoTint = "#2c313c",
-  okTint = "#2f332a",
-  warnStrong = "#6b4e2b",
-  faint = "#4d3d41",
-  guide = "#33282b",
-  activeGuide = "#4e4346",
+  widget = "#201829",
+  sidebar = "#100918",
+  activity = "#0c0513",
+  border = "#2f2837",
+  cursorline = "#211929",
+  selection = "#22452f",
+  accentTint = "#1f332a",
+  findmatch = "#64472d",
+  errTint = "#381d2a",
+  warnTint = "#382725",
+  infoTint = "#22283f",
+  okTint = "#252b2c",
+  warnStrong = "#64472d",
+  faint = "#413849",
+  guide = "#271f2f",
+  activeGuide = "#433c4b",
 }
 
 local function hl(group, spec)
@@ -2028,22 +2028,22 @@ hl("@lsp.type.string", { fg = c.string })
 hl("@lsp.type.number", { fg = c.constant })
 hl("@lsp.type.operator", { fg = c.operator })
 
-vim.g.terminal_color_0 = "#4a4043"
+vim.g.terminal_color_0 = "#3f3847"
 vim.g.terminal_color_1 = "#f66d67"
 vim.g.terminal_color_2 = "#74c878"
 vim.g.terminal_color_3 = "#f2af48"
 vim.g.terminal_color_4 = "#5fb8f2"
-vim.g.terminal_color_5 = "#ff967c"
-vim.g.terminal_color_6 = "#e87dd7"
-vim.g.terminal_color_7 = "#cabdc0"
-vim.g.terminal_color_8 = "#8b7378"
+vim.g.terminal_color_5 = "#74c240"
+vim.g.terminal_color_6 = "#2fd3a6"
+vim.g.terminal_color_7 = "#c2bdc8"
+vim.g.terminal_color_8 = "#7f7689"
 vim.g.terminal_color_9 = "#ff9088"
 vim.g.terminal_color_10 = "#81e286"
 vim.g.terminal_color_11 = "#ffca7f"
 vim.g.terminal_color_12 = "#86ceff"
-vim.g.terminal_color_13 = "#ffbaa8"
-vim.g.terminal_color_14 = "#ff94ed"
-vim.g.terminal_color_15 = "#e7dadd"
+vim.g.terminal_color_13 = "#82db45"
+vim.g.terminal_color_14 = "#29edba"
+vim.g.terminal_color_15 = "#e0dce6"
 ",
     "path": "colors/fixture-dark.lua",
   },
@@ -2065,37 +2065,37 @@ vim.o.background = "light"
 vim.g.colors_name = "fixture-light"
 
 local c = {
-  bg = "#f2f3ed",
-  fg = "#292a21",
-  accent = "#7952a9",
-  muted = "#80826e",
-  keyword = "#5a66aa",
-  string = "#834486",
-  function = "#007955",
-  type = "#6248a4",
-  variable = "#3f3c20",
-  constant = "#986000",
-  operator = "#454b69",
+  bg = "#eafaff",
+  fg = "#212b2e",
+  accent = "#a14f00",
+  muted = "#6d858c",
+  keyword = "#006090",
+  string = "#5a6abf",
+  function = "#007a72",
+  type = "#855acb",
+  variable = "#0f424b",
+  constant = "#288140",
+  operator = "#335166",
   error = "#b63132",
-  warning = "#966500",
+  warning = "#986600",
   info = "#006a9d",
   success = "#1e7729",
-  widget = "#edeee8",
-  sidebar = "#eaebe5",
-  activity = "#e3e4de",
-  border = "#d6d7d0",
-  cursorline = "#e9eae4",
-  selection = "#d7d0de",
-  accentTint = "#dad3df",
-  findmatch = "#d2c19a",
-  errTint = "#e9d6d1",
-  warnTint = "#e4dec9",
-  infoTint = "#cedee1",
-  okTint = "#d2e0d0",
-  warnStrong = "#d2c19a",
-  faint = "#c4c6ba",
-  guide = "#e2e3dd",
-  activeGuide = "#c6c7c0",
+  widget = "#e5f5fa",
+  sidebar = "#e2f2f7",
+  activity = "#dbebf0",
+  border = "#cedde2",
+  cursorline = "#e1f1f6",
+  selection = "#dad4c7",
+  accentTint = "#dbd8cc",
+  findmatch = "#cdc6a6",
+  errTint = "#e2dce0",
+  warnTint = "#dee4d9",
+  infoTint = "#c7e4f0",
+  okTint = "#cbe6df",
+  warnStrong = "#cdc6a6",
+  faint = "#b8cbd1",
+  guide = "#dae9ee",
+  activeGuide = "#beccd1",
 }
 
 local function hl(group, spec)
@@ -2288,22 +2288,22 @@ hl("@lsp.type.string", { fg = c.string })
 hl("@lsp.type.number", { fg = c.constant })
 hl("@lsp.type.operator", { fg = c.operator })
 
-vim.g.terminal_color_0 = "#292a21"
+vim.g.terminal_color_0 = "#212b2e"
 vim.g.terminal_color_1 = "#b63132"
 vim.g.terminal_color_2 = "#1e7729"
-vim.g.terminal_color_3 = "#966500"
+vim.g.terminal_color_3 = "#986600"
 vim.g.terminal_color_4 = "#006a9d"
-vim.g.terminal_color_5 = "#5a66aa"
-vim.g.terminal_color_6 = "#007955"
-vim.g.terminal_color_7 = "#dadbd5"
-vim.g.terminal_color_8 = "#80826e"
+vim.g.terminal_color_5 = "#16538f"
+vim.g.terminal_color_6 = "#007a72"
+vim.g.terminal_color_7 = "#d2e1e6"
+vim.g.terminal_color_8 = "#6d858c"
 vim.g.terminal_color_9 = "#a70018"
 vim.g.terminal_color_10 = "#006516"
-vim.g.terminal_color_11 = "#805500"
+vim.g.terminal_color_11 = "#825600"
 vim.g.terminal_color_12 = "#005884"
-vim.g.terminal_color_13 = "#48539e"
-vim.g.terminal_color_14 = "#006547"
-vim.g.terminal_color_15 = "#f2f3ed"
+vim.g.terminal_color_13 = "#00427b"
+vim.g.terminal_color_14 = "#006760"
+vim.g.terminal_color_15 = "#eafaff"
 ",
     "path": "colors/fixture-light.lua",
   },
@@ -2317,33 +2317,33 @@ exports[`port palette > matches its snapshot 1`] = `
   "name": "Fixture Dark",
   "mode": "dark",
   "roles": {
-    "bg": "#23191c",
-    "fg": "#e7dadd",
-    "accent": "#00b9ce",
-    "muted": "#8b7378",
-    "keyword": "#ff967c",
-    "string": "#ed8e21",
-    "function": "#e87dd7",
-    "type": "#d2a300",
-    "variable": "#f5c2c9",
-    "constant": "#c489ff",
-    "operator": "#d5ada2",
+    "bg": "#170f1f",
+    "fg": "#e0dce6",
+    "accent": "#3dc255",
+    "muted": "#7f7689",
+    "keyword": "#74c240",
+    "string": "#ffa4d5",
+    "function": "#2fd3a6",
+    "type": "#a99bfe",
+    "variable": "#dbc7f1",
+    "constant": "#c9ab00",
+    "operator": "#aabf9f",
     "error": "#f66d67",
     "warning": "#f2af48",
     "info": "#5fb8f2",
     "success": "#74c878"
   },
   "surfaces": {
-    "editor": "#23191c",
-    "sidebar": "#1c1215",
-    "activityBar": "#170e11",
-    "panel": "#1c1215",
-    "tabInactive": "#1c1215",
-    "widget": "#2d2225",
-    "input": "#2c2124",
-    "border": "#3b3033",
-    "lineHighlight": "#e7dadd0d",
-    "selection": "#00b9ce4d",
+    "editor": "#170f1f",
+    "sidebar": "#100918",
+    "activityBar": "#0c0513",
+    "panel": "#100918",
+    "tabInactive": "#100918",
+    "widget": "#201829",
+    "input": "#1f1728",
+    "border": "#2f2837",
+    "lineHighlight": "#e0dce60d",
+    "selection": "#3dc2554d",
     "onAccent": "#111418"
   }
 }
@@ -2360,33 +2360,33 @@ exports[`port palette > matches its snapshot 2`] = `
   "name": "Fixture Light",
   "mode": "light",
   "roles": {
-    "bg": "#f2f3ed",
-    "fg": "#292a21",
-    "accent": "#7952a9",
-    "muted": "#80826e",
-    "keyword": "#5a66aa",
-    "string": "#834486",
-    "function": "#007955",
-    "type": "#6248a4",
-    "variable": "#3f3c20",
-    "constant": "#986000",
-    "operator": "#454b69",
+    "bg": "#eafaff",
+    "fg": "#212b2e",
+    "accent": "#a14f00",
+    "muted": "#6d858c",
+    "keyword": "#006090",
+    "string": "#5a6abf",
+    "function": "#007a72",
+    "type": "#855acb",
+    "variable": "#0f424b",
+    "constant": "#288140",
+    "operator": "#335166",
     "error": "#b63132",
-    "warning": "#966500",
+    "warning": "#986600",
     "info": "#006a9d",
     "success": "#1e7729"
   },
   "surfaces": {
-    "editor": "#f2f3ed",
-    "sidebar": "#eaebe5",
-    "activityBar": "#e3e4de",
-    "panel": "#eaebe5",
-    "tabInactive": "#eaebe5",
-    "widget": "#edeee8",
-    "input": "#e8e9e3",
-    "border": "#d6d7d0",
-    "lineHighlight": "#292a210b",
-    "selection": "#7952a938",
+    "editor": "#eafaff",
+    "sidebar": "#e2f2f7",
+    "activityBar": "#dbebf0",
+    "panel": "#e2f2f7",
+    "tabInactive": "#e2f2f7",
+    "widget": "#e5f5fa",
+    "input": "#e0f0f5",
+    "border": "#cedde2",
+    "lineHighlight": "#212b2e0b",
+    "selection": "#a14f0038",
     "onAccent": "#ffffff"
   }
 }
@@ -2403,41 +2403,41 @@ exports[`port sublime > matches its snapshot 1`] = `
   "name": "Fixture Dark",
   "author": "SyntaxHue",
   "variables": {
-    "bg": "#23191c",
-    "fg": "#e7dadd",
-    "accent": "#00b9ce",
-    "muted": "#8b7378",
-    "keyword": "#ff967c",
-    "string": "#ed8e21",
-    "function": "#e87dd7",
-    "type": "#d2a300",
-    "variable": "#f5c2c9",
-    "constant": "#c489ff",
-    "operator": "#d5ada2",
+    "bg": "#170f1f",
+    "fg": "#e0dce6",
+    "accent": "#3dc255",
+    "muted": "#7f7689",
+    "keyword": "#74c240",
+    "string": "#ffa4d5",
+    "function": "#2fd3a6",
+    "type": "#a99bfe",
+    "variable": "#dbc7f1",
+    "constant": "#c9ab00",
+    "operator": "#aabf9f",
     "error": "#f66d67",
     "warning": "#f2af48",
     "info": "#5fb8f2",
     "success": "#74c878",
-    "border": "#3b3033",
-    "widget": "#2d2225",
-    "sidebar": "#1c1215"
+    "border": "#2f2837",
+    "widget": "#201829",
+    "sidebar": "#100918"
   },
   "globals": {
     "background": "var(bg)",
     "foreground": "var(fg)",
     "caret": "var(accent)",
     "accent": "var(accent)",
-    "line_highlight": "#e7dadd0d",
-    "selection": "#00b9ce4d",
-    "inactive_selection": "#00b9ce26",
+    "line_highlight": "#e0dce60d",
+    "selection": "#3dc2554d",
+    "inactive_selection": "#3dc25526",
     "selection_border": "var(accent)",
     "find_highlight": "var(warning)",
     "find_highlight_foreground": "var(bg)",
     "highlight": "var(warning)",
-    "invisibles": "#8b737866",
-    "guide": "#e7dadd14",
-    "active_guide": "#e7dadd38",
-    "stack_guide": "#e7dadd24",
+    "invisibles": "#7f768966",
+    "guide": "#e0dce614",
+    "active_guide": "#e0dce638",
+    "stack_guide": "#e0dce624",
     "brackets_foreground": "var(accent)",
     "brackets_options": "underline",
     "bracket_contents_foreground": "var(accent)",
@@ -2535,41 +2535,41 @@ exports[`port sublime > matches its snapshot 2`] = `
   "name": "Fixture Light",
   "author": "SyntaxHue",
   "variables": {
-    "bg": "#f2f3ed",
-    "fg": "#292a21",
-    "accent": "#7952a9",
-    "muted": "#80826e",
-    "keyword": "#5a66aa",
-    "string": "#834486",
-    "function": "#007955",
-    "type": "#6248a4",
-    "variable": "#3f3c20",
-    "constant": "#986000",
-    "operator": "#454b69",
+    "bg": "#eafaff",
+    "fg": "#212b2e",
+    "accent": "#a14f00",
+    "muted": "#6d858c",
+    "keyword": "#006090",
+    "string": "#5a6abf",
+    "function": "#007a72",
+    "type": "#855acb",
+    "variable": "#0f424b",
+    "constant": "#288140",
+    "operator": "#335166",
     "error": "#b63132",
-    "warning": "#966500",
+    "warning": "#986600",
     "info": "#006a9d",
     "success": "#1e7729",
-    "border": "#d6d7d0",
-    "widget": "#edeee8",
-    "sidebar": "#eaebe5"
+    "border": "#cedde2",
+    "widget": "#e5f5fa",
+    "sidebar": "#e2f2f7"
   },
   "globals": {
     "background": "var(bg)",
     "foreground": "var(fg)",
     "caret": "var(accent)",
     "accent": "var(accent)",
-    "line_highlight": "#292a210b",
-    "selection": "#7952a938",
-    "inactive_selection": "#7952a926",
+    "line_highlight": "#212b2e0b",
+    "selection": "#a14f0038",
+    "inactive_selection": "#a14f0026",
     "selection_border": "var(accent)",
     "find_highlight": "var(warning)",
     "find_highlight_foreground": "var(bg)",
     "highlight": "var(warning)",
-    "invisibles": "#80826e66",
-    "guide": "#292a2114",
-    "active_guide": "#292a2138",
-    "stack_guide": "#292a2124",
+    "invisibles": "#6d858c66",
+    "guide": "#212b2e14",
+    "active_guide": "#212b2e38",
+    "stack_guide": "#212b2e24",
     "brackets_foreground": "var(accent)",
     "brackets_options": "underline",
     "bracket_contents_foreground": "var(accent)",
@@ -2664,15 +2664,15 @@ exports[`port wezterm > matches its snapshot 1`] = `
 [
   {
     "content": "[colors]
-foreground = "#e7dadd"
-background = "#23191c"
-cursor_bg = "#00b9ce"
-cursor_fg = "#23191c"
-cursor_border = "#00b9ce"
-selection_fg = "#e7dadd"
-selection_bg = "#194951"
-ansi = ["#4a4043", "#f66d67", "#74c878", "#f2af48", "#5fb8f2", "#ff967c", "#e87dd7", "#cabdc0"]
-brights = ["#8b7378", "#ff9088", "#81e286", "#ffca7f", "#86ceff", "#ffbaa8", "#ff94ed", "#e7dadd"]
+foreground = "#e0dce6"
+background = "#170f1f"
+cursor_bg = "#3dc255"
+cursor_fg = "#170f1f"
+cursor_border = "#3dc255"
+selection_fg = "#e0dce6"
+selection_bg = "#22452f"
+ansi = ["#3f3847", "#f66d67", "#74c878", "#f2af48", "#5fb8f2", "#74c240", "#2fd3a6", "#c2bdc8"]
+brights = ["#7f7689", "#ff9088", "#81e286", "#ffca7f", "#86ceff", "#82db45", "#29edba", "#e0dce6"]
 
 [metadata]
 name = "Fixture Dark"
@@ -2686,15 +2686,15 @@ exports[`port wezterm > matches its snapshot 2`] = `
 [
   {
     "content": "[colors]
-foreground = "#292a21"
-background = "#f2f3ed"
-cursor_bg = "#7952a9"
-cursor_fg = "#f2f3ed"
-cursor_border = "#7952a9"
-selection_fg = "#292a21"
-selection_bg = "#d7d0de"
-ansi = ["#292a21", "#b63132", "#1e7729", "#966500", "#006a9d", "#5a66aa", "#007955", "#dadbd5"]
-brights = ["#80826e", "#a70018", "#006516", "#805500", "#005884", "#48539e", "#006547", "#f2f3ed"]
+foreground = "#212b2e"
+background = "#eafaff"
+cursor_bg = "#a14f00"
+cursor_fg = "#eafaff"
+cursor_border = "#a14f00"
+selection_fg = "#212b2e"
+selection_bg = "#dad4c7"
+ansi = ["#212b2e", "#b63132", "#1e7729", "#986600", "#006a9d", "#16538f", "#007a72", "#d2e1e6"]
+brights = ["#6d858c", "#a70018", "#006516", "#825600", "#005884", "#00427b", "#006760", "#eafaff"]
 
 [metadata]
 name = "Fixture Light"
@@ -2709,26 +2709,26 @@ exports[`port windows-terminal > matches its snapshot 1`] = `
   {
     "content": "{
   "name": "Fixture Dark",
-  "black": "#4a4043",
+  "black": "#3f3847",
   "red": "#f66d67",
   "green": "#74c878",
   "yellow": "#f2af48",
   "blue": "#5fb8f2",
-  "purple": "#ff967c",
-  "cyan": "#e87dd7",
-  "white": "#cabdc0",
-  "brightBlack": "#8b7378",
+  "purple": "#74c240",
+  "cyan": "#2fd3a6",
+  "white": "#c2bdc8",
+  "brightBlack": "#7f7689",
   "brightRed": "#ff9088",
   "brightGreen": "#81e286",
   "brightYellow": "#ffca7f",
   "brightBlue": "#86ceff",
-  "brightPurple": "#ffbaa8",
-  "brightCyan": "#ff94ed",
-  "brightWhite": "#e7dadd",
-  "background": "#23191c",
-  "foreground": "#e7dadd",
-  "cursorColor": "#00b9ce",
-  "selectionBackground": "#194951"
+  "brightPurple": "#82db45",
+  "brightCyan": "#29edba",
+  "brightWhite": "#e0dce6",
+  "background": "#170f1f",
+  "foreground": "#e0dce6",
+  "cursorColor": "#3dc255",
+  "selectionBackground": "#22452f"
 }
 ",
     "path": "fixture-dark.json",
@@ -2741,26 +2741,26 @@ exports[`port windows-terminal > matches its snapshot 2`] = `
   {
     "content": "{
   "name": "Fixture Light",
-  "black": "#292a21",
+  "black": "#212b2e",
   "red": "#b63132",
   "green": "#1e7729",
-  "yellow": "#966500",
+  "yellow": "#986600",
   "blue": "#006a9d",
-  "purple": "#5a66aa",
-  "cyan": "#007955",
-  "white": "#dadbd5",
-  "brightBlack": "#80826e",
+  "purple": "#16538f",
+  "cyan": "#007a72",
+  "white": "#d2e1e6",
+  "brightBlack": "#6d858c",
   "brightRed": "#a70018",
   "brightGreen": "#006516",
-  "brightYellow": "#805500",
+  "brightYellow": "#825600",
   "brightBlue": "#005884",
-  "brightPurple": "#48539e",
-  "brightCyan": "#006547",
-  "brightWhite": "#f2f3ed",
-  "background": "#f2f3ed",
-  "foreground": "#292a21",
-  "cursorColor": "#7952a9",
-  "selectionBackground": "#d7d0de"
+  "brightPurple": "#00427b",
+  "brightCyan": "#006760",
+  "brightWhite": "#eafaff",
+  "background": "#eafaff",
+  "foreground": "#212b2e",
+  "cursorColor": "#a14f00",
+  "selectionBackground": "#dad4c7"
 }
 ",
     "path": "fixture-light.json",
@@ -2780,69 +2780,69 @@ exports[`port zed > matches its snapshot 1`] = `
       "name": "Fixture Dark",
       "appearance": "dark",
       "style": {
-        "border": "#3b3033",
-        "border.variant": "#3b3033",
-        "border.focused": "#00b9ce",
-        "border.selected": "#00b9ce",
+        "border": "#2f2837",
+        "border.variant": "#2f2837",
+        "border.focused": "#3dc255",
+        "border.selected": "#3dc255",
         "border.transparent": "#00000000",
-        "border.disabled": "#3b3033",
-        "elevated_surface.background": "#2d2225",
-        "surface.background": "#1c1215",
-        "background": "#1c1215",
-        "element.background": "#2c2124",
-        "element.hover": "#e7dadd0f",
-        "element.active": "#00b9ce40",
-        "element.selected": "#00b9ce40",
-        "element.disabled": "#e7dadd0a",
+        "border.disabled": "#2f2837",
+        "elevated_surface.background": "#201829",
+        "surface.background": "#100918",
+        "background": "#100918",
+        "element.background": "#1f1728",
+        "element.hover": "#e0dce60f",
+        "element.active": "#3dc25540",
+        "element.selected": "#3dc25540",
+        "element.disabled": "#e0dce60a",
         "ghost_element.background": "#00000000",
-        "ghost_element.hover": "#e7dadd0f",
-        "ghost_element.active": "#00b9ce40",
-        "ghost_element.selected": "#00b9ce2e",
-        "ghost_element.disabled": "#e7dadd0a",
-        "text": "#e7dadd",
-        "text.muted": "#8b7378",
-        "text.placeholder": "#8b7378",
-        "text.disabled": "#8b737899",
-        "text.accent": "#00b9ce",
-        "icon": "#e7dadd",
-        "icon.muted": "#8b7378",
-        "icon.disabled": "#8b737899",
-        "icon.placeholder": "#8b7378",
-        "icon.accent": "#00b9ce",
-        "status_bar.background": "#170e11",
-        "title_bar.background": "#170e11",
-        "title_bar.inactive_background": "#170e11",
-        "toolbar.background": "#23191c",
-        "tab_bar.background": "#1c1215",
-        "tab.inactive_background": "#1c1215",
-        "tab.active_background": "#23191c",
+        "ghost_element.hover": "#e0dce60f",
+        "ghost_element.active": "#3dc25540",
+        "ghost_element.selected": "#3dc2552e",
+        "ghost_element.disabled": "#e0dce60a",
+        "text": "#e0dce6",
+        "text.muted": "#7f7689",
+        "text.placeholder": "#7f7689",
+        "text.disabled": "#7f768999",
+        "text.accent": "#3dc255",
+        "icon": "#e0dce6",
+        "icon.muted": "#7f7689",
+        "icon.disabled": "#7f768999",
+        "icon.placeholder": "#7f7689",
+        "icon.accent": "#3dc255",
+        "status_bar.background": "#0c0513",
+        "title_bar.background": "#0c0513",
+        "title_bar.inactive_background": "#0c0513",
+        "toolbar.background": "#170f1f",
+        "tab_bar.background": "#100918",
+        "tab.inactive_background": "#100918",
+        "tab.active_background": "#170f1f",
         "search.match_background": "#f2af484d",
-        "panel.background": "#1c1215",
-        "panel.focused_border": "#00b9ce",
-        "pane.focused_border": "#00b9ce",
-        "scrollbar.thumb.background": "#e7dadd1f",
-        "scrollbar.thumb.hover_background": "#e7dadd33",
+        "panel.background": "#100918",
+        "panel.focused_border": "#3dc255",
+        "pane.focused_border": "#3dc255",
+        "scrollbar.thumb.background": "#e0dce61f",
+        "scrollbar.thumb.hover_background": "#e0dce633",
         "scrollbar.thumb.border": "#00000000",
         "scrollbar.track.background": "#00000000",
         "scrollbar.track.border": "#00000000",
-        "editor.foreground": "#e7dadd",
-        "editor.background": "#23191c",
-        "editor.gutter.background": "#23191c",
-        "editor.subheader.background": "#1c1215",
-        "editor.active_line.background": "#e7dadd0d",
-        "editor.highlighted_line.background": "#e7dadd0d",
-        "editor.line_number": "#8b7378",
-        "editor.active_line_number": "#e7dadd",
-        "editor.invisible": "#8b737866",
-        "editor.wrap_guide": "#e7dadd14",
-        "editor.active_wrap_guide": "#e7dadd38",
-        "editor.document_highlight.read_background": "#00b9ce2e",
-        "editor.document_highlight.write_background": "#00b9ce4d",
-        "terminal.background": "#23191c",
-        "terminal.foreground": "#e7dadd",
-        "terminal.bright_foreground": "#e7dadd",
-        "terminal.ansi.black": "#4a4043",
-        "terminal.ansi.bright_black": "#8b7378",
+        "editor.foreground": "#e0dce6",
+        "editor.background": "#170f1f",
+        "editor.gutter.background": "#170f1f",
+        "editor.subheader.background": "#100918",
+        "editor.active_line.background": "#e0dce60d",
+        "editor.highlighted_line.background": "#e0dce60d",
+        "editor.line_number": "#7f7689",
+        "editor.active_line_number": "#e0dce6",
+        "editor.invisible": "#7f768966",
+        "editor.wrap_guide": "#e0dce614",
+        "editor.active_wrap_guide": "#e0dce638",
+        "editor.document_highlight.read_background": "#3dc2552e",
+        "editor.document_highlight.write_background": "#3dc2554d",
+        "terminal.background": "#170f1f",
+        "terminal.foreground": "#e0dce6",
+        "terminal.bright_foreground": "#e0dce6",
+        "terminal.ansi.black": "#3f3847",
+        "terminal.ansi.bright_black": "#7f7689",
         "terminal.ansi.red": "#f66d67",
         "terminal.ansi.bright_red": "#ff9088",
         "terminal.ansi.green": "#74c878",
@@ -2851,13 +2851,13 @@ exports[`port zed > matches its snapshot 1`] = `
         "terminal.ansi.bright_yellow": "#ffca7f",
         "terminal.ansi.blue": "#5fb8f2",
         "terminal.ansi.bright_blue": "#86ceff",
-        "terminal.ansi.magenta": "#ff967c",
-        "terminal.ansi.bright_magenta": "#ffbaa8",
-        "terminal.ansi.cyan": "#e87dd7",
-        "terminal.ansi.bright_cyan": "#ff94ed",
-        "terminal.ansi.white": "#cabdc0",
-        "terminal.ansi.bright_white": "#e7dadd",
-        "link_text.hover": "#00b9ce",
+        "terminal.ansi.magenta": "#74c240",
+        "terminal.ansi.bright_magenta": "#82db45",
+        "terminal.ansi.cyan": "#2fd3a6",
+        "terminal.ansi.bright_cyan": "#29edba",
+        "terminal.ansi.white": "#c2bdc8",
+        "terminal.ansi.bright_white": "#e0dce6",
+        "link_text.hover": "#3dc255",
         "error": "#f66d67",
         "error.background": "#f66d671f",
         "error.border": "#f66d6766",
@@ -2885,127 +2885,127 @@ exports[`port zed > matches its snapshot 1`] = `
         "hint": "#5fb8f2",
         "hint.background": "#5fb8f21f",
         "hint.border": "#5fb8f266",
-        "ignored": "#8b7378",
-        "hidden": "#8b7378",
-        "predictive": "#8b7378",
+        "ignored": "#7f7689",
+        "hidden": "#7f7689",
+        "predictive": "#7f7689",
         "renamed": "#5fb8f2",
-        "unreachable": "#8b7378",
+        "unreachable": "#7f7689",
         "players": [
           {
-            "cursor": "#00b9ce",
-            "background": "#00b9ce",
-            "selection": "#00b9ce4d"
+            "cursor": "#3dc255",
+            "background": "#3dc255",
+            "selection": "#3dc2554d"
           }
         ],
         "syntax": {
           "comment": {
-            "color": "#8b7378",
+            "color": "#7f7689",
             "font_style": "italic"
           },
           "comment.doc": {
-            "color": "#8b7378",
+            "color": "#7f7689",
             "font_style": "italic"
           },
           "keyword": {
-            "color": "#ff967c",
+            "color": "#74c240",
             "font_style": "italic"
           },
           "preproc": {
-            "color": "#ff967c",
+            "color": "#74c240",
             "font_style": "italic"
           },
           "string": {
-            "color": "#ed8e21"
+            "color": "#ffa4d5"
           },
           "string.escape": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "string.regex": {
-            "color": "#ed8e21"
+            "color": "#ffa4d5"
           },
           "string.special": {
-            "color": "#ed8e21"
+            "color": "#ffa4d5"
           },
           "string.special.symbol": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "function": {
-            "color": "#e87dd7"
+            "color": "#2fd3a6"
           },
           "attribute": {
-            "color": "#e87dd7"
+            "color": "#2fd3a6"
           },
           "title": {
-            "color": "#e87dd7"
+            "color": "#2fd3a6"
           },
           "label": {
-            "color": "#e87dd7"
+            "color": "#2fd3a6"
           },
           "type": {
-            "color": "#d2a300"
+            "color": "#a99bfe"
           },
           "constructor": {
-            "color": "#d2a300"
+            "color": "#a99bfe"
           },
           "enum": {
-            "color": "#d2a300"
+            "color": "#a99bfe"
           },
           "tag": {
-            "color": "#d2a300"
+            "color": "#a99bfe"
           },
           "variant": {
-            "color": "#d2a300"
+            "color": "#a99bfe"
           },
           "variable": {
-            "color": "#f5c2c9"
+            "color": "#dbc7f1"
           },
           "variable.special": {
-            "color": "#f5c2c9"
+            "color": "#dbc7f1"
           },
           "property": {
-            "color": "#f5c2c9"
+            "color": "#dbc7f1"
           },
           "primary": {
-            "color": "#e7dadd"
+            "color": "#e0dce6"
           },
           "embedded": {
-            "color": "#e7dadd"
+            "color": "#e0dce6"
           },
           "constant": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "number": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "boolean": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "operator": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "punctuation": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "punctuation.bracket": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "punctuation.delimiter": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "punctuation.list_marker": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "punctuation.special": {
-            "color": "#d5ada2"
+            "color": "#aabf9f"
           },
           "link_text": {
-            "color": "#00b9ce"
+            "color": "#3dc255"
           },
           "link_uri": {
-            "color": "#c489ff"
+            "color": "#c9ab00"
           },
           "text.literal": {
-            "color": "#ed8e21"
+            "color": "#ffa4d5"
           },
           "hint": {
             "color": "#5fb8f2"
@@ -3033,90 +3033,90 @@ exports[`port zed > matches its snapshot 2`] = `
       "name": "Fixture Light",
       "appearance": "light",
       "style": {
-        "border": "#d6d7d0",
-        "border.variant": "#d6d7d0",
-        "border.focused": "#7952a9",
-        "border.selected": "#7952a9",
+        "border": "#cedde2",
+        "border.variant": "#cedde2",
+        "border.focused": "#a14f00",
+        "border.selected": "#a14f00",
         "border.transparent": "#00000000",
-        "border.disabled": "#d6d7d0",
-        "elevated_surface.background": "#edeee8",
-        "surface.background": "#eaebe5",
-        "background": "#eaebe5",
-        "element.background": "#e8e9e3",
-        "element.hover": "#292a210f",
-        "element.active": "#7952a940",
-        "element.selected": "#7952a940",
-        "element.disabled": "#292a210a",
+        "border.disabled": "#cedde2",
+        "elevated_surface.background": "#e5f5fa",
+        "surface.background": "#e2f2f7",
+        "background": "#e2f2f7",
+        "element.background": "#e0f0f5",
+        "element.hover": "#212b2e0f",
+        "element.active": "#a14f0040",
+        "element.selected": "#a14f0040",
+        "element.disabled": "#212b2e0a",
         "ghost_element.background": "#00000000",
-        "ghost_element.hover": "#292a210f",
-        "ghost_element.active": "#7952a940",
-        "ghost_element.selected": "#7952a92e",
-        "ghost_element.disabled": "#292a210a",
-        "text": "#292a21",
-        "text.muted": "#80826e",
-        "text.placeholder": "#80826e",
-        "text.disabled": "#80826e99",
-        "text.accent": "#7952a9",
-        "icon": "#292a21",
-        "icon.muted": "#80826e",
-        "icon.disabled": "#80826e99",
-        "icon.placeholder": "#80826e",
-        "icon.accent": "#7952a9",
-        "status_bar.background": "#e3e4de",
-        "title_bar.background": "#e3e4de",
-        "title_bar.inactive_background": "#e3e4de",
-        "toolbar.background": "#f2f3ed",
-        "tab_bar.background": "#eaebe5",
-        "tab.inactive_background": "#eaebe5",
-        "tab.active_background": "#f2f3ed",
-        "search.match_background": "#9665004d",
-        "panel.background": "#eaebe5",
-        "panel.focused_border": "#7952a9",
-        "pane.focused_border": "#7952a9",
-        "scrollbar.thumb.background": "#292a211f",
-        "scrollbar.thumb.hover_background": "#292a2133",
+        "ghost_element.hover": "#212b2e0f",
+        "ghost_element.active": "#a14f0040",
+        "ghost_element.selected": "#a14f002e",
+        "ghost_element.disabled": "#212b2e0a",
+        "text": "#212b2e",
+        "text.muted": "#6d858c",
+        "text.placeholder": "#6d858c",
+        "text.disabled": "#6d858c99",
+        "text.accent": "#a14f00",
+        "icon": "#212b2e",
+        "icon.muted": "#6d858c",
+        "icon.disabled": "#6d858c99",
+        "icon.placeholder": "#6d858c",
+        "icon.accent": "#a14f00",
+        "status_bar.background": "#dbebf0",
+        "title_bar.background": "#dbebf0",
+        "title_bar.inactive_background": "#dbebf0",
+        "toolbar.background": "#eafaff",
+        "tab_bar.background": "#e2f2f7",
+        "tab.inactive_background": "#e2f2f7",
+        "tab.active_background": "#eafaff",
+        "search.match_background": "#9866004d",
+        "panel.background": "#e2f2f7",
+        "panel.focused_border": "#a14f00",
+        "pane.focused_border": "#a14f00",
+        "scrollbar.thumb.background": "#212b2e1f",
+        "scrollbar.thumb.hover_background": "#212b2e33",
         "scrollbar.thumb.border": "#00000000",
         "scrollbar.track.background": "#00000000",
         "scrollbar.track.border": "#00000000",
-        "editor.foreground": "#292a21",
-        "editor.background": "#f2f3ed",
-        "editor.gutter.background": "#f2f3ed",
-        "editor.subheader.background": "#eaebe5",
-        "editor.active_line.background": "#292a210b",
-        "editor.highlighted_line.background": "#292a210b",
-        "editor.line_number": "#80826e",
-        "editor.active_line_number": "#292a21",
-        "editor.invisible": "#80826e66",
-        "editor.wrap_guide": "#292a2114",
-        "editor.active_wrap_guide": "#292a2138",
-        "editor.document_highlight.read_background": "#7952a92e",
-        "editor.document_highlight.write_background": "#7952a94d",
-        "terminal.background": "#f2f3ed",
-        "terminal.foreground": "#292a21",
-        "terminal.bright_foreground": "#292a21",
-        "terminal.ansi.black": "#292a21",
-        "terminal.ansi.bright_black": "#80826e",
+        "editor.foreground": "#212b2e",
+        "editor.background": "#eafaff",
+        "editor.gutter.background": "#eafaff",
+        "editor.subheader.background": "#e2f2f7",
+        "editor.active_line.background": "#212b2e0b",
+        "editor.highlighted_line.background": "#212b2e0b",
+        "editor.line_number": "#6d858c",
+        "editor.active_line_number": "#212b2e",
+        "editor.invisible": "#6d858c66",
+        "editor.wrap_guide": "#212b2e14",
+        "editor.active_wrap_guide": "#212b2e38",
+        "editor.document_highlight.read_background": "#a14f002e",
+        "editor.document_highlight.write_background": "#a14f004d",
+        "terminal.background": "#eafaff",
+        "terminal.foreground": "#212b2e",
+        "terminal.bright_foreground": "#212b2e",
+        "terminal.ansi.black": "#212b2e",
+        "terminal.ansi.bright_black": "#6d858c",
         "terminal.ansi.red": "#b63132",
         "terminal.ansi.bright_red": "#a70018",
         "terminal.ansi.green": "#1e7729",
         "terminal.ansi.bright_green": "#006516",
-        "terminal.ansi.yellow": "#966500",
-        "terminal.ansi.bright_yellow": "#805500",
+        "terminal.ansi.yellow": "#986600",
+        "terminal.ansi.bright_yellow": "#825600",
         "terminal.ansi.blue": "#006a9d",
         "terminal.ansi.bright_blue": "#005884",
-        "terminal.ansi.magenta": "#5a66aa",
-        "terminal.ansi.bright_magenta": "#48539e",
-        "terminal.ansi.cyan": "#007955",
-        "terminal.ansi.bright_cyan": "#006547",
-        "terminal.ansi.white": "#dadbd5",
-        "terminal.ansi.bright_white": "#f2f3ed",
-        "link_text.hover": "#7952a9",
+        "terminal.ansi.magenta": "#16538f",
+        "terminal.ansi.bright_magenta": "#00427b",
+        "terminal.ansi.cyan": "#007a72",
+        "terminal.ansi.bright_cyan": "#006760",
+        "terminal.ansi.white": "#d2e1e6",
+        "terminal.ansi.bright_white": "#eafaff",
+        "link_text.hover": "#a14f00",
         "error": "#b63132",
         "error.background": "#b631321f",
         "error.border": "#b6313266",
-        "warning": "#966500",
-        "warning.background": "#9665001f",
-        "warning.border": "#96650066",
+        "warning": "#986600",
+        "warning.background": "#9866001f",
+        "warning.border": "#98660066",
         "info": "#006a9d",
         "info.background": "#006a9d1f",
         "info.border": "#006a9d66",
@@ -3126,139 +3126,139 @@ exports[`port zed > matches its snapshot 2`] = `
         "created": "#1e7729",
         "created.background": "#1e77291f",
         "created.border": "#1e772966",
-        "modified": "#966500",
-        "modified.background": "#9665001f",
-        "modified.border": "#96650066",
+        "modified": "#986600",
+        "modified.background": "#9866001f",
+        "modified.border": "#98660066",
         "deleted": "#b63132",
         "deleted.background": "#b631321f",
         "deleted.border": "#b6313266",
-        "conflict": "#966500",
-        "conflict.background": "#9665001f",
-        "conflict.border": "#96650066",
+        "conflict": "#986600",
+        "conflict.background": "#9866001f",
+        "conflict.border": "#98660066",
         "hint": "#006a9d",
         "hint.background": "#006a9d1f",
         "hint.border": "#006a9d66",
-        "ignored": "#80826e",
-        "hidden": "#80826e",
-        "predictive": "#80826e",
+        "ignored": "#6d858c",
+        "hidden": "#6d858c",
+        "predictive": "#6d858c",
         "renamed": "#006a9d",
-        "unreachable": "#80826e",
+        "unreachable": "#6d858c",
         "players": [
           {
-            "cursor": "#7952a9",
-            "background": "#7952a9",
-            "selection": "#7952a938"
+            "cursor": "#a14f00",
+            "background": "#a14f00",
+            "selection": "#a14f0038"
           }
         ],
         "syntax": {
           "comment": {
-            "color": "#80826e",
+            "color": "#6d858c",
             "font_style": "italic"
           },
           "comment.doc": {
-            "color": "#80826e",
+            "color": "#6d858c",
             "font_style": "italic"
           },
           "keyword": {
-            "color": "#5a66aa",
+            "color": "#006090",
             "font_style": "italic"
           },
           "preproc": {
-            "color": "#5a66aa",
+            "color": "#006090",
             "font_style": "italic"
           },
           "string": {
-            "color": "#834486"
+            "color": "#5a6abf"
           },
           "string.escape": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "string.regex": {
-            "color": "#834486"
+            "color": "#5a6abf"
           },
           "string.special": {
-            "color": "#834486"
+            "color": "#5a6abf"
           },
           "string.special.symbol": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "function": {
-            "color": "#007955"
+            "color": "#007a72"
           },
           "attribute": {
-            "color": "#007955"
+            "color": "#007a72"
           },
           "title": {
-            "color": "#007955"
+            "color": "#007a72"
           },
           "label": {
-            "color": "#007955"
+            "color": "#007a72"
           },
           "type": {
-            "color": "#6248a4"
+            "color": "#855acb"
           },
           "constructor": {
-            "color": "#6248a4"
+            "color": "#855acb"
           },
           "enum": {
-            "color": "#6248a4"
+            "color": "#855acb"
           },
           "tag": {
-            "color": "#6248a4"
+            "color": "#855acb"
           },
           "variant": {
-            "color": "#6248a4"
+            "color": "#855acb"
           },
           "variable": {
-            "color": "#3f3c20"
+            "color": "#0f424b"
           },
           "variable.special": {
-            "color": "#3f3c20"
+            "color": "#0f424b"
           },
           "property": {
-            "color": "#3f3c20"
+            "color": "#0f424b"
           },
           "primary": {
-            "color": "#292a21"
+            "color": "#212b2e"
           },
           "embedded": {
-            "color": "#292a21"
+            "color": "#212b2e"
           },
           "constant": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "number": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "boolean": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "operator": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "punctuation": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "punctuation.bracket": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "punctuation.delimiter": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "punctuation.list_marker": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "punctuation.special": {
-            "color": "#454b69"
+            "color": "#335166"
           },
           "link_text": {
-            "color": "#7952a9"
+            "color": "#a14f00"
           },
           "link_uri": {
-            "color": "#986000"
+            "color": "#288140"
           },
           "text.literal": {
-            "color": "#834486"
+            "color": "#5a6abf"
           },
           "hint": {
             "color": "#006a9d"

@@ -1,0 +1,102 @@
+[
+  {
+    "seed": 28172101,
+    "mode": "dark",
+    "harmony": "analogous"
+  },
+  {
+    "seed": 34141654,
+    "mode": "dark",
+    "harmony": "analogous"
+  },
+  {
+    "seed": 28905204,
+    "mode": "light",
+    "harmony": "analogous"
+  },
+  {
+    "seed": 12253293,
+    "mode": "light",
+    "harmony": "analogous"
+  },
+  {
+    "seed": 35293673,
+    "mode": "dark",
+    "harmony": "complementary"
+  },
+  {
+    "seed": 5864824,
+    "mode": "dark",
+    "harmony": "complementary"
+  },
+  {
+    "seed": 15080976,
+    "mode": "light",
+    "harmony": "complementary"
+  },
+  {
+    "seed": 21888361,
+    "mode": "light",
+    "harmony": "complementary"
+  },
+  {
+    "seed": 3979702,
+    "mode": "dark",
+    "harmony": "triadic"
+  },
+  {
+    "seed": 21678903,
+    "mode": "dark",
+    "harmony": "triadic"
+  },
+  {
+    "seed": 20526884,
+    "mode": "light",
+    "harmony": "triadic"
+  },
+  {
+    "seed": 34770028,
+    "mode": "light",
+    "harmony": "triadic"
+  },
+  {
+    "seed": 5341179,
+    "mode": "dark",
+    "harmony": "split"
+  },
+  {
+    "seed": 1047290,
+    "mode": "dark",
+    "harmony": "split"
+  },
+  {
+    "seed": 11415461,
+    "mode": "light",
+    "harmony": "split"
+  },
+  {
+    "seed": 41158497,
+    "mode": "light",
+    "harmony": "split"
+  },
+  {
+    "seed": 3246599,
+    "mode": "dark",
+    "harmony": "monochrome"
+  },
+  {
+    "seed": 36236234,
+    "mode": "dark",
+    "harmony": "monochrome"
+  },
+  {
+    "seed": 11520190,
+    "mode": "light",
+    "harmony": "monochrome"
+  },
+  {
+    "seed": 36864608,
+    "mode": "light",
+    "harmony": "monochrome"
+  }
+]
