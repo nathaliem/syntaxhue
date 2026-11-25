@@ -1766,3 +1766,46 @@ pre.code {
   margin: 0 0 8px;
   font: 650 15px var(--display);
 }
+
+/* ---------- coach marks ---------- */
+.coach {
+  position: fixed;
+  z-index: 40;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--ink);
+  color: var(--surface);
+  box-shadow: var(--elev-1);
+}
+.coach::before {
+  content: "";
+  position: absolute;
+  left: var(--arrow, 50%);
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+.coach.above::before {
+  top: auto;
+  bottom: -6px;
+}
+.coach-body {
+  margin: 0 0 10px;
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+.coach-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.coach-count {
+  flex: 1;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.coach .btn.ghost {
+  color: inherit;
+}

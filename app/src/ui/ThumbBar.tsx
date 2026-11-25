@@ -11,10 +11,12 @@ interface Props {
 export function ThumbBar({ unlocked, onShuffle, onExport }: Props) {
   return (
     <div className="thumb-bar">
-      <Button variant="primary" onClick={onShuffle} disabled={unlocked === 0}>
+      <Button variant="primary" data-coach="shuffle" onClick={onShuffle} disabled={unlocked === 0}>
         {shuffleLabel(unlocked)}
       </Button>
-      <Button onClick={onExport}>Export</Button>
+      <Button data-coach="export" onClick={onExport}>
+        Export
+      </Button>
     </div>
   );
 }

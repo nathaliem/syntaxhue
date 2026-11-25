@@ -16,6 +16,7 @@ import { VibeControls, VibePanel } from "./ui/VibePanel";
 import { RoleEditorPopover } from "./ui/RoleEditorPopover";
 import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
+import { CoachMarks } from "./ui/CoachMarks";
 import { RedoIcon, UndoIcon } from "./ui/icons";
 import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
@@ -151,6 +152,7 @@ function AppShell({ store }: { store: ThemeStore }) {
           <div className="bar-actions">
             <Button
               variant="primary"
+              data-coach="shuffle"
               onClick={() => dispatch({ type: "shuffle" })}
               disabled={unlocked === 0}
               title={unlocked === 0 ? "Unlock a color to shuffle" : "Shuffle unlocked colors (Space)"}
@@ -185,7 +187,7 @@ function AppShell({ store }: { store: ThemeStore }) {
                 </IconButton>
               </>
             )}
-            <Button className="export-btn" onClick={() => setExportOpen(true)}>
+            <Button className="export-btn" data-coach="export" onClick={() => setExportOpen(true)}>
               Export
             </Button>
           </div>
@@ -254,9 +256,17 @@ function AppShell({ store }: { store: ThemeStore }) {
             <p className="stage-hint">Click anything in the preview to edit the color behind it.</p>
             <LanguageSwitch lang={lang} onChange={setLang} />
           </div>
-          <FitToWidth>
-            <Workbench theme={theme} selected={selected} highlighted={hovered} onPick={pick} sample={sampleFor(lang)} />
-          </FitToWidth>
+          <div data-coach="preview">
+            <FitToWidth>
+              <Workbench
+                theme={theme}
+                selected={selected}
+                highlighted={hovered}
+                onPick={pick}
+                sample={sampleFor(lang)}
+              />
+            </FitToWidth>
+          </div>
           {(tablet || mobile) && (
             <>
               <p className="side-foot" role="status">
@@ -301,6 +311,8 @@ function AppShell({ store }: { store: ThemeStore }) {
           <VibeControls vibe={theme.vibe} dispatch={dispatch} />
         </BottomSheet>
       )}
+
+      <CoachMarks />
 
       <LibraryDrawer
         open={libraryOpen}

@@ -5,6 +5,7 @@ import { afterEach, beforeEach } from "vitest";
 // Every test starts with empty browser storage and an empty URL hash.
 beforeEach(() => {
   localStorage.clear();
+  localStorage.setItem("hueprint:coach", "done"); // first-run tips are tested on their own
   history.replaceState(null, "", "/");
 });
 
