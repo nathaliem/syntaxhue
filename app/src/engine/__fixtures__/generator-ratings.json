@@ -1,0 +1,4 @@
+{
+  "method": "Blind rating of 40 shuffles (mixed harmonies and modes) on a 5-point scale: 3+ means 'I'd use this as a starting point'. Add one entry per rated shuffle: { \"seed\": number, \"mode\": \"dark\"|\"light\", \"harmony\": \"auto\"|..., \"rater\": string, \"score\": 1-5 }. Target: at least 70% rated 3 or higher.",
+  "ratings": []
+}

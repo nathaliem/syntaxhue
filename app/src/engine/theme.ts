@@ -160,6 +160,18 @@ export type Harmony = "auto" | HarmonyName;
 export const HARMONY_NAMES = Object.keys(HARMONIES) as HarmonyName[];
 const AUTO_HARMONIES: HarmonyName[] = ["analogous", "complementary", "triadic", "split"];
 
+/**
+ * Per-harmony tuning. Hues close together (analogous) need more lightness spread and chroma to stay readable as
+ * separate colors; hues far apart (triadic) already separate and look garish when pushed.
+ */
+const TUNING: Record<HarmonyName, { chroma: number; lightJitter: number }> = {
+  analogous: { chroma: 1.2, lightJitter: 0.075 },
+  complementary: { chroma: 1.05, lightJitter: 0.06 },
+  triadic: { chroma: 0.95, lightJitter: 0.05 },
+  split: { chroma: 1, lightJitter: 0.06 },
+  monochrome: { chroma: 1, lightJitter: 0 },
+};
+
 const ADJ = [
   "Quiet",
   "Ember",
@@ -206,6 +218,9 @@ export const MIN_SYNTAX_DISTANCE = 0.06;
 /** Syntax colors closer than this to the error color make normal code look like an error. */
 export const MIN_ERROR_DISTANCE = 0.08;
 const MAX_ATTEMPTS = 120;
+/** A generated theme is only accepted early when its syntax colors clear the minimums by this factor. */
+export const QUALITY_DISTINCTNESS = 1.4;
+const QUALITY_ATTEMPTS = 40;
 
 /**
  * How well a theme separates its syntax colors: 1 or more means it meets both minimums.
@@ -238,7 +253,9 @@ export function generate(seed: number, mode: Mode, prev?: ThemeState, harmony: H
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const t = generateOnce((seed + attempt * 0x9e3779b1) >>> 0, mode, prev, harmony);
     const score = distinctness(t);
-    if (score >= 1) return t;
+    // Aim high for a while, then settle for less, down to the hard minimum (some harmonies, like light monochrome, rarely reach the aim).
+    if (score >= (attempt < QUALITY_ATTEMPTS ? QUALITY_DISTINCTNESS : attempt < 2 * QUALITY_ATTEMPTS ? 1.15 : 1))
+      return t;
     if (score > bestScore) {
       best = t;
       bestScore = score;
@@ -260,7 +277,8 @@ function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, ha
   const harmonyName = harmony === "auto" ? auto : harmony;
   const harm = HARMONIES[harmonyName];
   const mono = harmonyName === "monochrome";
-  const sat = rnd(0.08, 0.17);
+  const tune = TUNING[harmonyName];
+  const sat = rnd(0.08, 0.17) * tune.chroma;
   const hues = harm.map((o) => (base + o + rnd(-12, 12) * (mono ? 0.3 : 1) + 360) % 360);
 
   let bg: Hex;
@@ -277,7 +295,7 @@ function generateOnce(seed: number, mode: Mode, prev: ThemeState | undefined, ha
   const accentL = (i: number) =>
     mono
       ? (dark ? syntaxL + 0.03 - i * 0.055 : syntaxL - 0.13 + i * 0.065) + rnd(-0.01, 0.01)
-      : syntaxL + rnd(-0.04, 0.04);
+      : syntaxL + rnd(-tune.lightJitter, tune.lightJitter);
   const accentC = (i: number) => (mono ? sat * [1.3, 0.7, 1.15, 0.55, 0.95][i] * rnd(0.9, 1.1) : sat * rnd(0.8, 1.2));
 
   const want: Record<Exclude<RoleId, "bg">, () => Hex> = {
