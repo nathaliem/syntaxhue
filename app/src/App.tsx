@@ -17,6 +17,7 @@ import { RoleEditorPopover } from "./ui/RoleEditorPopover";
 import { SwatchStrip } from "./ui/SwatchStrip";
 import { ThumbBar } from "./ui/ThumbBar";
 import { CoachMarks } from "./ui/CoachMarks";
+import { ShortcutSheet } from "./ui/ShortcutSheet";
 import { RedoIcon, UndoIcon } from "./ui/icons";
 import { useThemeStore } from "./state";
 import { Button, IconButton, Menu, SegmentedControl, ToastProvider, useToast } from "./ui/kit";
@@ -28,6 +29,7 @@ function AppShell({ store }: { store: ThemeStore }) {
   const [hovered, setHovered] = useState<RoleId | null>(null);
   const [exportOpen, setExportOpen] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const library = useLibrary();
   const toast = useToast();
   const issues = contrastIssues(theme);
@@ -66,11 +68,20 @@ function AppShell({ store }: { store: ThemeStore }) {
       const el = document.activeElement as HTMLElement | null;
       const isSlider = el instanceof HTMLInputElement && el.type === "range";
       const typing = el && !isSlider && (/INPUT|TEXTAREA|SELECT/.test(el.tagName) || el.isContentEditable);
-      if (exportOpen || libraryOpen || typing) return;
+      if (exportOpen || libraryOpen || shortcutsOpen || typing) return;
       if (isSlider && e.code === "Space") return;
       if (e.code === "Space" && !(el && el.tagName === "BUTTON")) {
         e.preventDefault();
         dispatch({ type: "shuffle" });
+      } else if (e.key === "?" && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        setShortcutsOpen(true);
+      } else if (e.key.toLowerCase() === "l" && !e.metaKey && !e.ctrlKey && !e.altKey && selected) {
+        e.preventDefault();
+        dispatch({ type: "lock", role: selected });
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "e") {
+        e.preventDefault();
+        setExportOpen(true);
       } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         void library
@@ -83,7 +94,7 @@ function AppShell({ store }: { store: ThemeStore }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch, exportOpen, libraryOpen, library, theme, toast]);
+  }, [dispatch, exportOpen, libraryOpen, shortcutsOpen, selected, library, theme, toast]);
 
   const breakpoint = useBreakpoint();
   const mobile = breakpoint === "mobile";
@@ -312,6 +323,7 @@ function AppShell({ store }: { store: ThemeStore }) {
         </BottomSheet>
       )}
 
+      <ShortcutSheet open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
       <CoachMarks />
 
       <LibraryDrawer
