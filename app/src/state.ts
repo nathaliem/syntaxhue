@@ -156,8 +156,22 @@ function clearHash() {
   history.replaceState(null, "", location.pathname + location.search);
 }
 
-/** Reads `#t=…` from the URL. undefined = no link, null = a link we can't read. */
+/** `/s?t=…` is the opt-in link with a preview image. Once read, the address goes back to plain `/`. */
+function takeQueryCode(): string | null {
+  const code = new URLSearchParams(location.search).get("t");
+  if (code === null) return null;
+  const rest = new URLSearchParams(location.search);
+  rest.delete("t");
+  const path = location.pathname === "/s" ? "/" : location.pathname;
+  const q = rest.toString();
+  history.replaceState(null, "", path + (q ? `?${q}` : "") + location.hash);
+  return code;
+}
+
+/** Reads `#t=…` (or the opt-in `?t=…`) from the URL. undefined = no link, null = a link we can't read. */
 function readLink(): ThemeState | null | undefined {
+  const fromQuery = takeQueryCode();
+  if (fromQuery !== null) return decodeTheme(fromQuery);
   const m = location.hash.match(/[#&]t=([^&]+)/);
   if (!m) return undefined;
   clearHash();
@@ -311,4 +325,9 @@ export function useThemeStore() {
 
 export function shareUrl(t: ThemeState): string {
   return `${location.origin}${location.pathname}#t=${encodeTheme(t)}`;
+}
+
+/** The opt-in link: the server reads the code to give the link its own preview image. */
+export function previewShareUrl(t: ThemeState): string {
+  return `${location.origin}/s?t=${encodeTheme(t)}`;
 }

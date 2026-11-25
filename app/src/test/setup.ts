@@ -2,24 +2,31 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, beforeEach } from "vitest";
 
-// Every test starts with empty browser storage and an empty URL hash.
-beforeEach(() => {
-  localStorage.clear();
-  localStorage.setItem("hueprint:coach", "done"); // first-run tips are tested on their own
-  history.replaceState(null, "", "/");
-});
+// Tests that opt into the Node environment (`// @vitest-environment node`) have no browser to set up.
+const dom = typeof window !== "undefined";
 
-afterEach(() => {
-  cleanup();
-});
+// Every test starts with empty browser storage and an empty URL hash.
+if (dom)
+  beforeEach(() => {
+    localStorage.clear();
+    localStorage.setItem("hueprint:coach", "done"); // first-run tips are tested on their own
+    history.replaceState(null, "", "/");
+  });
+
+if (dom)
+  afterEach(() => {
+    cleanup();
+  });
 
 // jsdom has no <dialog> methods; the export dialog calls them.
-HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
-  this.open = true;
-};
-HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
-  this.open = false;
-};
+if (dom) {
+  HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
+    this.open = true;
+  };
+  HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
+    this.open = false;
+  };
+}
 
 // jsdom has no matchMedia. Tests run at a desktop width unless they change it. Only width queries are understood
 // ("(min-width: 768px) and (max-width: 1199px)"); anything else (prefers-color-scheme) does not match.
@@ -33,7 +40,7 @@ export function setViewportWidth(value: number) {
 export function setMobile(value: boolean) {
   setViewportWidth(value ? 390 : DESKTOP);
 }
-beforeEach(() => setViewportWidth(DESKTOP));
+if (dom) beforeEach(() => setViewportWidth(DESKTOP));
 function matchesWidth(query: string): boolean {
   const parts = query.split(/\s+and\s+/);
   return parts.every((p) => {
@@ -42,14 +49,15 @@ function matchesWidth(query: string): boolean {
     return m[1] === "min" ? width >= Number(m[2]) : width <= Number(m[2]);
   });
 }
-window.matchMedia ??= ((query: string) => ({
-  get matches() {
-    return matchesWidth(query);
-  },
-  media: query,
-  addEventListener: (_: string, l: () => void) => listeners.add(l),
-  removeEventListener: (_: string, l: () => void) => listeners.delete(l),
-})) as unknown as typeof window.matchMedia;
+if (dom)
+  window.matchMedia ??= ((query: string) => ({
+    get matches() {
+      return matchesWidth(query);
+    },
+    media: query,
+    addEventListener: (_: string, l: () => void) => listeners.add(l),
+    removeEventListener: (_: string, l: () => void) => listeners.delete(l),
+  })) as unknown as typeof window.matchMedia;
 
 // jsdom has no scrollIntoView; the app scrolls an opened editor into view.
-Element.prototype.scrollIntoView ??= () => {};
+if (dom) Element.prototype.scrollIntoView ??= () => {};

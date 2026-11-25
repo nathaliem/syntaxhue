@@ -40,5 +40,11 @@
       "destination": "https://syntaxhue.dev/$1",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/s",
+      "destination": "/api/share"
+    }
   ]
 }

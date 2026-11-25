@@ -87,6 +87,17 @@ describe("opening a share link", () => {
     expect(location.hash).toBe("");
   });
 
+  it("opens a preview link (/s?t=) the same way and goes back to plain /", () => {
+    const t = generate(21, "dark");
+    t.name = "Preview Palette";
+    history.replaceState(null, "", `/s?t=${encodeTheme(t)}`);
+    render(<App />);
+    expect(banner()).toHaveTextContent("You opened a shared theme.");
+    expect(screen.getByRole("textbox", { name: "Theme name" })).toHaveValue("Preview Palette");
+    expect(location.pathname).toBe("/");
+    expect(location.search).toBe("");
+  });
+
   it("Save to library keeps the shared theme as a library entry and removes the banner", async () => {
     const user = userEvent.setup();
     const t = generate(12, "dark");

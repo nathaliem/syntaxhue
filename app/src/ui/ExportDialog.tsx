@@ -6,7 +6,7 @@ import type { ThemeState } from "../engine/theme";
 import { ExtensionForm } from "./ExtensionForm";
 import { PortsPanel } from "./PortsPanel";
 import { SettingsGuide } from "./SettingsGuide";
-import { shareUrl } from "../state";
+import { previewShareUrl, shareUrl } from "../state";
 import { MergePanel } from "./MergePanel";
 import { Survey } from "./Survey";
 import { Button, Dialog, IconButton, Toggle } from "./kit";
@@ -24,7 +24,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
 
   const snippet = settingsSnippetText(theme, scoped);
   const fileJson = JSON.stringify(themeFile(theme), null, 2);
-  const link = shareUrl(theme);
+  const [withPreview, setWithPreview] = useState(false);
+  const link = withPreview ? previewShareUrl(theme) : shareUrl(theme);
   const slug =
     theme.name
       .toLowerCase()
@@ -151,6 +152,16 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
             <p>
               Anyone with this link opens the same theme. Everything is stored in the link itself, nothing is uploaded.
             </p>
+            <label className="check-row">
+              <input type="checkbox" checked={withPreview} onChange={(e) => setWithPreview(e.target.checked)} />
+              <span>
+                Show a preview image of this theme when the link is posted
+                <small className="hint">
+                  Off by default. When on, the link is longer and its theme (colors, name and settings) is read by our
+                  server to draw the image. It is not stored.
+                </small>
+              </span>
+            </label>
             <input
               className="link-in"
               readOnly

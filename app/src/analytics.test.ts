@@ -51,6 +51,10 @@ describe("analytics", () => {
     expect(beforeSend({ url: "https://syntaxhue.dev/#t=abc123" })).toEqual({ url: "https://syntaxhue.dev/" });
   });
 
+  it("strips ?t= and treats /s as the home page", () => {
+    expect(beforeSend({ url: "https://syntaxhue.dev/s?t=pabc" })).toEqual({ url: "https://syntaxhue.dev/" });
+  });
+
   it("has a description for every event, and no property that could hold free text", () => {
     for (const [name, e] of Object.entries(EVENT_DICTIONARY)) {
       expect(e.when.length, name).toBeGreaterThan(10);

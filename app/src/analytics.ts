@@ -57,6 +57,14 @@ export function trackEvent(name: EventName, props: Record<string, string> = {}):
 /** For `<Analytics beforeSend>`: drops every page view and event when Do Not Track is on, and strips the URL fragment. */
 export function beforeSend<E extends { url: string }>(event: E): E | null {
   if (doNotTrack()) return null;
-  // A share link keeps the whole theme after the "#"; it must never reach analytics.
-  return { ...event, url: event.url.split("#")[0] };
+  // A share link keeps the whole theme after the "#" or in "?t="; it must never reach analytics.
+  try {
+    const u = new URL(event.url);
+    u.hash = "";
+    u.searchParams.delete("t");
+    if (u.pathname === "/s") u.pathname = "/";
+    return { ...event, url: u.toString() };
+  } catch {
+    return { ...event, url: event.url.split("#")[0].split("?")[0] };
+  }
 }
