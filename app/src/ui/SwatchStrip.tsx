@@ -1,3 +1,4 @@
+import { roleSpeech } from "../engine/colorName";
 import { useRef, type Dispatch } from "react";
 import { LockIcon } from "./icons";
 import { ROLES, type RoleId, type ThemeState } from "../engine/theme";
@@ -29,7 +30,7 @@ export function SwatchStrip({ theme, selected, onSelect, dispatch }: Props) {
             <button
               className={"strip-swatch" + (selected === def.id ? " open" : "") + (role.locked ? " locked" : "")}
               style={{ background: role.color }}
-              aria-label={`${def.label} ${role.color}${role.locked ? ", locked" : ""}`}
+              aria-label={roleSpeech(def.label, role.color, role.locked, null, 0)}
               aria-expanded={selected === def.id}
               onPointerDown={() => {
                 longPressed.current = false;

@@ -1,3 +1,4 @@
+import { describeColor } from "../engine/colorName";
 import { type CSSProperties, type MouseEvent } from "react";
 import { surfaces, workbenchColors } from "../engine/derive";
 import { effectiveTheme } from "../engine/vibe";
@@ -69,7 +70,7 @@ export function Workbench({ theme, selected, highlighted, onPick, sample }: Prop
       data-hl={highlighted ?? selected ?? undefined}
       onClick={handleClick}
       role="img"
-      aria-label={`Preview of VS Code in the ${theme.mode} theme “${theme.name}”, showing ${sample.file}. Every color in it can be edited from the color list.`}
+      aria-label={`Preview of VS Code in the ${theme.mode} theme “${theme.name}”: ${describeColor(shown.roles.bg.color)} background, ${describeColor(shown.roles.fg.color)} text, showing ${sample.file}. Every color in it can be edited from the color list.`}
     >
       {(highlighted ?? selected) && (
         <style>{`.wb [data-role="${highlighted ?? selected}"]{outline:2px dashed var(--hl-ring);outline-offset:-2px;border-radius:3px}`}</style>

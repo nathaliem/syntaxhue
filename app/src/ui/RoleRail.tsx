@@ -1,3 +1,4 @@
+import { chromaWord, hueName, lightnessWord, roleSpeech } from "../engine/colorName";
 import { useEffect, useState, type ClipboardEvent, type Dispatch, type KeyboardEvent } from "react";
 import { LockIcon, UnlockIcon, WarningIcon } from "./icons";
 import { contrast, fixContrast, hexToOklch, normalizeHex, oklchToHex, type Oklch } from "../engine/color";
@@ -136,6 +137,7 @@ function RoleRow({
       <div className="role-row">
         <button
           className="role-main"
+          aria-label={roleSpeech(def.label, role.color, role.locked, ratio, def.min)}
           aria-expanded={open}
           aria-controls={open ? `edit-${def.id}` : undefined}
           aria-keyshortcuts="Control+C Meta+C Control+V Meta+V"
@@ -220,6 +222,7 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
     step: number,
     fmt: (v: number) => string,
     track: string,
+    speak: (v: number) => string,
   ) => (
     <label className="slider">
       <span className="slider-l">{label}</span>
@@ -228,11 +231,14 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
         max={max}
         step={step}
         value={lch[key]}
+        aria-valuetext={speak(lch[key])}
         track={track}
         onChange={(v) => setFrom({ ...lch, [key]: v }, false)}
         onCommit={(v) => setFrom({ ...lch, [key]: v }, true)}
       />
-      <span className="slider-v">{fmt(lch[key])}</span>
+      <span className="slider-v" aria-hidden="true">
+        {fmt(lch[key])}
+      </span>
     </label>
   );
 
@@ -262,6 +268,7 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
         0.005,
         (v) => `${Math.round(v * 100)}%`,
         stops((t) => ({ ...lch, l: t })),
+        (v) => `${Math.round(v * 100)} percent, ${lightnessWord(v)}`,
       )}
       {slider(
         "c",
@@ -271,6 +278,7 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
         0.002,
         (v) => v.toFixed(2),
         stops((t) => ({ ...lch, c: t * 0.37 })),
+        (v) => `${v.toFixed(2)}, ${chromaWord(v)}`,
       )}
       {slider(
         "h",
@@ -280,6 +288,7 @@ export function RoleEditor({ def, theme, dispatch }: { def: RoleDef; theme: Them
         1,
         (v) => `${Math.round(v)}°`,
         stops((t) => ({ ...lch, h: t * 360 })),
+        (v) => `${Math.round(v)} degrees, ${hueName(v)}`,
       )}
       <div className="editor-row">
         <label className="hex-in">
