@@ -4,6 +4,7 @@ import { BASE_THEME, settingsSnippetText, themeFile } from "../engine/derive";
 import type { ThemeState } from "../engine/theme";
 import { ExtensionForm } from "./ExtensionForm";
 import { PortsPanel } from "./PortsPanel";
+import { SettingsGuide } from "./SettingsGuide";
 import { shareUrl } from "../state";
 import { Button, Dialog, IconButton, Toggle } from "./kit";
 
@@ -13,6 +14,8 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
   const [tab, setTab] = useState<Tab>("settings");
   const [scoped, setScoped] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
+  /** After the first copy the how-to turns into the picture guide. */
+  const [guided, setGuided] = useState(false);
 
   const snippet = settingsSnippetText(theme, scoped);
   const fileJson = JSON.stringify(themeFile(theme), null, 2);
@@ -27,6 +30,7 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
     try {
       await navigator.clipboard.writeText(text);
       setCopied(what);
+      if (what === "snippet") setGuided(true);
       setTimeout(() => setCopied(null), 1800);
     } catch {
       setCopied("failed");
@@ -76,18 +80,22 @@ export function ExportDialog({ theme, open, onClose }: { theme: ThemeState; open
 
         {tab === "settings" && (
           <div className="export-body">
-            <ol className="steps">
-              <li>
-                In VS Code, open the Command Palette (<kbd>⇧⌘P</kbd> / <kbd>Ctrl+Shift+P</kbd>).
-              </li>
-              <li>
-                Run <b>Preferences: Open User Settings (JSON)</b>.
-              </li>
-              <li>
-                Paste the snippet just inside the outer <code>{"{ }"}</code> and save. If a key already exists, replace
-                it.
-              </li>
-            </ol>
+            {guided ? (
+              <SettingsGuide baseTheme={BASE_THEME[theme.mode]} />
+            ) : (
+              <ol className="steps">
+                <li>
+                  In VS Code, open the Command Palette (<kbd>⇧⌘P</kbd> / <kbd>Ctrl+Shift+P</kbd>).
+                </li>
+                <li>
+                  Run <b>Preferences: Open User Settings (JSON)</b>.
+                </li>
+                <li>
+                  Paste the snippet just inside the outer <code>{"{ }"}</code> and save. If a key already exists,
+                  replace it.
+                </li>
+              </ol>
+            )}
             <Toggle checked={scoped} onChange={setScoped}>
               Only apply on top of “{BASE_THEME[theme.mode]}” (recommended, keeps your other themes untouched)
             </Toggle>
