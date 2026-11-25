@@ -8,6 +8,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: true,
+  retries: process.env.CI ? 1 : 0,
   reporter: "list",
   use: { baseURL: "http://localhost:4173", viewport: { width: 1440, height: 900 } },
   webServer: {
@@ -16,10 +17,13 @@ export default defineConfig({
     reuseExistingServer: true,
     timeout: 180_000,
   },
-  projects: [
-    { name: "chrome", use: { ...devices["Desktop Chrome"], channel: "chrome" } },
-    { name: "edge", use: { ...devices["Desktop Edge"], channel: "msedge" } },
-    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
-    { name: "webkit", use: { ...devices["Desktop Safari"] } },
-  ],
+  // CI runs Playwright's own Chromium only (fast, no extra installs); run `npm run e2e` locally for all four browsers.
+  projects: process.env.CI
+    ? [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }]
+    : [
+        { name: "chrome", use: { ...devices["Desktop Chrome"], channel: "chrome" } },
+        { name: "edge", use: { ...devices["Desktop Edge"], channel: "msedge" } },
+        { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+        { name: "webkit", use: { ...devices["Desktop Safari"] } },
+      ],
 });
