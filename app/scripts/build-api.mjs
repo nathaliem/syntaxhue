@@ -10,6 +10,6 @@ for (const name of ["og", "share"]) {
     external: ["@resvg/resvg-js"],
     logLevel: "warn",
   });
-  await bundle.write({ file: `api/${name}.js`, format: "esm" });
+  await bundle.write({ file: `api/${name}.js`, format: "esm", minify: true });
   await bundle.close();
 }
