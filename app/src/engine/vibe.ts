@@ -22,6 +22,7 @@ const SATURATION_RANGE = 0.6;
 const GREY_TINT = 0.015;
 const GREY_CHROMA = 0.04;
 
+const keep = (r: ThemeState["roles"][RoleId]) => r.locked || r.picked === true;
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
 /** True when any slider that recolors roles is away from 0 (depth only changes surfaces). */
@@ -54,6 +55,11 @@ export function effectiveTheme(t: ThemeState): ThemeState {
 
   const moved = {} as Record<RoleId, Hex>;
   for (const def of ROLES) {
+    // A locked color, or one the user set by hand, is exactly what they want: vibe never touches it.
+    if (keep(t.roles[def.id])) {
+      moved[def.id] = t.roles[def.id].color;
+      continue;
+    }
     const o: Oklch = hexToOklch(t.roles[def.id].color);
     if (v.warmth !== 0) {
       const target = v.warmth > 0 ? WARM_HUE : COOL_HUE;
@@ -71,6 +77,10 @@ export function effectiveTheme(t: ThemeState): ThemeState {
   const roles = {} as ThemeState["roles"];
   for (const def of ROLES) {
     // A color the user picked below its minimum stays as picked: vibe only keeps it from getting worse.
+    if (keep(t.roles[def.id])) {
+      roles[def.id] = t.roles[def.id];
+      continue;
+    }
     const floor = Math.min(def.min, contrast(t.roles[def.id].color, t.roles.bg.color));
     const color = def.min > 0 ? fixContrast(moved[def.id], bg, floor) : moved[def.id];
     roles[def.id] = { ...t.roles[def.id], color };

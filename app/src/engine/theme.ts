@@ -115,6 +115,8 @@ export function shuffleLabel(unlocked: number): string {
 export interface RoleState {
   color: Hex;
   locked: boolean;
+  /** Set once the user has set this color by hand. Vibe leaves such a color exactly as picked. */
+  picked?: boolean;
   fontStyle: FontStyle[];
 }
 

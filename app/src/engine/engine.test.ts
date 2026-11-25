@@ -13,6 +13,7 @@ import {
 import { reducer, type History } from "../state";
 import { semanticRules, settingsSnippet, settingsSnippetText, themeFile, tokenRules, workbenchColors } from "./derive";
 import { decodeTheme, encodeTheme } from "./share";
+import { effectiveTheme } from "./vibe";
 
 describe("color", () => {
   it("computes WCAG contrast", () => {
@@ -250,6 +251,33 @@ describe("share names", () => {
 
 describe("history", () => {
   const start = (): History => ({ past: [], present: generate(1, "dark"), future: [] });
+
+  it("editing a color marks it as set by hand; a shuffle gives the unlocked ones fresh colors", () => {
+    let h: History = { past: [], present: generate(5, "dark"), future: [] };
+    expect(h.present.roles.keyword.picked).toBeUndefined();
+    h = reducer(h, { type: "color", role: "keyword", color: "#aabbcc" });
+    expect(h.present.roles.keyword.picked).toBe(true);
+    expect(h.present.roles.string.picked).toBeUndefined();
+    h = reducer(h, { type: "shuffle", seed: 9 });
+    expect(h.present.roles.keyword.picked).toBeUndefined();
+  });
+
+  it("a hand-picked color is exact until vibe moves again, then it follows vibe", () => {
+    const pick = "#ff00aa";
+    let h: History = { past: [], present: generate(5, "dark"), future: [] };
+    h = reducer(h, { type: "vibe", key: "warmth", value: 0.6, commit: true });
+    h = reducer(h, { type: "color", role: "accent", color: pick });
+    expect(effectiveTheme(h.present).roles.accent.color).toBe(pick);
+    h = reducer(h, { type: "vibe", key: "contrast", value: 0.5, commit: true });
+    expect(h.present.roles.accent.color).toBe(pick); // the stored pick is untouched
+    expect(h.present.roles.accent.picked).toBeUndefined();
+    expect(effectiveTheme(h.present).roles.accent.color).not.toBe(pick);
+    // locked: never follows vibe
+    h = reducer(h, { type: "color", role: "accent", color: pick });
+    h = reducer(h, { type: "lock", role: "accent" });
+    h = reducer(h, { type: "vibe", key: "saturation", value: 0.4, commit: true });
+    expect(effectiveTheme(h.present).roles.accent.color).toBe(pick);
+  });
 
   it("typing a hex value is one undo step", () => {
     let h = start();

@@ -163,6 +163,7 @@ const ZERO_VIBE = Object.freeze({
 *   next 8 bytes  font styles, one nibble per role: 1 italic, 2 bold, 4 underline
 *   next 45 bytes colors, 3 bytes (r, g, b) per role
 *   4 bytes       only if the vibe flag is set: contrast, saturation, warmth, depth as signed bytes (value x 100)
+*   2 bytes       only if the picked flag is set (bit 2): bit i set = role i was set by hand, so vibe leaves it alone
 *   rest          theme name, UTF-8
 *
 * Themes with all vibe sliders at 0 leave the vibe out, which keeps their links short.
@@ -176,6 +177,7 @@ const STYLE_BITS = [
 ];
 const FLAG_LIGHT = 1;
 const FLAG_VIBE = 2;
+const FLAG_PICKED = 4;
 const OLDEST_PAYLOAD_VERSION = 1;
 const N = ROLE_IDS.length;
 const STYLE_BYTES = Math.ceil(N / 2);
@@ -201,10 +203,13 @@ function decodeBinary(payload) {
 	const version = bytes[0];
 	if (version < OLDEST_PAYLOAD_VERSION || version > 2) return null;
 	const flags = bytes[1];
-	if (flags & -4 || flags & FLAG_VIBE && version < 2) return null;
+	if (flags & -8 || flags & FLAG_VIBE && version < 2) return null;
 	const hasVibe = (flags & FLAG_VIBE) !== 0;
-	const nameAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+	const hasPicked = (flags & FLAG_PICKED) !== 0;
+	const pickedAt = FIXED + (hasVibe ? VIBE_KEYS.length : 0);
+	const nameAt = pickedAt + (hasPicked ? 2 : 0);
 	if (bytes.length < nameAt) return null;
+	const picks = hasPicked ? bytes[pickedAt] | bytes[pickedAt + 1] << 8 : 0;
 	const vibe = { ...ZERO_VIBE };
 	if (hasVibe) for (const [i, k] of VIBE_KEYS.entries()) {
 		const v = (bytes[FIXED + i] << 24 >> 24) / 100;
@@ -226,6 +231,7 @@ function decodeBinary(payload) {
 		roles[id] = {
 			color: "#" + rgb.toString(16).padStart(6, "0"),
 			locked: (locks & 1 << i) !== 0,
+			...(picks & 1 << i) !== 0 ? { picked: true } : {},
 			fontStyle: STYLE_BITS.filter(([, bit]) => nibble & bit).map(([style]) => style)
 		};
 	});

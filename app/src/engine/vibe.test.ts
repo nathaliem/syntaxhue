@@ -149,6 +149,26 @@ describe("vibe: contrast minimums always hold", () => {
     }
   });
 
+  it("never recolors a locked role, whatever the sliders say", () => {
+    const t = generate(3, "dark");
+    const pick = "#ff00aa" as const;
+    const locked = { ...t, roles: { ...t.roles, accent: { ...t.roles.accent, color: pick, locked: true } } };
+    for (const vibe of [{ saturation: 1 }, { warmth: 1 }, { warmth: -1 }, { contrast: 1 }, { contrast: -1 }]) {
+      const e = effectiveTheme(withVibe(locked, vibe));
+      expect(e.roles.accent.color).toBe(pick);
+      expect(e.roles.keyword.color).not.toBe(t.roles.keyword.color); // unlocked roles still follow vibe
+    }
+  });
+
+  it("keeps a color the user set by hand exactly as picked, whatever the sliders say", () => {
+    const t = generate(3, "dark");
+    const pick = "#ff00aa" as const;
+    const edited = { ...t, roles: { ...t.roles, accent: { ...t.roles.accent, color: pick, picked: true } } };
+    for (const vibe of [{ saturation: 1 }, { warmth: 1 }, { warmth: -1 }, { contrast: 1 }, { contrast: -1 }]) {
+      expect(effectiveTheme(withVibe(edited, vibe)).roles.accent.color).toBe(pick);
+    }
+  });
+
   it("pushes lightness back when a slider would break a minimum", () => {
     const t = generate(10, "dark");
     const soft = effectiveTheme(withVibe(t, { contrast: -1 }));
