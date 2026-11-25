@@ -1,4 +1,4 @@
-import { colorDistance, contrast, fixContrast, hexToOklch, mix, oklchToHexInGamut, type Hex } from "./color";
+import { contrast, fixContrast, hexToOklch, mix, oklchToHexInGamut, type Hex } from "./color";
 import type { PortInput } from "./ports/port";
 
 export const ANSI_NAMES = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"] as const;
@@ -18,8 +18,7 @@ export interface AnsiPalette {
 /** Minimum contrast for the colors programs print as text: the six hues, and bright black (used for comments and hints). */
 export const ANSI_MIN_HUE = 4.5;
 export const ANSI_MIN_DIM = 3;
-/** Least OKLCH distance between any two of the six hues, and between a color and its bright variant. */
-export const ANSI_MIN_APART = 0.05;
+/** Least OKLCH distance between a color and its bright variant. */
 export const ANSI_MIN_BRIGHT_STEP = 0.03;
 
 /**
@@ -33,28 +32,18 @@ export function ansiPalette(input: PortInput): AnsiPalette {
   const bg = surfaces.editor;
   const dark = mode === "dark";
 
-  const hues = [roles.error, roles.success, roles.warning, roles.info, roles.keyword, roles.function];
-  const normal = hues.map((h) => fixContrast(h, bg, ANSI_MIN_HUE));
-  // Nudge a hue away from an earlier one when two land too close (e.g. a cyan function next to a blue info).
-  for (let i = 1; i < normal.length; i++) {
-    for (let tries = 0; tries < 12; tries++) {
-      if (normal.slice(0, i).every((p) => colorDistance(p, normal[i]) >= ANSI_MIN_APART)) break;
-      const o = hexToOklch(normal[i]);
-      normal[i] = fixContrast(
-        oklchToHexInGamut({ l: o.l + (dark ? 0.03 : -0.03), c: o.c * 1.08, h: (o.h + 12) % 360 }),
-        bg,
-        ANSI_MIN_HUE,
-      );
-    }
-  }
+  // The six hues are the user's own colors and are exported exactly as picked: no contrast fix, no nudging.
+  const normal = [roles.error, roles.success, roles.warning, roles.info, roles.keyword, roles.function];
+  // The bright variants are derived, so they may be adjusted, but never to read worse than the color they come from.
   const vivid = (hex: Hex) => {
     const o = hexToOklch(hex);
-    return fixContrast(oklchToHexInGamut({ l: o.l + (dark ? 0.07 : -0.06), c: o.c * 1.12, h: o.h }), bg, ANSI_MIN_HUE);
+    const floor = Math.min(ANSI_MIN_HUE, contrast(hex, bg));
+    return fixContrast(oklchToHexInGamut({ l: o.l + (dark ? 0.07 : -0.06), c: o.c * 1.12, h: o.h }), bg, floor);
   };
 
   const black = dark ? mix(bg, roles.fg, 0.2) : roles.fg;
   const white = dark ? mix(roles.fg, bg, 0.15) : mix(bg, roles.fg, 0.12);
-  const brightBlack = fixContrast(roles.muted, bg, ANSI_MIN_DIM);
+  const brightBlack = roles.muted;
   const brightWhite = dark ? roles.fg : bg;
 
   return {

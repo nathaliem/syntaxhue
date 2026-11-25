@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ANSI_MIN_APART, ANSI_MIN_BRIGHT_STEP, ANSI_MIN_DIM, ANSI_MIN_HUE, ansiContrast, ansiPalette } from "./ansi";
-import { colorDistance, isHex } from "./color";
+import { ANSI_MIN_BRIGHT_STEP, ANSI_MIN_DIM, ANSI_MIN_HUE, ansiContrast, ansiPalette } from "./ansi";
+import { colorDistance, contrast, isHex } from "./color";
 import { generate } from "./theme";
 import { portInput } from "./ports";
 
@@ -30,15 +30,33 @@ describe("ANSI palette", () => {
     }
   });
 
-  it("keeps the six hues apart from each other", () => {
-    for (const { s, m, p } of palettes) {
-      const h = p.normal.slice(1, 7);
-      for (let i = 0; i < h.length; i++) {
-        for (let j = i + 1; j < h.length; j++) {
-          expect(colorDistance(h[i], h[j]), `seed ${s} ${m}: ${i} vs ${j}`).toBeGreaterThanOrEqual(ANSI_MIN_APART);
-        }
-      }
+  it("exports the six hues exactly as the roles are, never adjusted", () => {
+    for (const { s, m } of palettes) {
+      const input = portInput(generate(s, m));
+      const r = input.roles;
+      expect(ansiPalette(input).normal.slice(1, 7), `seed ${s} ${m}`).toEqual([
+        r.error,
+        r.success,
+        r.warning,
+        r.info,
+        r.keyword,
+        r.function,
+      ]);
+      expect(ansiPalette(input).bright[0]).toBe(r.muted);
     }
+  });
+
+  it("leaves colors the user set below the minimum alone, and brights never read worse than their normal color", () => {
+    const t = generate(4, "dark");
+    const bg = t.roles.bg.color;
+    const bad = {
+      ...t,
+      roles: { ...t.roles, error: { ...t.roles.error, color: bg }, muted: { ...t.roles.muted, color: bg } },
+    };
+    const p = ansiPalette(portInput(bad));
+    expect(p.normal[1]).toBe(bg);
+    expect(p.bright[0]).toBe(bg);
+    expect(contrast(p.bright[1], p.background)).toBeGreaterThanOrEqual(contrast(p.normal[1], p.background) - 1e-9);
   });
 
   it("makes each bright hue visibly different from its normal one", () => {

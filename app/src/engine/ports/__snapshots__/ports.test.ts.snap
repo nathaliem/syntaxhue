@@ -65,7 +65,7 @@ red = "#b63132"
 green = "#1e7729"
 yellow = "#986600"
 blue = "#006a9d"
-purple = "#16538f"
+purple = "#006090"
 cyan = "#007a72"
 white = "#d2e1e6"
 
@@ -75,7 +75,7 @@ red = "#a70018"
 green = "#006516"
 yellow = "#825600"
 blue = "#005884"
-purple = "#00427b"
+purple = "#004f77"
 cyan = "#006760"
 white = "#eafaff"
 ",
@@ -123,7 +123,7 @@ palette = 1=#b63132
 palette = 2=#1e7729
 palette = 3=#986600
 palette = 4=#006a9d
-palette = 5=#16538f
+palette = 5=#006090
 palette = 6=#007a72
 palette = 7=#d2e1e6
 palette = 8=#6d858c
@@ -131,7 +131,7 @@ palette = 9=#a70018
 palette = 10=#006516
 palette = 11=#825600
 palette = 12=#005884
-palette = 13=#00427b
+palette = 13=#004f77
 palette = 14=#006760
 palette = 15=#eafaff
 background = #eafaff
@@ -546,19 +546,19 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #16538f -->
+	<!-- #006090 -->
 	<key>Ansi 5 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.560784</real>
+		<real>0.564706</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.325490</real>
+		<real>0.376471</real>
 		<key>Red Component</key>
-		<real>0.086275</real>
+		<real>0.000000</real>
 	</dict>
 	<!-- #007a72 -->
 	<key>Ansi 6 Color</key>
@@ -658,17 +658,17 @@ exports[`port iterm2 > matches its snapshot 2`] = `
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
-	<!-- #00427b -->
+	<!-- #004f77 -->
 	<key>Ansi 13 Color</key>
 	<dict>
 		<key>Alpha Component</key>
 		<real>1</real>
 		<key>Blue Component</key>
-		<real>0.482353</real>
+		<real>0.466667</real>
 		<key>Color Space</key>
 		<string>sRGB</string>
 		<key>Green Component</key>
-		<real>0.258824</real>
+		<real>0.309804</real>
 		<key>Red Component</key>
 		<real>0.000000</real>
 	</dict>
@@ -1665,7 +1665,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_MAGENTA_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="16538f" />
+        <option name="FOREGROUND" value="006090" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_OUTPUT">
@@ -1705,7 +1705,7 @@ exports[`port jetbrains > matches its snapshot 2`] = `
     </option>
     <option name="CONSOLE_MAGENTA_BRIGHT_OUTPUT">
       <value>
-        <option name="FOREGROUND" value="00427b" />
+        <option name="FOREGROUND" value="004f77" />
       </value>
     </option>
     <option name="CONSOLE_CYAN_BRIGHT_OUTPUT">
@@ -1773,7 +1773,7 @@ color1 #b63132
 color2 #1e7729
 color3 #986600
 color4 #006a9d
-color5 #16538f
+color5 #006090
 color6 #007a72
 color7 #d2e1e6
 color8 #6d858c
@@ -1781,7 +1781,7 @@ color9 #a70018
 color10 #006516
 color11 #825600
 color12 #005884
-color13 #00427b
+color13 #004f77
 color14 #006760
 color15 #eafaff
 ",
@@ -1917,9 +1917,9 @@ exports[`port macos-terminal > matches its snapshot 2`] = `
 	<!-- #006a9d -->
 	<key>ANSIBlueColor</key>
 	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqUXhOVFk0TmlBd0xqWXhOVFk0TmdBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
-	<!-- #16538f -->
+	<!-- #006090 -->
 	<key>ANSIMagentaColor</key>
-	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUM0d09EWXlOelVnTUM0ek1qVTBPU0F3TGpVMk1EYzROQUE9PC9kYXRhPjxrZXk+JGNsYXNzPC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4yPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGRpY3Q+PGtleT4kY2xhc3NuYW1lPC9rZXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PGtleT4kY2xhc3Nlczwva2V5PjxhcnJheT48c3RyaW5nPk5TQ29sb3I8L3N0cmluZz48c3RyaW5nPk5TT2JqZWN0PC9zdHJpbmc+PC9hcnJheT48L2RpY3Q+PC9hcnJheT48a2V5PiR0b3A8L2tleT48ZGljdD48a2V5PnJvb3Q8L2tleT48ZGljdD48a2V5PkNGJFVJRDwva2V5PjxpbnRlZ2VyPjE8L2ludGVnZXI+PC9kaWN0PjwvZGljdD48a2V5PiR2ZXJzaW9uPC9rZXk+PGludGVnZXI+MTAwMDAwPC9pbnRlZ2VyPjwvZGljdD48L3BsaXN0Pg==</data>
+	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqTTNOalEzTVNBd0xqVTJORGN3TmdBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
 	<!-- #007a72 -->
 	<key>ANSICyanColor</key>
 	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqUTNPRFF6TVNBd0xqUTBOekExT1FBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
@@ -1941,9 +1941,9 @@ exports[`port macos-terminal > matches its snapshot 2`] = `
 	<!-- #005884 -->
 	<key>ANSIBrightBlueColor</key>
 	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqTTBOVEE1T0NBd0xqVXhOelkwTndBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
-	<!-- #00427b -->
+	<!-- #004f77 -->
 	<key>ANSIBrightMagentaColor</key>
-	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqSTFPRGd5TkNBd0xqUTRNak0xTXdBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
+	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqTXdPVGd3TkNBd0xqUTJOalkyTndBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
 	<!-- #006760 -->
 	<key>ANSIBrightCyanColor</key>
 	<data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHBsaXN0IHZlcnNpb249IjEuMCI+PGRpY3Q+PGtleT4kYXJjaGl2ZXI8L2tleT48c3RyaW5nPk5TS2V5ZWRBcmNoaXZlcjwvc3RyaW5nPjxrZXk+JG9iamVjdHM8L2tleT48YXJyYXk+PHN0cmluZz4kbnVsbDwvc3RyaW5nPjxkaWN0PjxrZXk+TlNDb2xvclNwYWNlPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48a2V5Pk5TUkdCPC9rZXk+PGRhdGE+TUNBd0xqUXdNemt5TWlBd0xqTTNOalEzTVFBPTwvZGF0YT48a2V5PiRjbGFzczwva2V5PjxkaWN0PjxrZXk+Q0YkVUlEPC9rZXk+PGludGVnZXI+MjwvaW50ZWdlcj48L2RpY3Q+PC9kaWN0PjxkaWN0PjxrZXk+JGNsYXNzbmFtZTwva2V5PjxzdHJpbmc+TlNDb2xvcjwvc3RyaW5nPjxrZXk+JGNsYXNzZXM8L2tleT48YXJyYXk+PHN0cmluZz5OU0NvbG9yPC9zdHJpbmc+PHN0cmluZz5OU09iamVjdDwvc3RyaW5nPjwvYXJyYXk+PC9kaWN0PjwvYXJyYXk+PGtleT4kdG9wPC9rZXk+PGRpY3Q+PGtleT5yb290PC9rZXk+PGRpY3Q+PGtleT5DRiRVSUQ8L2tleT48aW50ZWdlcj4xPC9pbnRlZ2VyPjwvZGljdD48L2RpY3Q+PGtleT4kdmVyc2lvbjwva2V5PjxpbnRlZ2VyPjEwMDAwMDwvaW50ZWdlcj48L2RpY3Q+PC9wbGlzdD4=</data>
@@ -2461,7 +2461,7 @@ vim.g.terminal_color_1 = "#b63132"
 vim.g.terminal_color_2 = "#1e7729"
 vim.g.terminal_color_3 = "#986600"
 vim.g.terminal_color_4 = "#006a9d"
-vim.g.terminal_color_5 = "#16538f"
+vim.g.terminal_color_5 = "#006090"
 vim.g.terminal_color_6 = "#007a72"
 vim.g.terminal_color_7 = "#d2e1e6"
 vim.g.terminal_color_8 = "#6d858c"
@@ -2469,7 +2469,7 @@ vim.g.terminal_color_9 = "#a70018"
 vim.g.terminal_color_10 = "#006516"
 vim.g.terminal_color_11 = "#825600"
 vim.g.terminal_color_12 = "#005884"
-vim.g.terminal_color_13 = "#00427b"
+vim.g.terminal_color_13 = "#004f77"
 vim.g.terminal_color_14 = "#006760"
 vim.g.terminal_color_15 = "#eafaff"
 ",
@@ -2880,7 +2880,7 @@ terminal_colors:
     green: '#1e7729'
     yellow: '#986600'
     blue: '#006a9d'
-    purple: '#16538f'
+    purple: '#006090'
     cyan: '#007a72'
     white: '#d2e1e6'
   bright:
@@ -2889,7 +2889,7 @@ terminal_colors:
     green: '#006516'
     yellow: '#825600'
     blue: '#005884'
-    purple: '#00427b'
+    purple: '#004f77'
     cyan: '#006760'
     white: '#eafaff'
 ",
@@ -2931,8 +2931,8 @@ cursor_fg = "#eafaff"
 cursor_border = "#a14f00"
 selection_fg = "#212b2e"
 selection_bg = "#dad4c7"
-ansi = ["#212b2e", "#b63132", "#1e7729", "#986600", "#006a9d", "#16538f", "#007a72", "#d2e1e6"]
-brights = ["#6d858c", "#a70018", "#006516", "#825600", "#005884", "#00427b", "#006760", "#eafaff"]
+ansi = ["#212b2e", "#b63132", "#1e7729", "#986600", "#006a9d", "#006090", "#007a72", "#d2e1e6"]
+brights = ["#6d858c", "#a70018", "#006516", "#825600", "#005884", "#004f77", "#006760", "#eafaff"]
 
 [metadata]
 name = "Fixture Light"
@@ -2984,7 +2984,7 @@ exports[`port windows-terminal > matches its snapshot 2`] = `
   "green": "#1e7729",
   "yellow": "#986600",
   "blue": "#006a9d",
-  "purple": "#16538f",
+  "purple": "#006090",
   "cyan": "#007a72",
   "white": "#d2e1e6",
   "brightBlack": "#6d858c",
@@ -2992,7 +2992,7 @@ exports[`port windows-terminal > matches its snapshot 2`] = `
   "brightGreen": "#006516",
   "brightYellow": "#825600",
   "brightBlue": "#005884",
-  "brightPurple": "#00427b",
+  "brightPurple": "#004f77",
   "brightCyan": "#006760",
   "brightWhite": "#eafaff",
   "background": "#eafaff",
@@ -3342,8 +3342,8 @@ exports[`port zed > matches its snapshot 2`] = `
         "terminal.ansi.bright_yellow": "#825600",
         "terminal.ansi.blue": "#006a9d",
         "terminal.ansi.bright_blue": "#005884",
-        "terminal.ansi.magenta": "#16538f",
-        "terminal.ansi.bright_magenta": "#00427b",
+        "terminal.ansi.magenta": "#006090",
+        "terminal.ansi.bright_magenta": "#004f77",
         "terminal.ansi.cyan": "#007a72",
         "terminal.ansi.bright_cyan": "#006760",
         "terminal.ansi.white": "#d2e1e6",
