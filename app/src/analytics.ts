@@ -6,14 +6,24 @@ import { track } from "@vercel/analytics";
  * `props` lists the only properties an event may have, each with the values allowed.
  */
 export const EVENT_DICTIONARY = {
-  shuffle: { when: "A shuffle is run.", props: {} },
+  shuffle: { when: "A shuffle is run (the first one in a visit only).", once: true, props: {} },
+  edit: {
+    when: "A color, slider or font style is changed by hand (the first one in a visit only).",
+    once: true,
+    props: {},
+  },
   export: {
-    when: "An export is copied or downloaded.",
-    props: { type: ["settings", "file", "extension", "editor", "terminal", "link"] },
+    when: "A settings snippet, theme file, extension or editor/terminal file is copied or downloaded.",
+    props: { type: ["settings", "file", "extension", "editor", "terminal"] },
   },
   share: { when: "A share link is copied.", props: {} },
   library_save: { when: "A theme is saved to the library.", props: {} },
-} as const satisfies Record<string, { when: string; props: Record<string, readonly string[]> }>;
+} as const satisfies Record<string, { when: string; once?: boolean; props: Record<string, readonly string[]> }>;
+
+/** Events marked `once` that were already sent in this visit. */
+const sentOnce = new Set<string>();
+/** For tests: forget which `once` events were sent. */
+export const resetOnce = () => sentOnce.clear();
 
 export type EventName = keyof typeof EVENT_DICTIONARY;
 
@@ -24,8 +34,14 @@ export function doNotTrack(nav: Pick<Navigator, "doNotTrack"> = navigator): bool
 
 /** Sends a listed event with only its allowed properties. Returns whether anything was sent. */
 export function trackEvent(name: EventName, props: Record<string, string> = {}): boolean {
-  const entry = (EVENT_DICTIONARY as Record<string, { props: Record<string, readonly string[]> }>)[name];
+  const entry = (EVENT_DICTIONARY as Record<string, { once?: boolean; props: Record<string, readonly string[]> }>)[
+    name
+  ];
   if (!entry || doNotTrack()) return false;
+  if (entry.once) {
+    if (sentOnce.has(name)) return false;
+    sentOnce.add(name);
+  }
   const clean: Record<string, string> = {};
   for (const [k, v] of Object.entries(props)) {
     if (entry.props[k]?.includes(v)) clean[k] = v;

@@ -25,9 +25,11 @@ export function AboutDialog({ open, onClose }: { open: boolean; onClose: () => v
           </p>
           <h3>What is collected</h3>
           <p>
-            Anonymous page view counts from Vercel Web Analytics: which page was opened, the country, and the kind of
-            browser. No cookies, no IP addresses stored, no accounts, and never your colors or theme names. If your
-            browser sends Do Not Track, nothing is sent at all.
+            Anonymous counts from Vercel Web Analytics: page views (the country and the kind of browser) and a few
+            button presses: a first shuffle and a first hand edit per visit, and each export (only its kind: settings,
+            theme file, extension, editor or terminal), share link copy and library save. No cookies, no IP addresses
+            stored, no accounts, and never your colors, theme names or the text of a share link. If your browser sends
+            Do Not Track, nothing is sent at all.
           </p>
           <h3>Not affiliated with Microsoft</h3>
           <p>

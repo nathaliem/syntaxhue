@@ -1,3 +1,4 @@
+import { trackEvent } from "../analytics";
 import { useMemo, useState } from "react";
 import {
   advice,
@@ -119,6 +120,7 @@ export function ExtensionForm({ theme }: { theme: ThemeState }) {
       a.download = vsixFileName(theme, options);
       a.click();
       URL.revokeObjectURL(url);
+      trackEvent("export", { type: "extension" });
     } catch (e) {
       setBuildError(e instanceof Error ? e.message : "Something went wrong while building the package.");
     } finally {

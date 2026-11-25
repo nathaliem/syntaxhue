@@ -3,9 +3,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const sent: [string, unknown][] = [];
 vi.mock("@vercel/analytics", () => ({ track: (n: string, p: unknown) => sent.push([n, p]) }));
 
-import { beforeSend, EVENT_DICTIONARY, trackEvent, type EventName } from "./analytics";
+import { beforeSend, EVENT_DICTIONARY, resetOnce, trackEvent, type EventName } from "./analytics";
 
 afterEach(() => {
+  resetOnce();
   sent.length = 0;
   vi.restoreAllMocks();
   Object.defineProperty(navigator, "doNotTrack", { value: null, configurable: true });
@@ -15,6 +16,14 @@ describe("analytics", () => {
   it("sends a listed event", () => {
     expect(trackEvent("shuffle")).toBe(true);
     expect(sent).toEqual([["shuffle", {}]]);
+  });
+
+  it("sends a once-per-visit event only the first time", () => {
+    expect(trackEvent("shuffle")).toBe(true);
+    expect(trackEvent("shuffle")).toBe(false);
+    expect(trackEvent("export", { type: "file" })).toBe(true);
+    expect(trackEvent("export", { type: "file" })).toBe(true);
+    expect(sent).toHaveLength(3);
   });
 
   it("drops an event that is not in the dictionary", () => {

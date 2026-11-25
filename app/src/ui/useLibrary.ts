@@ -1,3 +1,4 @@
+import { trackEvent } from "../analytics";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { newId, openLibrary, themesEqual, type LibraryStore, type SavedTheme } from "../engine/library";
 import type { ThemeState } from "../engine/theme";
@@ -107,6 +108,7 @@ export function useLibrary(provided?: LibraryStore): Library {
         await s.put(item);
         link(item.id);
         await refresh();
+        trackEvent("library_save");
         return item;
       } catch {
         setError("Couldn't save this theme. Your browser may be out of space or blocking storage.");
