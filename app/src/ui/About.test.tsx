@@ -16,3 +16,13 @@ describe("About and privacy", () => {
     expect((dialog as HTMLDialogElement).open).toBe(false);
   });
 });
+
+describe("GitHub link", () => {
+  it("is on the page, in About, and feedback goes to its issues", async () => {
+    render(<App />);
+    const links = screen.getAllByRole("link", { name: "Source on GitHub" });
+    expect(links[0]).toHaveAttribute("href", "https://github.com/nathaliem/syntaxhue");
+    const { FEEDBACK_URL } = await import("../feedback");
+    expect(FEEDBACK_URL).toBe("https://github.com/nathaliem/syntaxhue/issues/new");
+  });
+});

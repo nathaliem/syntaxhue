@@ -1,6 +1,6 @@
 import { Dialog, IconButton } from "./kit";
 import { CloseIcon } from "./icons";
-import { FEEDBACK_URL } from "../feedback";
+import { FEEDBACK_URL, GITHUB_URL } from "../feedback";
 
 /** What SyntaxHue is, how export works, what is collected, and that it isn't a Microsoft product. */
 export function AboutDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -17,7 +17,11 @@ export function AboutDialog({ open, onClose }: { open: boolean; onClose: () => v
           <h3>What it is</h3>
           <p>
             SyntaxHue makes color themes for VS Code. Shuffle, tune what you like, then paste the result into your
-            settings or export it as an extension. It is free and made by one person.
+            settings or export it as an extension. It is free and made by one person. The code is on{" "}
+            <a href={GITHUB_URL} target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+            .
           </p>
           <h3>Your themes stay with you</h3>
           <p>
